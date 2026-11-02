@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.bioprep_academicstudyguide"
+    namespace = "com.example.bioprep"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.bioprep_academicstudyguide"
+        applicationId = "com.example.bioprep"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
@@ -37,7 +37,9 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
     implementation(libs.material)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
+    testImplementation("org.json:json:20240303")
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
 }

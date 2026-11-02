@@ -1,3 +1,76 @@
 <resources>
-    <string name="app_name">BioPrep - Academic Study Guide</string>
+    <string name="app_name">BioPrep</string>
+    <string name="app_subtitle">HSC Biology Study Companion</string>
+    <string name="welcome_desc">Interactive study companion for HSC Biology 1st &amp; 2nd Paper. Practice chapter-based MCQs, sharpen your timing with the study timer, and test yourself with online challenges.</string>
+    <string name="btn_get_started">Get Started</string>
+    
+    <!-- Home Screen -->
+    <string name="title_home">BioPrep Dashboard</string>
+    <string name="subtitle_home">Choose a Biology paper to start practicing</string>
+    <string name="paper_1_title">Biology 1st Paper</string>
+    <string name="paper_1_desc">Botany • Cells, Genetics, Plant Physiology &amp; Biotechnology</string>
+    <string name="paper_2_title">Biology 2nd Paper</string>
+    <string name="paper_2_desc">Zoology • Animal Diversity, Human Physiology &amp; Evolution</string>
+    <string name="btn_online_challenge">Online Science Challenge</string>
+    <string name="online_challenge_desc">Supplementary questions from Open Trivia Database</string>
+    
+    <!-- Chapter Screen -->
+    <string name="title_chapters">Select Chapter</string>
+    <string name="empty_chapters">No chapters available for this paper.</string>
+    <string name="chapter_subtitle_practice">Sample MCQs</string>
+    
+    <!-- Quiz Screen -->
+    <string name="title_quiz">Biology MCQ Quiz</string>
+    <string name="empty_questions">No questions available for this chapter.</string>
+    <string name="timer_label">Timer: </string>
+    <string name="timer_default">01:00</string>
+    <string name="timer_completed">Completed!</string>
+    <string name="btn_start">Start</string>
+    <string name="btn_pause">Pause</string>
+    <string name="btn_resume">Resume</string>
+    <string name="btn_stop">Stop</string>
+    <string name="btn_prev">Previous</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_submit">Submit Quiz</string>
+    <string name="question_progress_format">Question %1$d of %2$d</string>
+    <string name="dialog_unanswered_title">Unanswered Questions</string>
+    <string name="dialog_unanswered_msg">You have %1$d unanswered question(s). Are you sure you want to submit?</string>
+    <string name="btn_continue">Keep Editing</string>
+    <string name="btn_submit_anyway">Submit Anyway</string>
+    <string name="perm_rationale">BioPrep needs notification permission to notify you when your study countdown completes.</string>
+    <string name="perm_granted">Notification permission granted.</string>
+    <string name="perm_denied">Notification permission denied. Timer completion will be shown in-app.</string>
+    
+    <!-- Result Screen -->
+    <string name="title_result">Quiz Results</string>
+    <string name="label_total_questions">Total Questions</string>
+    <string name="label_correct">Correct Answers</string>
+    <string name="label_incorrect">Incorrect Answers</string>
+    <string name="label_unanswered">Unanswered</string>
+    <string name="label_score_percentage">Score</string>
+    <string name="btn_back_home">Back to Home</string>
+    
+    <!-- Online Quiz Screen -->
+    <string name="title_online_quiz">Online Science Challenge</string>
+    <string name="online_quiz_disclaimer">Supplementary Science &amp; Nature questions via Open Trivia Database (Not official HSC content).</string>
+    <string name="btn_fetch_question">Fetch New Question</string>
+    <string name="btn_check_answer">Check Answer</string>
+    <string name="btn_retry">Retry</string>
+    <string name="msg_loading">Fetching question from server...</string>
+    <string name="msg_select_answer">Please select an option before checking.</string>
+    <string name="msg_correct">Correct! Great job.</string>
+    <string name="msg_incorrect">Incorrect. Correct answer: %1$s</string>
+    <string name="msg_error_network">Network error. Please check your internet connection and try again.</string>
+    <string name="msg_error_timeout">Request timed out. Please try again.</string>
+    <string name="msg_error_server">Server returned error (%1$d). Please try again later.</string>
+    <string name="msg_error_api">OpenTDB reported an issue. Please try again.</string>
+    <string name="msg_error_parse">Failed to parse server response.</string>
+    <string name="source_label">Source: %1$s</string>
+    
+    <!-- Config -->
+    <string name="opentdb_endpoint">https://opentdb.com/api.php?amount=1&amp;category=17&amp;type=multiple</string>
+    <string name="notif_channel_id">bioprep_study_timer</string>
+    <string name="notif_channel_name">BioPrep Study Timer</string>
+    <string name="notif_title">Study Session Finished</string>
+    <string name="notif_content">Your BioPrep study timer countdown has completed!</string>
 </resources>
