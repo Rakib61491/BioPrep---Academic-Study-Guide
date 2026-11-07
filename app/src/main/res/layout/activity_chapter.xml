@@ -1,46 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutChapterHubRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bio_background">
+    android:background="@color/bio_surface">
 
-    <!-- Fullscreen Stitch Background Atmosphere -->
+    <!-- Fullscreen Botanical Microscopic Background matching Exam Practice.jpeg -->
     <ImageView
         android:id="@+id/ivChapterBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.85"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_stitch_biology"
-        android:alpha="0.25"
-        android:contentDescription="@null" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Scrollable Main Container -->
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#22001713"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Scrollable Content Body -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
-        android:paddingBottom="72dp">
+        app:layout_constraintBottom_toTopOf="@id/bottomNavBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="24dp">
 
-            <!-- Top Header Bar -->
-            <LinearLayout
+            <!-- Top Header Bar matching Exam Practice.jpeg -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bio_surface_container"
-                android:elevation="4dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="12dp">
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp">
 
+                <!-- Small Back Button at Top Left -->
                 <ImageButton
                     android:id="@+id/btnChapterBack"
                     android:layout_width="32dp"
@@ -48,492 +64,672 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Back"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="@color/bio_on_surface" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <!-- Centered Title: Exam Practice -->
+                <TextView
+                    android:id="@+id/tvChapterPaperTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
+                    android:text="Exam Practice"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Search and More Options on Right -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔬"
-                        android:textSize="18sp" />
+                    <ImageView
+                        android:id="@+id/btnChapterSearch"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Search"
+                        android:src="@drawable/ic_search_clean" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:text="Exam Practice"
-                        android:textColor="@color/bio_on_surface"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/btnChapterBookmark"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginStart="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Options"
+                        android:src="@drawable/ic_more_vert_clean" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/btnChapterSearch"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:gravity="center"
-                    android:text="🔍"
-                    android:textSize="18sp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/btnChapterBookmark"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:gravity="center"
-                    android:text="🔖"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <!-- Search & Filter Bar -->
+            <!-- Search Bar matching Exam Practice.jpeg -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_height="52dp"
                 android:layout_marginTop="14dp"
-                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_card_dark_teal"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
 
                 <EditText
                     android:id="@+id/etSearchChapters"
                     android:layout_width="0dp"
-                    android:layout_height="44dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_card"
-                    android:hint="Search chapters, MCQs, and tests..."
+                    android:background="@drawable/bg_card_white"
+                    android:hint="Search for mock tests, questions..."
+                    android:inputType="text"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:textColor="@color/bio_on_surface"
-                    android:textColorHint="@color/bio_outline"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textColorHint="@color/bio_card_text_muted"
                     android:textSize="13sp" />
 
-                <TextView
-                    android:id="@+id/btnFilterChapters"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_card"
-                    android:gravity="center"
-                    android:text="⚙️"
-                    android:textSize="18sp" />
+                <ImageView
+                    android:id="@+id/btnChapterFilter"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="10dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Filter"
+                    android:src="@drawable/ic_filter_clean" />
             </LinearLayout>
 
-            <!-- Practice Modes Header & 2x2 Bento Grid -->
+            <!-- Accordion 1: Botany Header matching Exam Practice.jpeg -->
             <LinearLayout
+                android:id="@+id/cardBotanyAccordion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="vertical">
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_card_dark_teal"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
 
+                <TextView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_chip_emerald"
+                    android:gravity="center"
+                    android:text="🌱"
+                    android:textSize="22sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Botany"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvChapterCountBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="12 Chapters available"
+                        android:textColor="@color/bio_mint_accent"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btnToggleBotany"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center"
+                    android:text="▼"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <!-- Expanded White Card for Botany Rows matching Exam Practice.jpeg -->
+            <LinearLayout
+                android:id="@+id/layoutBotanyExpanded"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_white"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp"
+                android:visibility="visible">
+
+                <!-- Row 1: Chapter 1 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▼"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="Chapter 1: Cell &amp; its\nFunction"
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/bg_chip_cyan"
+                        android:gravity="center"
+                        android:text="🔬"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/btnPracticeBotany1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_pill_emerald"
+                        android:backgroundTint="#0F4C3A"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Practice"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E2E8F0" />
+
+                <!-- Row 2: Chapter 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▼"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="Chapter 2: Photosynthesis\n&amp; Respiration"
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnPracticeBotany2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_pill_emerald"
+                        android:backgroundTint="#0F4C3A"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Practice"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E2E8F0" />
+
+                <!-- Row 3: Chapter 3 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▼"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="Chapter 3: Plant Breeding"
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnPracticeBotany3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_pill_emerald"
+                        android:backgroundTint="#0F4C3A"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Practice"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E2E8F0" />
+
+                <!-- Row 4: Chapter 4 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="▼"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="Chapter 4: Biotechnology"
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnPracticeBotany4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_pill_emerald"
+                        android:backgroundTint="#0F4C3A"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Practice"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Accordion 2: Zoology Header matching Exam Practice.jpeg -->
+            <LinearLayout
+                android:id="@+id/cardZoologyAccordion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_card_dark_teal"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_chip_cyan"
+                    android:gravity="center"
+                    android:text="🦠"
+                    android:textSize="22sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Zoology"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="14 Chapters available"
+                        android:textColor="@color/bio_mint_accent"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btnToggleZoology"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center"
+                    android:text="▼"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <!-- Expanded White Card for Zoology Rows -->
+            <LinearLayout
+                android:id="@+id/layoutZoologyExpanded"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_white"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp"
+                android:visibility="gone">
+
+                <!-- Row 1: Zoology Chapter 1 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="PRACTICE MODES"
-                        android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="11sp"
+                        android:text="Chapter 1: Animal Diversity &amp; Classification"
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <Button
+                        android:id="@+id/btnPracticeZoology1"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Live Drills"
-                        android:textColor="@color/bio_primary"
-                        android:textSize="11sp" />
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_pill_emerald"
+                        android:backgroundTint="#0F4C3A"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Practice"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <GridLayout
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E2E8F0" />
+
+                <!-- Row 2: Zoology Chapter 2 -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:columnCount="2"
-                    android:rowCount="2">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
-                    <!-- Mode 1: Chapter-wise MCQ -->
-                    <LinearLayout
-                        android:id="@+id/modeChapterMcq"
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/bg_card"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical"
-                        android:padding="12dp">
+                        android:layout_weight="1"
+                        android:text="Chapter 2: Introduction to Animal Behavior"
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="📖 All Topics"
-                            android:textColor="@color/bio_primary"
-                            android:textSize="10sp"
-                            android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/btnPracticeZoology2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:background="@drawable/bg_pill_emerald"
+                        android:backgroundTint="#0F4C3A"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Practice"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="Chapter-wise MCQ"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Topic-focused recall"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-
-                    <!-- Mode 2: Mixed Mock -->
-                    <LinearLayout
-                        android:id="@+id/modeMixedMock"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/bg_card"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="⚡ Speed Test"
-                            android:textColor="@color/bio_secondary"
-                            android:textSize="10sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="Mixed Chapter Mock"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Randomized timed test"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-
-                    <!-- Mode 3: Botany Practice -->
-                    <LinearLayout
-                        android:id="@+id/modeBotanyPractice"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_marginEnd="4dp"
-                        android:background="@drawable/bg_card"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🌱 1st Paper"
-                            android:textColor="@color/bio_primary"
-                            android:textSize="10sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="Botany Practice"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="12 Core chapters"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-
-                    <!-- Mode 4: Zoology Practice -->
-                    <LinearLayout
-                        android:id="@+id/modeZoologyPractice"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_columnWeight="1"
-                        android:layout_marginStart="4dp"
-                        android:background="@drawable/bg_card"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🐾 2nd Paper"
-                            android:textColor="@color/bio_secondary"
-                            android:textSize="10sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="Zoology Practice"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="12 Core chapters"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-                </GridLayout>
             </LinearLayout>
 
-            <!-- Paper Selection Tabs -->
-            <LinearLayout
+            <!-- Bottom Big Button: Start Mock Exam or Full Exam Practice matching Exam Practice.jpeg -->
+            <Button
+                android:id="@+id/btnStartMockExam"
                 android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_card_dark_teal"
+                android:text="Start Mock Exam or Full Exam Practice"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
+
+            <!-- Hidden components for backwards compatibility / unit tests -->
+            <TextView
+                android:id="@+id/tabBotany"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal">
+                android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/tabBotany"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_chip_cyan"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:text="🌱 Botany (1st Paper)"
-                    android:textColor="@color/bio_primary"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tabZoology"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1"
-                    android:background="@color/bio_surface_container"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:text="🐾 Zoology (2nd Paper)"
-                    android:textColor="@color/bio_on_surface_variant"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-            <!-- Active Paper Title & Stats -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tabZoology"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/tvChapterPaperTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Botany — Biology 1st Paper"
-                    android:textColor="@color/bio_on_surface"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvChapterCountBadge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="12 Chapters • 300 MCQs"
-                    android:textColor="@color/bio_outline"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <!-- Chapter ListView (Embedded, Non-scrolling inside NestedScrollView) -->
             <ListView
                 android:id="@+id/lvChapters"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="24dp"
-                android:divider="@null"
-                android:dividerHeight="0dp"
-                android:nestedScrollingEnabled="false" />
-
-            <!-- Empty State -->
-            <TextView
-                android:id="@+id/tvEmptyChapters"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:gravity="center"
-                android:text="No chapters found"
-                android:textColor="@color/bio_outline"
-                android:textSize="14sp"
                 android:visibility="gone" />
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+            <TextView
+                android:id="@+id/tvEmptyChapters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
-    <!-- Bottom Navigation Bar (Stitch Specification: 4 destinations, Study active) -->
+            <View
+                android:id="@+id/modeChapterMcq"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/modeMixedMock"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/modeBotanyPractice"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:visibility="gone" />
+
+            <View
+                android:id="@+id/modeZoologyPractice"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation Dock matching Exam Practice.jpeg -->
     <LinearLayout
-        android:id="@+id/bottomNavChapter"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:background="@color/bio_surface_container_low"
-        android:elevation="10dp"
+        android:id="@+id/bottomNavBar"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_bottom_nav_dock"
+        android:elevation="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <!-- Tab 1: Home -->
         <LinearLayout
             android:id="@+id/navTabHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🏠"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home_nav"
+                app:tint="@color/bio_nav_inactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Home"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
 
+        <!-- Tab 2: Study (Active) -->
         <LinearLayout
             android:id="@+id/navTabStudy"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_chip_cyan"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📖"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_study_nav"
+                app:tint="@color/bio_nav_active" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Study"
-                android:textColor="@color/bio_primary"
-                android:textSize="10sp"
+                android:textColor="@color/bio_nav_active"
+                android:textSize="11sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- Tab 3: Saved -->
         <LinearLayout
             android:id="@+id/navTabSaved"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🔖"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_saved_nav" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Saved"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
 
+        <!-- Tab 4: Profile -->
         <LinearLayout
             android:id="@+id/navTabProfile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="👤"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_profile_nav" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Profile"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
+
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

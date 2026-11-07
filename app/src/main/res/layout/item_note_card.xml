@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/bg_card_white"
+    android:elevation="3dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Row 1: Title and Date matching Notes.jpeg -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvNoteCardTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Photosynthesis &amp; Respiration"
+            android:textColor="@color/bio_card_text_dark"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvNoteCardDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oct 25, 2026"
+            android:textColor="@color/bio_card_text_muted"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Row 2: Category Badge matching Notes.jpeg -->
+    <TextView
+        android:id="@+id/tvNoteCardCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/bg_chip_cyan"
+        android:paddingStart="8dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="2dp"
+        android:text="Biology"
+        android:textColor="@color/bio_nav_active"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+    <!-- Row 3: Description and Edit Pen Button matching Notes.jpeg -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvNoteCardDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="3"
+            android:text="Features key stages like the Calvin cycle, light-dependent reactions..."
+            android:textColor="@color/bio_card_text_muted"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/btnEditNoteCard"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
+            android:text="✏️"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</LinearLayout>
+

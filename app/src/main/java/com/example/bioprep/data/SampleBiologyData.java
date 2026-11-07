@@ -229,21 +229,27 @@ public final class SampleBiologyData {
                 "Mendel's Law of Independent Assortment yields a 9:3:3:1 phenotypic ratio in F2 generation.",
                 "Sample");
 
-        // Fill remaining chapters with clean sample fallback questions
+        // Ensure every chapter in Paper 1 has at least 3 questions for thorough practice
         for (Chapter c : paper1Chapters) {
-            if (!QUESTIONS_BY_CHAPTER.containsKey(c.getId())) {
-                addQuestion(c.getId(), PAPER_BIOLOGY_1, "q_" + c.getId() + "_sample", c.getTitle(),
-                        "Sample HSC Question for " + c.getTitle() + ": Which statement is factually accurate?",
+            List<Question> existing = QUESTIONS_BY_CHAPTER.get(c.getId());
+            int currentCount = (existing != null) ? existing.size() : 0;
+            for (int i = currentCount + 1; i <= 3; i++) {
+                addQuestion(c.getId(), PAPER_BIOLOGY_1, "q_" + c.getId() + "_sample_" + i, c.getTitle(),
+                        "HSC Practice Question " + i + " for " + c.getTitle() + ": Which statement is factually accurate?",
                         Arrays.asList("Option A (Concept Overview)", "Option B (Key Mechanism)", "Option C (Correct Concept)", "Option D (Alternative Explanation)"),
                         2,
                         "Explanation: Option C reflects standard HSC curriculum facts for " + c.getTitle(),
                         "Sample");
             }
         }
+
+        // Ensure every chapter in Paper 2 has at least 3 questions for thorough practice
         for (Chapter c : paper2Chapters) {
-            if (!QUESTIONS_BY_CHAPTER.containsKey(c.getId())) {
-                addQuestion(c.getId(), PAPER_BIOLOGY_2, "q_" + c.getId() + "_sample", c.getTitle(),
-                        "Sample HSC Question for " + c.getTitle() + ": Which statement is factually accurate?",
+            List<Question> existing = QUESTIONS_BY_CHAPTER.get(c.getId());
+            int currentCount = (existing != null) ? existing.size() : 0;
+            for (int i = currentCount + 1; i <= 3; i++) {
+                addQuestion(c.getId(), PAPER_BIOLOGY_2, "q_" + c.getId() + "_sample_" + i, c.getTitle(),
+                        "HSC Practice Question " + i + " for " + c.getTitle() + ": Which statement is factually accurate?",
                         Arrays.asList("Option A (Concept Overview)", "Option B (Key Mechanism)", "Option C (Correct Concept)", "Option D (Alternative Explanation)"),
                         2,
                         "Explanation: Option C reflects standard HSC curriculum facts for " + c.getTitle(),

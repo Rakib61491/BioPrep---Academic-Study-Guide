@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- BioVerdant HSC Stitch Theme Palette (Project 15814936439009237240) -->
+    <!-- BioVerdant HSC Stitch Theme Palette (Matching Figma Prototypes) -->
     <!-- Surfaces & Canvas (Deep Botanical Abyssal Forest) -->
     <color name="bio_background">#001713</color>
     <color name="bio_surface">#001713</color>
@@ -17,6 +17,17 @@
     <color name="bio_surface_container_highest">#1C3A35</color>
     <color name="bio_surface_forest">#133E37</color>
 
+    <!-- Figma Screen Match: Header Teal Banner (Active Recall & Flashcards) -->
+    <color name="bio_banner_header">#7ED4BD</color>
+    <color name="bio_banner_header_text">#0A382C</color>
+
+    <!-- Dark Teal Cards & Containers (Notes, Saved, Exam, Goal, Profile) -->
+    <color name="bio_container_dark">#0D332B</color>
+    <color name="bio_container_dark_teal">#0D3D32</color>
+    <color name="bio_container_dark_border">#1E5446</color>
+    <color name="bio_option_bg">#103B32</color>
+    <color name="bio_option_stroke">#1E5A4D</color>
+
     <!-- Content & Typography Colors -->
     <color name="bio_on_surface">#C8EAE1</color>
     <color name="bio_on_surface_variant">#B9CAC5</color>
@@ -29,26 +40,46 @@
     <color name="bio_on_primary">#003730</color>
     <color name="bio_on_primary_container">#006257</color>
     <color name="bio_primary_fixed">#45FCE2</color>
+    <color name="bio_neon_cyan">#25F4DB</color>
+    <color name="bio_mint_accent">#2DD4BF</color>
 
     <!-- Secondary Accent: Lush Cellular Emerald -->
     <color name="bio_secondary">#4EDEA3</color>
     <color name="bio_secondary_container">#00A572</color>
     <color name="bio_on_secondary">#003824</color>
     <color name="bio_on_secondary_container">#00311F</color>
+    <color name="bio_emerald_btn">#10B981</color>
+    <color name="bio_emerald_btn_dark">#059669</color>
 
-    <!-- Tertiary Accent: Amber Mitochondria -->
+    <!-- Tertiary Accent: Amber Mitochondria / Chapter Bubbles -->
     <color name="bio_tertiary">#FFE5CB</color>
     <color name="bio_tertiary_container">#FFC277</color>
     <color name="bio_tertiary_fixed">#FFDDB8</color>
     <color name="bio_on_tertiary">#472A00</color>
     <color name="bio_on_tertiary_container">#7B4D00</color>
+    <color name="bio_chapter_yellow">#F59E0B</color>
+    <color name="bio_chapter_teal">#14B8A6</color>
+    <color name="bio_chapter_purple">#A855F7</color>
+    <color name="bio_chapter_pink">#FB7185</color>
 
     <!-- Clinical High-Contrast Card Colors -->
     <color name="bio_card_white">#FFFFFF</color>
-    <color name="bio_card_text_dark">#0B2B26</color>
-    <color name="bio_card_text_muted">#3B4A46</color>
+    <color name="bio_card_text_dark">#0F172A</color>
+    <color name="bio_card_text_muted">#64748B</color>
     <color name="bio_card_border">#E2E8F0</color>
     <color name="bio_badge_bg">#E6FAF7</color>
+
+    <!-- Spaced Repetition Rating Buttons -->
+    <color name="bio_rate_again">#EF4444</color>
+    <color name="bio_rate_hard">#F97316</color>
+    <color name="bio_rate_good">#84CC16</color>
+    <color name="bio_rate_easy">#22C55E</color>
+    <color name="bio_feedback_pill">#BBE1D5</color>
+
+    <!-- Bottom Navigation Dock Colors -->
+    <color name="bio_nav_dock_bg">#FFFFFF</color>
+    <color name="bio_nav_active">#0F766E</color>
+    <color name="bio_nav_inactive">#64748B</color>
 
     <!-- Semantic Feedback Colors -->
     <color name="bio_error">#FFB4AB</color>

@@ -69,24 +69,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initViewsAndListeners() {
-        // Top Left Small Back Button
-        View btnHomeBack = findViewById(R.id.btnHomeBack);
-        if (btnHomeBack != null) {
-            btnHomeBack.setOnClickListener(v -> finish());
-        }
-
         // Top Left Avatar -> Opens My Profile Screen
         View.OnClickListener profileOpener = v -> {
             Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
             startActivity(intent);
         };
+        View frameHomeAvatar = findViewById(R.id.frameHomeAvatar);
+        if (frameHomeAvatar != null) {
+            frameHomeAvatar.setOnClickListener(profileOpener);
+        }
         View ivHeaderAvatar = findViewById(R.id.ivHeaderAvatar);
         if (ivHeaderAvatar != null) {
             ivHeaderAvatar.setOnClickListener(profileOpener);
-        }
-        View imgStudentAvatar = findViewById(R.id.imgStudentAvatar);
-        if (imgStudentAvatar != null) {
-            imgStudentAvatar.setOnClickListener(profileOpener);
         }
 
         // Top Right Goal Option -> Opens Daily Goal & Analytics Screen
@@ -94,10 +88,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(getApplicationContext(), AnalyticsActivity.class);
             startActivity(intent);
         };
-        View btnHeaderGoal = findViewById(R.id.btnHeaderGoal);
-        if (btnHeaderGoal != null) {
-            btnHeaderGoal.setOnClickListener(goalOpener);
-        }
         View layoutGoalRing = findViewById(R.id.layoutGoalRing);
         if (layoutGoalRing != null) {
             layoutGoalRing.setOnClickListener(goalOpener);
@@ -125,15 +115,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
 
-        Button btnStartRecall = findViewById(R.id.btnStartRecall);
-        if (btnStartRecall != null) {
-            btnStartRecall.setOnClickListener(v -> {
-                Intent intent = new Intent(getApplicationContext(), ActiveRecallActivity.class);
-                startActivity(intent);
-            });
-        }
-
-        // Card 2: Interactive Flashcards (Stitch Screen 6 & Lab Manual Experiments)
+        // Card 2: Interactive Flashcards
         View cardLabExperiments = findViewById(R.id.cardLabExperiments);
         if (cardLabExperiments != null) {
             cardLabExperiments.setOnClickListener(v -> {
@@ -151,7 +133,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
 
-        // Card 4: Bangladeshi Resources Library (Topic 3: Implicit Intents)
+        // Card 4: Exam Practice Card in Row 2
+        View cardExamPractice = findViewById(R.id.cardExamPractice);
+        if (cardExamPractice != null) {
+            cardExamPractice.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), ChapterActivity.class);
+                startActivity(intent);
+            });
+        }
+
+        // Card 5: Resources Library (Topic 3: Implicit Intents)
         View cardResources = findViewById(R.id.cardResources);
         if (cardResources != null) {
             cardResources.setOnClickListener(v -> {
@@ -160,10 +151,53 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
 
-        View btnSavedLibrary = findViewById(R.id.btnSavedLibrary);
-        if (btnSavedLibrary != null) {
-            btnSavedLibrary.setOnClickListener(v -> {
-                Intent intent = new Intent(getApplicationContext(), SavedItemsActivity.class);
+        // Daily Quiz Challenge: "Learn More" button
+        View btnLearnMoreQuiz = findViewById(R.id.btnLearnMoreQuiz);
+        if (btnLearnMoreQuiz != null) {
+            btnLearnMoreQuiz.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
+                startActivity(intent);
+            });
+        }
+        View bannerDailyQuiz = findViewById(R.id.bannerDailyQuiz);
+        if (bannerDailyQuiz != null) {
+            bannerDailyQuiz.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
+                startActivity(intent);
+            });
+        }
+
+        // Recent Activity Card
+        View cardRecentActivity = findViewById(R.id.cardRecentActivity);
+        if (cardRecentActivity != null) {
+            cardRecentActivity.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), ActiveRecallActivity.class);
+                startActivity(intent);
+            });
+        }
+
+        View btnRecentMenu = findViewById(R.id.btnRecentMenu);
+        if (btnRecentMenu != null) {
+            btnRecentMenu.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(HomeActivity.this, v);
+                popup.getMenu().add("Resume Photosynthesis");
+                popup.getMenu().add("Mark Completed");
+                popup.getMenu().add("Remove from Recent");
+                popup.setOnMenuItemClickListener(item -> {
+                    Toast.makeText(HomeActivity.this, item.getTitle() + " selected", Toast.LENGTH_SHORT).show();
+                    if ("Resume Photosynthesis".equals(item.getTitle())) {
+                        startActivity(new Intent(HomeActivity.this, ActiveRecallActivity.class));
+                    }
+                    return true;
+                });
+                popup.show();
+            });
+        }
+
+        View btnSeeAllRecent = findViewById(R.id.btnSeeAllRecent);
+        if (btnSeeAllRecent != null) {
+            btnSeeAllRecent.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), AnalyticsActivity.class);
                 startActivity(intent);
             });
         }
@@ -324,7 +358,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         // Topic 9: Register Broadcast Receiver dynamically in onStart()
         if (!isReceiverRegistered && airplaneModeReceiver != null) {
             IntentFilter filter = new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-            registerReceiver(airplaneModeReceiver, filter);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ContextCompat.registerReceiver(this, airplaneModeReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
+            } else {
+                registerReceiver(airplaneModeReceiver, filter);
+            }
             isReceiverRegistered = true;
             Log.d(TAG, "AirplaneModeReceiver registered.");
         }

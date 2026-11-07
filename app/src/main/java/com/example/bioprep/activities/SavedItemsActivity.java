@@ -86,69 +86,105 @@ public class SavedItemsActivity extends AppCompatActivity {
         TextView pillNotes = findViewById(R.id.pillFilterNotes);
         TextView pillRecall = findViewById(R.id.pillFilterRecall);
         TextView pillFlashcards = findViewById(R.id.pillFilterFlashcards);
-        TextView pillResources = findViewById(R.id.pillFilterResources);
+        TextView pillMcq = findViewById(R.id.pillFilterMcq);
 
-        pillAll.setOnClickListener(v -> {
-            cardSavedNote.setVisibility(View.VISIBLE);
-            cardSavedRecall.setVisibility(View.VISIBLE);
-            cardSavedFlashcard.setVisibility(View.VISIBLE);
-            cardSavedResource.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "Showing all saved items", Toast.LENGTH_SHORT).show();
-        });
+        View.OnClickListener pillReset = v -> {
+            if (pillAll != null) pillAll.setBackgroundResource(R.drawable.bg_card_dark_teal);
+            if (pillNotes != null) pillNotes.setBackgroundResource(R.drawable.bg_card_dark_teal);
+            if (pillRecall != null) pillRecall.setBackgroundResource(R.drawable.bg_card_dark_teal);
+            if (pillFlashcards != null) pillFlashcards.setBackgroundResource(R.drawable.bg_card_dark_teal);
+            if (pillMcq != null) pillMcq.setBackgroundResource(R.drawable.bg_card_dark_teal);
+            v.setBackgroundResource(R.drawable.bg_pill_cyan);
+        };
 
-        pillNotes.setOnClickListener(v -> {
-            cardSavedNote.setVisibility(View.VISIBLE);
-            cardSavedRecall.setVisibility(View.GONE);
-            cardSavedFlashcard.setVisibility(View.GONE);
-            cardSavedResource.setVisibility(View.GONE);
-            Toast.makeText(this, "Showing saved notes", Toast.LENGTH_SHORT).show();
-        });
+        if (pillAll != null) {
+            pillAll.setOnClickListener(v -> {
+                pillReset.onClick(v);
+                cardSavedNote.setVisibility(View.VISIBLE);
+                cardSavedRecall.setVisibility(View.VISIBLE);
+                cardSavedFlashcard.setVisibility(View.VISIBLE);
+                cardSavedResource.setVisibility(View.VISIBLE);
+                Toast.makeText(this, "Showing all saved items", Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        pillRecall.setOnClickListener(v -> {
-            cardSavedNote.setVisibility(View.GONE);
-            cardSavedRecall.setVisibility(View.VISIBLE);
-            cardSavedFlashcard.setVisibility(View.GONE);
-            cardSavedResource.setVisibility(View.GONE);
-            Toast.makeText(this, "Showing saved active recall", Toast.LENGTH_SHORT).show();
-        });
+        if (pillNotes != null) {
+            pillNotes.setOnClickListener(v -> {
+                pillReset.onClick(v);
+                cardSavedNote.setVisibility(View.VISIBLE);
+                cardSavedRecall.setVisibility(View.GONE);
+                cardSavedFlashcard.setVisibility(View.GONE);
+                cardSavedResource.setVisibility(View.GONE);
+                Toast.makeText(this, "Showing saved notes", Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        pillFlashcards.setOnClickListener(v -> {
-            cardSavedNote.setVisibility(View.GONE);
-            cardSavedRecall.setVisibility(View.GONE);
-            cardSavedFlashcard.setVisibility(View.VISIBLE);
-            cardSavedResource.setVisibility(View.GONE);
-            Toast.makeText(this, "Showing saved flashcards", Toast.LENGTH_SHORT).show();
-        });
+        if (pillRecall != null) {
+            pillRecall.setOnClickListener(v -> {
+                pillReset.onClick(v);
+                cardSavedNote.setVisibility(View.GONE);
+                cardSavedRecall.setVisibility(View.VISIBLE);
+                cardSavedFlashcard.setVisibility(View.GONE);
+                cardSavedResource.setVisibility(View.GONE);
+                Toast.makeText(this, "Showing saved active recall", Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        pillResources.setOnClickListener(v -> {
-            cardSavedNote.setVisibility(View.GONE);
-            cardSavedRecall.setVisibility(View.GONE);
-            cardSavedFlashcard.setVisibility(View.GONE);
-            cardSavedResource.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "Showing saved resources", Toast.LENGTH_SHORT).show();
-        });
+        if (pillFlashcards != null) {
+            pillFlashcards.setOnClickListener(v -> {
+                pillReset.onClick(v);
+                cardSavedNote.setVisibility(View.GONE);
+                cardSavedRecall.setVisibility(View.GONE);
+                cardSavedFlashcard.setVisibility(View.VISIBLE);
+                cardSavedResource.setVisibility(View.GONE);
+                Toast.makeText(this, "Showing saved flashcards", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (pillMcq != null) {
+            pillMcq.setOnClickListener(v -> {
+                pillReset.onClick(v);
+                cardSavedNote.setVisibility(View.GONE);
+                cardSavedRecall.setVisibility(View.VISIBLE);
+                cardSavedFlashcard.setVisibility(View.VISIBLE);
+                cardSavedResource.setVisibility(View.GONE);
+                Toast.makeText(this, "Showing saved MCQ & questions", Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
     private void setupCardClicks() {
         // Saved Note -> NotesActivity
         View.OnClickListener noteOpener = v -> startActivity(new Intent(this, NotesActivity.class));
-        cardSavedNote.setOnClickListener(noteOpener);
-        findViewById(R.id.btnOpenSavedNote).setOnClickListener(noteOpener);
+        if (cardSavedNote != null) cardSavedNote.setOnClickListener(noteOpener);
+        View btnOpenNote = findViewById(R.id.btnOpenSavedNote);
+        if (btnOpenNote != null) btnOpenNote.setOnClickListener(noteOpener);
 
         // Saved Recall -> ActiveRecallActivity
         View.OnClickListener recallOpener = v -> startActivity(new Intent(this, ActiveRecallActivity.class));
-        cardSavedRecall.setOnClickListener(recallOpener);
-        findViewById(R.id.btnOpenSavedRecall).setOnClickListener(recallOpener);
+        if (cardSavedRecall != null) cardSavedRecall.setOnClickListener(recallOpener);
+        View btnOpenRecall = findViewById(R.id.btnOpenSavedRecall);
+        if (btnOpenRecall != null) btnOpenRecall.setOnClickListener(recallOpener);
 
         // Saved Flashcard -> FlashcardsActivity
         View.OnClickListener flashcardOpener = v -> startActivity(new Intent(this, FlashcardsActivity.class));
-        cardSavedFlashcard.setOnClickListener(flashcardOpener);
-        findViewById(R.id.btnOpenSavedFlashcard).setOnClickListener(flashcardOpener);
+        if (cardSavedFlashcard != null) cardSavedFlashcard.setOnClickListener(flashcardOpener);
+        View btnOpenFlashcard = findViewById(R.id.btnOpenSavedFlashcard);
+        if (btnOpenFlashcard != null) btnOpenFlashcard.setOnClickListener(flashcardOpener);
 
         // Saved Resource -> ResourcesActivity
         View.OnClickListener resourceOpener = v -> startActivity(new Intent(this, ResourcesActivity.class));
-        cardSavedResource.setOnClickListener(resourceOpener);
-        findViewById(R.id.btnOpenSavedResource).setOnClickListener(resourceOpener);
+        if (cardSavedResource != null) cardSavedResource.setOnClickListener(resourceOpener);
+        View btnOpenResource = findViewById(R.id.btnOpenSavedResource);
+        if (btnOpenResource != null) btnOpenResource.setOnClickListener(resourceOpener);
+
+        // Bookmark ribbons toggle
+        View.OnClickListener bookmarkToggle = v -> Toast.makeText(this, "Bookmark updated in your library", Toast.LENGTH_SHORT).show();
+        if (findViewById(R.id.btnBookmarkItem1) != null) findViewById(R.id.btnBookmarkItem1).setOnClickListener(bookmarkToggle);
+        if (findViewById(R.id.btnBookmarkItem2) != null) findViewById(R.id.btnBookmarkItem2).setOnClickListener(bookmarkToggle);
+        if (findViewById(R.id.btnBookmarkItem3) != null) findViewById(R.id.btnBookmarkItem3).setOnClickListener(bookmarkToggle);
+        if (findViewById(R.id.btnDownloadSavedPaper) != null) findViewById(R.id.btnDownloadSavedPaper).setOnClickListener(v ->
+                Toast.makeText(this, "Downloading 2025 Past Paper PDF (1.2 MB)...", Toast.LENGTH_SHORT).show());
     }
 
     private void setupNavigation() {

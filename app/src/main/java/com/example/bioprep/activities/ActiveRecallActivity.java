@@ -65,9 +65,51 @@ public class ActiveRecallActivity extends AppCompatActivity {
             btnRecallBack.setOnClickListener(v -> finish());
         }
 
+        View btnRecallOptions = findViewById(R.id.btnRecallOptions);
+        if (btnRecallOptions != null) {
+            btnRecallOptions.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(ActiveRecallActivity.this, v);
+                popup.getMenu().add("Bookmark this Drill");
+                popup.getMenu().add("Reset All Drills");
+                popup.getMenu().add("Switch to Botany");
+                popup.setOnMenuItemClickListener(item -> {
+                    Toast.makeText(ActiveRecallActivity.this, item.getTitle() + " selected", Toast.LENGTH_SHORT).show();
+                    if ("Reset All Drills".equals(item.getTitle())) {
+                        currentQuestionIndex = 0;
+                        updateQuestionDisplay();
+                    }
+                    return true;
+                });
+                popup.show();
+            });
+        }
+
         if (btnToggleAnswer != null) {
             btnToggleAnswer.setOnClickListener(v -> toggleAnswer());
         }
+
+        Button btnShowAnswerBottom = findViewById(R.id.btnShowAnswerBottom);
+        if (btnShowAnswerBottom != null) {
+            btnShowAnswerBottom.setOnClickListener(v -> toggleAnswer());
+        }
+
+        // Bottom Navigation Bar items
+        findViewById(R.id.navTabHome).setOnClickListener(v -> {
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+        });
+        findViewById(R.id.navTabStudy).setOnClickListener(v -> {
+            startActivity(new Intent(this, ChapterActivity.class));
+            finish();
+        });
+        findViewById(R.id.navTabSaved).setOnClickListener(v -> {
+            startActivity(new Intent(this, SavedItemsActivity.class));
+            finish();
+        });
+        findViewById(R.id.navTabProfile).setOnClickListener(v -> {
+            startActivity(new Intent(this, ProfileActivity.class));
+            finish();
+        });
 
         Button btnRecallNext = findViewById(R.id.btnRecallNext);
         if (btnRecallNext != null) {
@@ -182,10 +224,7 @@ public class ActiveRecallActivity extends AppCompatActivity {
      * addView(editText), addView(showButton), setOnClickListener, Toast.makeText.
      */
     private void setupDynamicViewsDemo() {
-        LinearLayout dynamicContainer = findViewById(R.id.dynamicLayoutContainer);
-        if (dynamicContainer == null) {
-            dynamicContainer = findViewById(R.id.main);
-        }
+        LinearLayout dynamicContainer = findViewById(R.id.main);
         if (dynamicContainer == null) return;
 
         // 1. new EditText(this)

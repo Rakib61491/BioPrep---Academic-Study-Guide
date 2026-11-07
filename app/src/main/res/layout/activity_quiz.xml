@@ -1,46 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutQuizRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bio_background">
+    android:background="@color/bio_surface">
 
-    <!-- Fullscreen Stitch Background Atmosphere -->
+    <!-- Fullscreen Botanical Microscopic Background matching Exam Practice Sample Questions.jpeg -->
     <ImageView
         android:id="@+id/ivQuizBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.85"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_stitch_biology"
-        android:alpha="0.25"
-        android:contentDescription="@null" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Scrollable Question Runner -->
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#22001713"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Scrollable Main Container -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
-        android:paddingBottom="72dp">
+        app:layout_constraintBottom_toTopOf="@id/bottomNavBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="24dp">
 
-            <!-- Top Header Bar -->
-            <LinearLayout
+            <!-- Top Header Bar matching Exam Practice Sample Questions.jpeg -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bio_surface_container"
-                android:elevation="4dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="12dp">
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp">
 
+                <!-- Small Back Button at Top Left -->
                 <ImageButton
                     android:id="@+id/btnQuizBack"
                     android:layout_width="32dp"
@@ -48,459 +64,473 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Back"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="@color/bio_primary" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
 
+                <!-- Centered Title & Subtitle -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        android:id="@+id/tvQuizMainTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="জীববিজ্ঞান (HSC Biology)"
-                        android:textColor="@color/bio_primary"
-                        android:textSize="17sp"
+                        android:text="Exam Practice"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvQuizSubheader"
+                        android:id="@+id/tvChapterTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Exam Practice • Botany &amp; Zoology"
-                        android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="11sp" />
+                        android:layout_marginTop="2dp"
+                        android:text="Chapter 1: Cell &amp; Its Function"
+                        android:textColor="@color/bio_mint_accent"
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/btnQuizBookmark"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:gravity="center"
                     android:text="🔖"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Subheader & Chapter Category Bar -->
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Question Info & Countdown Timer Row matching Exam Practice Sample Questions.jpeg -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingTop="14dp"
-                android:paddingEnd="16dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvQuizChapterTitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Exam Practice"
-                        android:textColor="@color/bio_on_surface"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvQuizPaperBadge"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_chip_cyan"
-                        android:paddingStart="10dp"
-                        android:paddingTop="3dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="3dp"
-                        android:text="Biology 1st Paper"
-                        android:textColor="@color/bio_primary"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvQuizChapterSubtitle"
+                    android:id="@+id/tvProgress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Question 4 of 20"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvTimerRemaining"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="🌱 Botany • অধ্যায় ১: কোষ ও এর গঠন"
-                    android:textColor="@color/bio_on_surface_variant"
-                    android:textSize="12sp" />
+                    android:text="Time Left: 14:35"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Progress & Timer Card -->
+            <!-- Progress Bar with percent text matching Exam Practice Sample Questions.jpeg -->
             <LinearLayout
-                android:id="@+id/layoutTimerCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/bio_surface_container"
-                android:orientation="vertical"
-                android:padding="14dp">
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvQuizProgress"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Question 1 of 5"
-                        android:textColor="@color/bio_primary"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <!-- Timer Badge -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_chip_cyan"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="10dp"
-                        android:paddingTop="3dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="3dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="⏱ "
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tvTimerRemaining"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="01:00"
-                            android:textColor="@color/bio_primary"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Timer Controls -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/btnTimerStart"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="0dp"
-                        android:layout_height="34dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_primary_container"
-                        android:text="Start"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_surface_container_lowest"
-                        android:textSize="11sp" />
-
-                    <Button
-                        android:id="@+id/btnTimerPause"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="0dp"
-                        android:layout_height="34dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_surface_variant"
-                        android:enabled="false"
-                        android:text="Pause"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_on_surface"
-                        android:textSize="11sp" />
-
-                    <Button
-                        android:id="@+id/btnTimerResume"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="0dp"
-                        android:layout_height="34dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_secondary"
-                        android:enabled="false"
-                        android:text="Resume"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_surface_container_lowest"
-                        android:textSize="11sp" />
-
-                    <Button
-                        android:id="@+id/btnTimerStop"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="0dp"
-                        android:layout_height="34dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_surface_variant"
-                        android:enabled="false"
-                        android:text="Stop"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_on_surface"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <!-- Micro Progress Bar -->
                 <ProgressBar
-                    android:id="@+id/pbQuizRunner"
+                    android:id="@+id/pbQuizProgress"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="0dp"
+                    android:layout_height="8dp"
+                    android:layout_weight="1"
                     android:max="100"
                     android:progress="20"
-                    android:progressTint="@color/bio_primary_container" />
+                    android:progressDrawable="@drawable/progress_bar_cyan" />
+
+                <TextView
+                    android:id="@+id/tvProgressPercentText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="20%"
+                    android:textColor="@color/bio_mint_accent"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- RecyclerView of Questions -->
+            <!-- Question Card (Clinical White Card) matching Exam Practice Sample Questions.jpeg -->
+            <LinearLayout
+                android:id="@+id/cardQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tvQuizQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4dp"
+                    android:text="Which of the following organelles is responsible for cellular respiration and energy production in eukaryotic cells?"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Option Buttons matching Exam Practice Sample Questions.jpeg -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <!-- Option A -->
+                <LinearLayout
+                    android:id="@+id/btnOptionA"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_btn_option_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp">
+
+                    <TextView
+                        android:id="@+id/tvOptionAText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="A)  Ribosome"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/ivCheckA"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_check_clean"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Option B -->
+                <LinearLayout
+                    android:id="@+id/btnOptionB"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_btn_option_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp">
+
+                    <TextView
+                        android:id="@+id/tvOptionBText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="B)  Chloroplast"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/ivCheckB"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_check_clean"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Option C (Selected Green with checkmark in design) -->
+                <LinearLayout
+                    android:id="@+id/btnOptionC"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_btn_option_selected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp">
+
+                    <TextView
+                        android:id="@+id/tvOptionCText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="C)  Mitochondria"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/ivCheckC"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_check_clean"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <!-- Option D -->
+                <LinearLayout
+                    android:id="@+id/btnOptionD"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_btn_option_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp">
+
+                    <TextView
+                        android:id="@+id/tvOptionDText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="D)  Golgi Apparatus"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/ivCheckD"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_check_clean"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Bottom Action Buttons: Skip and Submit & Next matching Exam Practice Sample Questions.jpeg -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal">
+
+                <!-- Skip Button -->
+                <Button
+                    android:id="@+id/btnQuizSkip"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_option_unselected"
+                    android:text="Skip"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bio_mint_accent"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null" />
+
+                <!-- Submit & Next Button -->
+                <Button
+                    android:id="@+id/btnQuizSubmit"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1.6"
+                    android:background="@drawable/bg_pill_cyan"
+                    android:text="Submit &amp; Next"
+                    android:textAllCaps="false"
+                    android:textColor="#0A382C"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null" />
+            </LinearLayout>
+
+            <!-- Hidden components for backwards compatibility / RecyclerView tests -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvQuestions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:nestedScrollingEnabled="false" />
-
-            <!-- Empty Quiz State -->
-            <TextView
-                android:id="@+id/tvEmptyQuiz"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:gravity="center"
-                android:text="@string/empty_questions"
-                android:textColor="@color/bio_outline"
-                android:textSize="15sp"
                 android:visibility="gone" />
 
-            <!-- Bio Explanation Callout Box -->
-            <LinearLayout
-                android:id="@+id/layoutBioExplanation"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvEmptyQuiz"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/bio_surface_container"
-                android:orientation="vertical"
-                android:padding="12dp">
+                android:visibility="gone" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="💡 ব্যাখ্যা (Explanation):"
-                        android:textColor="@color/bio_primary"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_chip_emerald"
-                        android:paddingStart="8dp"
-                        android:paddingTop="2dp"
-                        android:paddingEnd="8dp"
-                        android:paddingBottom="2dp"
-                        android:text="Powerhouse of Cell"
-                        android:textColor="@color/bio_secondary"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:lineSpacingExtra="2dp"
-                    android:text="Mitochondria generate most of the ATP needed for cellular respiration. তাই একে কোষের শক্তিঘর বলা হয়।"
-                    android:textColor="@color/bio_on_surface_variant"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <!-- Sticky Navigation Actions: Prev, Skip, Next, Submit -->
-            <LinearLayout
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btnPrev"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="24dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btnPrevQuestion"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="0dp"
-                    android:layout_height="44dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/bio_surface_container_high"
-                    android:text="Prev"
-                    android:textAllCaps="false"
-                    android:textColor="@color/bio_on_surface"
-                    android:textSize="12sp" />
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btnNextQuestion"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="0dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@color/bio_surface_container_high"
-                    android:text="Skip"
-                    android:textAllCaps="false"
-                    android:textColor="@color/bio_on_surface"
-                    android:textSize="12sp" />
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/btnSubmitQuiz"
-                    android:layout_width="0dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_weight="1.5"
-                    android:backgroundTint="@color/bio_primary_container"
-                    android:text="Submit &amp; Next >"
-                    android:textAllCaps="false"
-                    android:textColor="@color/bio_surface_container_lowest"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/btnTimerStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnTimerPause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnTimerResume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnTimerStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
 
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
-    <!-- Bottom Navigation Bar (Stitch Specification: 4 destinations, Study active) -->
+    <!-- Bottom Navigation Dock matching Exam Practice Sample Questions.jpeg -->
     <LinearLayout
-        android:id="@+id/bottomNavQuiz"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:background="@color/bio_surface_container_low"
-        android:elevation="10dp"
+        android:id="@+id/bottomNavBar"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_bottom_nav_dock"
+        android:elevation="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <!-- Tab 1: Home -->
         <LinearLayout
             android:id="@+id/navTabHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🏠"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home_nav"
+                app:tint="@color/bio_nav_inactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Home"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
 
+        <!-- Tab 2: Study (Active) -->
         <LinearLayout
             android:id="@+id/navTabStudy"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_chip_cyan"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📖"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_study_nav"
+                app:tint="@color/bio_nav_active" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Study"
-                android:textColor="@color/bio_primary"
-                android:textSize="10sp"
+                android:textColor="@color/bio_nav_active"
+                android:textSize="11sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- Tab 3: Saved -->
         <LinearLayout
             android:id="@+id/navTabSaved"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🔖"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_saved_nav" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Saved"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
 
+        <!-- Tab 4: Profile -->
         <LinearLayout
             android:id="@+id/navTabProfile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="👤"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_profile_nav" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Profile"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
+
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

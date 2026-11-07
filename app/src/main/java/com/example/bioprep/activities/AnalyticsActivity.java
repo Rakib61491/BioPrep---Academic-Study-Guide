@@ -108,8 +108,41 @@ public class AnalyticsActivity extends AppCompatActivity {
         if (btnFilterMonthly != null) btnFilterMonthly.setOnClickListener(filterListener);
 
         // Option 1: Custom Goals
-        findViewById(R.id.btnSetCustomGoals).setOnClickListener(v ->
-                Toast.makeText(this, "Custom Goal: 20 MCQs & 10 Flashcards daily set!", Toast.LENGTH_SHORT).show());
+        View btnSetCustomGoals = findViewById(R.id.btnSetCustomGoals);
+        if (btnSetCustomGoals != null) {
+            btnSetCustomGoals.setOnClickListener(v -> {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle("Set Custom Daily Goals");
+
+                LinearLayout layout = new LinearLayout(this);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                layout.setPadding(32, 24, 32, 16);
+
+                final android.widget.EditText inputMcqTarget = new android.widget.EditText(this);
+                inputMcqTarget.setHint("Daily MCQ Target (e.g., 25)");
+                inputMcqTarget.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+                layout.addView(inputMcqTarget);
+
+                final android.widget.EditText inputFlashTarget = new android.widget.EditText(this);
+                inputFlashTarget.setHint("Daily Flashcard Target (e.g., 15)");
+                inputFlashTarget.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+                layout.addView(inputFlashTarget);
+
+                builder.setView(layout);
+                builder.setPositiveButton("Save Goals", (dialog, which) -> {
+                    String mcq = inputMcqTarget.getText().toString().trim();
+                    String flash = inputFlashTarget.getText().toString().trim();
+                    String goalSummary = (!mcq.isEmpty() ? mcq : "20") + " MCQs & " + (!flash.isEmpty() ? flash : "10") + " Flashcards";
+                    getSharedPreferences("BioPrepGoals", MODE_PRIVATE)
+                            .edit()
+                            .putString("daily_goal_summary", goalSummary)
+                            .apply();
+                    Toast.makeText(this, "Daily Goal Updated: " + goalSummary, Toast.LENGTH_SHORT).show();
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.show();
+            });
+        }
 
         // Option 2: Share Report (Implicit Intent)
         findViewById(R.id.btnShareReport).setOnClickListener(v -> {
@@ -121,8 +154,19 @@ public class AnalyticsActivity extends AppCompatActivity {
         });
 
         // Option 3: Adjust Alerts
-        findViewById(R.id.btnAdjustAlerts).setOnClickListener(v ->
-                Toast.makeText(this, "Daily study reminder set for 8:00 PM!", Toast.LENGTH_SHORT).show());
+        View btnAdjustAlerts = findViewById(R.id.btnAdjustAlerts);
+        if (btnAdjustAlerts != null) {
+            btnAdjustAlerts.setOnClickListener(v -> {
+                String[] times = {"7:00 PM (Evening Prep)", "8:00 PM (Prime Study)", "9:30 PM (Night Review)", "Disable Daily Reminder"};
+                new android.app.AlertDialog.Builder(this)
+                        .setTitle("Select Daily Study Reminder Time")
+                        .setItems(times, (dialog, which) -> {
+                            Toast.makeText(this, "Reminder set: " + times[which], Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            });
+        }
     }
 
     private void setupNavigation() {

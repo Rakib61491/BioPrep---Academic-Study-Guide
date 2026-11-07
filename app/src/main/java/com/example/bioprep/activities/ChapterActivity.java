@@ -64,6 +64,47 @@ public class ChapterActivity extends AppCompatActivity {
         lvChapters = findViewById(R.id.lvChapters);
         tvEmptyChapters = findViewById(R.id.tvEmptyChapters);
 
+        // Accordion Expand/Collapse for Botany
+        View layoutBotanyExpanded = findViewById(R.id.layoutBotanyExpanded);
+        View cardBotanyAccordion = findViewById(R.id.cardBotanyAccordion);
+        View.OnClickListener toggleBotany = v -> {
+            int vis = (layoutBotanyExpanded != null && layoutBotanyExpanded.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE;
+            if (layoutBotanyExpanded != null) layoutBotanyExpanded.setVisibility(vis);
+            TextView btnToggle = findViewById(R.id.btnToggleBotany);
+            if (btnToggle != null) btnToggle.setText(vis == View.VISIBLE ? "▲" : "▼");
+        };
+        if (cardBotanyAccordion != null) cardBotanyAccordion.setOnClickListener(toggleBotany);
+        View btnToggleBotany = findViewById(R.id.btnToggleBotany);
+        if (btnToggleBotany != null) btnToggleBotany.setOnClickListener(toggleBotany);
+
+        // Accordion Expand/Collapse for Zoology
+        View layoutZoologyExpanded = findViewById(R.id.layoutZoologyExpanded);
+        View cardZoologyAccordion = findViewById(R.id.cardZoologyAccordion);
+        View.OnClickListener toggleZoology = v -> {
+            int vis = (layoutZoologyExpanded != null && layoutZoologyExpanded.getVisibility() == View.VISIBLE) ? View.GONE : View.VISIBLE;
+            if (layoutZoologyExpanded != null) layoutZoologyExpanded.setVisibility(vis);
+            TextView btnToggle = findViewById(R.id.btnToggleZoology);
+            if (btnToggle != null) btnToggle.setText(vis == View.VISIBLE ? "▲" : "▼");
+        };
+        if (cardZoologyAccordion != null) cardZoologyAccordion.setOnClickListener(toggleZoology);
+        View btnToggleZoology = findViewById(R.id.btnToggleZoology);
+        if (btnToggleZoology != null) btnToggleZoology.setOnClickListener(toggleZoology);
+
+        // Setup practice buttons with real chapter identifiers
+        setupPracticeButtons();
+
+        // Big Bottom Button: Start Mock Exam
+        View btnStartMockExam = findViewById(R.id.btnStartMockExam);
+        if (btnStartMockExam != null) {
+            btnStartMockExam.setOnClickListener(v -> {
+                Intent intent = new Intent(ChapterActivity.this, QuizActivity.class);
+                intent.putExtra(EXTRA_PAPER_ID, paperId);
+                intent.putExtra(EXTRA_CHAPTER_ID, "full_mock");
+                intent.putExtra(EXTRA_CHAPTER_TITLE, "Full HSC Mock Exam");
+                startActivity(intent);
+            });
+        }
+
         View btnBack = findViewById(R.id.btnChapterBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
@@ -71,8 +112,38 @@ public class ChapterActivity extends AppCompatActivity {
 
         View btnSearch = findViewById(R.id.btnChapterSearch);
         if (btnSearch != null) {
-            btnSearch.setOnClickListener(v ->
-                    Toast.makeText(this, "Searching exam database...", Toast.LENGTH_SHORT).show());
+            btnSearch.setOnClickListener(v -> {
+                android.widget.EditText et = findViewById(R.id.etSearchChapters);
+                if (et != null) et.requestFocus();
+            });
+        }
+
+        View btnFilter = findViewById(R.id.btnChapterFilter);
+        if (btnFilter != null) {
+            btnFilter.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(this, v);
+                popup.getMenu().add("Show Both Papers");
+                popup.getMenu().add("Botany Only (Paper 1)");
+                popup.getMenu().add("Zoology Only (Paper 2)");
+                popup.setOnMenuItemClickListener(item -> {
+                    String title = item.getTitle().toString();
+                    if ("Botany Only (Paper 1)".equals(title)) {
+                        tabBotany.performClick();
+                        if (layoutBotanyExpanded != null) layoutBotanyExpanded.setVisibility(View.VISIBLE);
+                        if (layoutZoologyExpanded != null) layoutZoologyExpanded.setVisibility(View.GONE);
+                    } else if ("Zoology Only (Paper 2)".equals(title)) {
+                        tabZoology.performClick();
+                        if (layoutBotanyExpanded != null) layoutBotanyExpanded.setVisibility(View.GONE);
+                        if (layoutZoologyExpanded != null) layoutZoologyExpanded.setVisibility(View.VISIBLE);
+                    } else {
+                        if (layoutBotanyExpanded != null) layoutBotanyExpanded.setVisibility(View.VISIBLE);
+                        if (layoutZoologyExpanded != null) layoutZoologyExpanded.setVisibility(View.VISIBLE);
+                    }
+                    Toast.makeText(this, "Filter: " + title, Toast.LENGTH_SHORT).show();
+                    return true;
+                });
+                popup.show();
+            });
         }
 
         View btnBookmark = findViewById(R.id.btnChapterBookmark);
@@ -98,6 +169,22 @@ public class ChapterActivity extends AppCompatActivity {
             tabBotany.setTextColor(getColor(R.color.bio_on_surface_variant));
             loadChaptersForPaper(paperId);
         });
+
+        // Handle initial EXTRA_CHAPTER_ID from HomeActivity
+        String initialChapterId = getIntent().getStringExtra(EXTRA_CHAPTER_ID);
+        if (initialChapterId != null && !initialChapterId.isEmpty()) {
+            if (initialChapterId.endsWith("_p2") || SampleBiologyData.PAPER_BIOLOGY_2.equals(paperId)) {
+                paperId = SampleBiologyData.PAPER_BIOLOGY_2;
+                tabZoology.performClick();
+                if (layoutZoologyExpanded != null) layoutZoologyExpanded.setVisibility(View.VISIBLE);
+                if (layoutBotanyExpanded != null) layoutBotanyExpanded.setVisibility(View.GONE);
+            } else {
+                paperId = SampleBiologyData.PAPER_BIOLOGY_1;
+                tabBotany.performClick();
+                if (layoutBotanyExpanded != null) layoutBotanyExpanded.setVisibility(View.VISIBLE);
+                if (layoutZoologyExpanded != null) layoutZoologyExpanded.setVisibility(View.GONE);
+            }
+        }
 
         // Search bar filtering
         android.widget.EditText etSearchChapters = findViewById(R.id.etSearchChapters);
@@ -131,6 +218,28 @@ public class ChapterActivity extends AppCompatActivity {
             }
         }
         adapter.updateList(filtered);
+    }
+
+    private void setupPracticeButtons() {
+        bindChapterPractice(R.id.btnPracticeBotany1, SampleBiologyData.PAPER_BIOLOGY_1, "c1_p1", "Chapter 1: Cell & its Function");
+        bindChapterPractice(R.id.btnPracticeBotany2, SampleBiologyData.PAPER_BIOLOGY_1, "c2_p1", "Chapter 2: Cell Division & Bioenergetics");
+        bindChapterPractice(R.id.btnPracticeBotany3, SampleBiologyData.PAPER_BIOLOGY_1, "c3_p1", "Chapter 3: Cell Chemistry");
+        bindChapterPractice(R.id.btnPracticeBotany4, SampleBiologyData.PAPER_BIOLOGY_1, "c4_p1", "Chapter 4: Microorganisms");
+        bindChapterPractice(R.id.btnPracticeZoology1, SampleBiologyData.PAPER_BIOLOGY_2, "c1_p2", "Chapter 1: Animal Diversity & Classification");
+        bindChapterPractice(R.id.btnPracticeZoology2, SampleBiologyData.PAPER_BIOLOGY_2, "c2_p2", "Chapter 2: Introduction to Animal Behavior");
+    }
+
+    private void bindChapterPractice(int buttonId, String targetPaper, String chapterId, String title) {
+        View btn = findViewById(buttonId);
+        if (btn != null) {
+            btn.setOnClickListener(v -> {
+                Intent intent = new Intent(ChapterActivity.this, QuizActivity.class);
+                intent.putExtra(EXTRA_PAPER_ID, targetPaper);
+                intent.putExtra(EXTRA_CHAPTER_ID, chapterId);
+                intent.putExtra(EXTRA_CHAPTER_TITLE, title);
+                startActivity(intent);
+            });
+        }
     }
 
     private void setupPracticeModes() {

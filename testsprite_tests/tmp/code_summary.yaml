@@ -1,0 +1,69 @@
+projectName: "BioPrepAcademicStudyGuide"
+projectPath: "c:\\Users\\User\\Documents\\2-2\\Lab\\CSE 2200_Advanced Programming\\Lab Project\\BioPrepAcademicStudyGuide"
+framework: "Android Native Java"
+language: "Java"
+buildTool: "Gradle"
+targetSdk: 34
+compileSdk: 34
+minSdk: 26
+
+architecture:
+  pattern: "Android Native Multi-Activity with MVC / Component Architecture"
+  components:
+    - name: "Activities"
+      description: "11 Figma prototype screens + 1 notification receiver target activity"
+    - name: "Services"
+      description: "StudyTimerService (bound timer), BackgroundAudioService (MediaPlayer ringtone), NewService"
+    - name: "ContentProvider"
+      description: "BioNotesProvider (SQLite-backed note management with URI authority)"
+    - name: "BroadcastReceiver"
+      description: "AirplaneModeReceiver (dynamic and manifest registered receiver)"
+    - name: "Data Repository"
+      description: "SampleBiologyData (in-memory curriculum for Botany and Zoology, MCQs, flashcards, active recall drills)"
+
+screens:
+  - name: "WelcomeActivity"
+    file: "activities/WelcomeActivity.java"
+    layout: "activity_welcome.xml"
+    features: ["Animated progress bar (0-100%)", "Smooth transition to HomeActivity", "Tap to skip"]
+  - name: "HomeActivity"
+    file: "activities/HomeActivity.java"
+    layout: "activity_home.xml"
+    features: ["Greeting header", "Avatar to Profile", "Goal ring to Analytics", "Chapter filter chips", "5 Study features grid", "Daily quiz banner", "Recent activity card", "White bottom dock", "Lab 08 syllabus controls"]
+  - name: "ActiveRecallActivity"
+    file: "activities/ActiveRecallActivity.java"
+    layout: "activity_active_recall.xml"
+    features: ["Bilingual question prompts", "Expandable model answer and medical keywords", "Spaced repetition ratings (Again, Good, Easy)", "Free-form student scratchpad", "Topic 5 dynamic view generation"]
+  - name: "NotesActivity"
+    file: "activities/NotesActivity.java"
+    layout: "activity_notes.xml"
+    features: ["Search bar filter", "+ Add New Note dialog", "Category filter chips", "ContentResolver SQLite CRUD", "Note card edit and delete dialog"]
+  - name: "ResourcesActivity"
+    file: "activities/ResourcesActivity.java"
+    layout: "activity_resources.xml"
+    features: ["Resource search bar", "Syllabus download", "Reference books links", "Past exam papers PDF links", "3D biology animation video lessons"]
+  - name: "FlashcardsActivity"
+    file: "activities/FlashcardsActivity.java"
+    layout: "activity_flashcards.xml"
+    features: ["3D card flip animation", "Question front and answer back", "Anki response buttons (Again, Hard, Good, Easy)", "Lab Manual ListView & RecyclerView fruit experiments"]
+  - name: "ChapterActivity"
+    file: "activities/ChapterActivity.java"
+    layout: "activity_chapter.xml"
+    features: ["Chapter search bar", "Collapsible Botany accordion", "Collapsible Zoology accordion", "Chapter practice launchers", "Mock Exam launcher"]
+  - name: "QuizActivity"
+    file: "activities/QuizActivity.java"
+    layout: "activity_quiz.xml"
+    features: ["Live countdown timer with start/pause/stop", "Cyan progress bar", "Option cards (A, B, C, D) with selection checkmark", "Skip and Submit & Next", "Score modal"]
+  - name: "AnalyticsActivity"
+    file: "activities/AnalyticsActivity.java"
+    layout: "activity_analytics.xml"
+    features: ["7-day calendar strip with today indicator", "Daily Progress Breakdown card with Daily/Weekly/Monthly toggle", "4 KPI cards", "Custom goals dialog", "Share report sheet", "Alert adjustments"]
+  - name: "SavedItemsActivity"
+    file: "activities/SavedItemsActivity.java"
+    layout: "activity_saved_items.xml"
+    features: ["Search filter", "5 category filter pills", "Bookmark ribbon cards", "Direct preview click handlers"]
+  - name: "ProfileActivity"
+    file: "activities/ProfileActivity.java"
+    layout: "activity_profile.xml"
+    features: ["Avatar with edit icon", "Level and rank badge", "Achievements card", "Settings dialogs (Personal Info, Goals, Badges, Notifications, Theme, Help)", "Log out dialog"]
+

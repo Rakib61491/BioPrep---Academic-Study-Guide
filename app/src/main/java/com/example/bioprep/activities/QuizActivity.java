@@ -164,9 +164,20 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         setupNavigationControls();
     }
 
+    // Interactive single question views matching Exam Practice Sample Questions.jpeg
+    private TextView tvQuizQuestion;
+    private TextView tvProgressPercentText;
+    private android.widget.ProgressBar pbQuizProgress;
+    private View btnOptionA, btnOptionB, btnOptionC, btnOptionD;
+    private TextView tvOptionAText, tvOptionBText, tvOptionCText, tvOptionDText;
+    private View ivCheckA, ivCheckB, ivCheckC, ivCheckD;
+    private Button btnQuizSkip, btnQuizSubmit;
+    private int selectedOptionIndex = -1;
+
     private void initViews() {
-        tvChapterTitle = findViewById(R.id.tvQuizChapterTitle);
-        tvProgress = findViewById(R.id.tvQuizProgress);
+        tvChapterTitle = findViewById(R.id.tvChapterTitle);
+        tvProgress = findViewById(R.id.tvProgress);
+
         tvTimerRemaining = findViewById(R.id.tvTimerRemaining);
         btnTimerStart = findViewById(R.id.btnTimerStart);
         btnTimerPause = findViewById(R.id.btnTimerPause);
@@ -174,11 +185,35 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         btnTimerStop = findViewById(R.id.btnTimerStop);
         rvQuestions = findViewById(R.id.rvQuestions);
         tvEmptyQuiz = findViewById(R.id.tvEmptyQuiz);
-        btnPrev = findViewById(R.id.btnPrevQuestion);
-        btnNext = findViewById(R.id.btnNextQuestion);
-        btnSubmit = findViewById(R.id.btnSubmitQuiz);
+        btnPrev = findViewById(R.id.btnPrev);
+        btnNext = findViewById(R.id.btnNext);
+        btnSubmit = findViewById(R.id.btnSubmit);
 
-        tvChapterTitle.setText(chapterTitle);
+        tvQuizQuestion = findViewById(R.id.tvQuizQuestion);
+        tvProgressPercentText = findViewById(R.id.tvProgressPercentText);
+        pbQuizProgress = findViewById(R.id.pbQuizProgress);
+
+        btnOptionA = findViewById(R.id.btnOptionA);
+        btnOptionB = findViewById(R.id.btnOptionB);
+        btnOptionC = findViewById(R.id.btnOptionC);
+        btnOptionD = findViewById(R.id.btnOptionD);
+
+        tvOptionAText = findViewById(R.id.tvOptionAText);
+        tvOptionBText = findViewById(R.id.tvOptionBText);
+        tvOptionCText = findViewById(R.id.tvOptionCText);
+        tvOptionDText = findViewById(R.id.tvOptionDText);
+
+        ivCheckA = findViewById(R.id.ivCheckA);
+        ivCheckB = findViewById(R.id.ivCheckB);
+        ivCheckC = findViewById(R.id.ivCheckC);
+        ivCheckD = findViewById(R.id.ivCheckD);
+
+        btnQuizSkip = findViewById(R.id.btnQuizSkip);
+        btnQuizSubmit = findViewById(R.id.btnQuizSubmit);
+
+        if (tvChapterTitle != null) {
+            tvChapterTitle.setText(chapterTitle);
+        }
 
         View btnBack = findViewById(R.id.btnQuizBack);
         if (btnBack != null) {
@@ -188,6 +223,44 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         View btnBookmark = findViewById(R.id.btnQuizBookmark);
         if (btnBookmark != null) {
             btnBookmark.setOnClickListener(v -> startActivity(new Intent(this, SavedItemsActivity.class)));
+        }
+
+        // Setup Option Click Listeners
+        setupOptionClicks();
+
+        // Setup Skip and Submit & Next
+        if (btnQuizSkip != null) {
+            btnQuizSkip.setOnClickListener(v -> {
+                if (questions != null && currentPosition < questions.size() - 1) {
+                    currentPosition++;
+                    displaySingleQuestion(currentPosition);
+                } else {
+                    handleSubmitAttempt();
+                }
+            });
+        }
+
+        if (btnQuizSubmit != null) {
+            btnQuizSubmit.setOnClickListener(v -> {
+                if (questions != null && !questions.isEmpty() && currentPosition < questions.size()) {
+                    Question q = questions.get(currentPosition);
+                    if (selectedOptionIndex != -1) {
+                        selectedAnswers.put(q.getId(), selectedOptionIndex);
+                        boolean isCorrect = (selectedOptionIndex == q.getCorrectOptionIndex());
+                        if (isCorrect) {
+                            Toast.makeText(this, "✓ Correct Answer! Well done!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "✗ Incorrect. Correct was: " + q.getOptions().get(q.getCorrectOptionIndex()), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    if (currentPosition < questions.size() - 1) {
+                        currentPosition++;
+                        displaySingleQuestion(currentPosition);
+                    } else {
+                        handleSubmitAttempt();
+                    }
+                }
+            });
         }
 
         View navHome = findViewById(R.id.navTabHome);
@@ -212,6 +285,85 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         }
     }
 
+    private void setupOptionClicks() {
+        if (btnOptionA != null) btnOptionA.setOnClickListener(v -> selectOption(0));
+        if (btnOptionB != null) btnOptionB.setOnClickListener(v -> selectOption(1));
+        if (btnOptionC != null) btnOptionC.setOnClickListener(v -> selectOption(2));
+        if (btnOptionD != null) btnOptionD.setOnClickListener(v -> selectOption(3));
+    }
+
+    private void selectOption(int index) {
+        selectedOptionIndex = index;
+        resetOptionViews();
+        highlightOptionSelected(index);
+        if (questions != null && currentPosition < questions.size()) {
+            selectedAnswers.put(questions.get(currentPosition).getId(), index);
+        }
+    }
+
+    private void resetOptionViews() {
+        if (btnOptionA != null) btnOptionA.setBackgroundResource(R.drawable.bg_btn_option_unselected);
+        if (btnOptionB != null) btnOptionB.setBackgroundResource(R.drawable.bg_btn_option_unselected);
+        if (btnOptionC != null) btnOptionC.setBackgroundResource(R.drawable.bg_btn_option_unselected);
+        if (btnOptionD != null) btnOptionD.setBackgroundResource(R.drawable.bg_btn_option_unselected);
+
+        if (ivCheckA != null) ivCheckA.setVisibility(View.GONE);
+        if (ivCheckB != null) ivCheckB.setVisibility(View.GONE);
+        if (ivCheckC != null) ivCheckC.setVisibility(View.GONE);
+        if (ivCheckD != null) ivCheckD.setVisibility(View.GONE);
+    }
+
+    private void highlightOptionSelected(int index) {
+        if (index == 0 && btnOptionA != null) {
+            btnOptionA.setBackgroundResource(R.drawable.bg_btn_option_selected);
+            if (ivCheckA != null) ivCheckA.setVisibility(View.VISIBLE);
+        } else if (index == 1 && btnOptionB != null) {
+            btnOptionB.setBackgroundResource(R.drawable.bg_btn_option_selected);
+            if (ivCheckB != null) ivCheckB.setVisibility(View.VISIBLE);
+        } else if (index == 2 && btnOptionC != null) {
+            btnOptionC.setBackgroundResource(R.drawable.bg_btn_option_selected);
+            if (ivCheckC != null) ivCheckC.setVisibility(View.VISIBLE);
+        } else if (index == 3 && btnOptionD != null) {
+            btnOptionD.setBackgroundResource(R.drawable.bg_btn_option_selected);
+            if (ivCheckD != null) ivCheckD.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void displaySingleQuestion(int index) {
+        if (questions == null || questions.isEmpty() || index < 0 || index >= questions.size()) return;
+        Question q = questions.get(index);
+
+        if (tvQuizQuestion != null) {
+            tvQuizQuestion.setText(q.getQuestionText());
+        }
+        if (tvProgress != null) {
+            tvProgress.setText("Question " + (index + 1) + " of " + questions.size());
+        }
+        int percent = (int) (((index + 1) / (float) questions.size()) * 100);
+        if (pbQuizProgress != null) {
+            pbQuizProgress.setProgress(percent);
+        }
+        if (tvProgressPercentText != null) {
+            tvProgressPercentText.setText(percent + "%");
+        }
+
+        List<String> options = q.getOptions();
+        resetOptionViews();
+
+        if (options.size() > 0 && tvOptionAText != null) tvOptionAText.setText("A)  " + options.get(0));
+        if (options.size() > 1 && tvOptionBText != null) tvOptionBText.setText("B)  " + options.get(1));
+        if (options.size() > 2 && tvOptionCText != null) tvOptionCText.setText("C)  " + options.get(2));
+        if (options.size() > 3 && tvOptionDText != null) tvOptionDText.setText("D)  " + options.get(3));
+
+        Integer prevSelected = selectedAnswers.get(q.getId());
+        if (prevSelected != null) {
+            selectedOptionIndex = prevSelected;
+            highlightOptionSelected(prevSelected);
+        } else {
+            selectedOptionIndex = -1;
+        }
+    }
+
     private void restoreState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             ArrayList<String> keys = savedInstanceState.getStringArrayList(KEY_ANSWER_KEYS);
@@ -230,7 +382,14 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
     }
 
     private void setupQuizList() {
-        questions = SampleBiologyData.getQuestions(paperId, chapterId);
+        if ("full_mock".equalsIgnoreCase(chapterId) || "all".equalsIgnoreCase(chapterId) || chapterId == null || chapterId.trim().isEmpty()) {
+            questions = SampleBiologyData.getAllQuestions();
+        } else {
+            questions = SampleBiologyData.getQuestions(paperId, chapterId);
+            if (questions == null || questions.isEmpty()) {
+                questions = SampleBiologyData.getAllQuestions();
+            }
+        }
         if (questions == null || questions.isEmpty()) {
             rvQuestions.setVisibility(View.GONE);
             tvEmptyQuiz.setVisibility(View.VISIBLE);
@@ -266,11 +425,15 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
                     int firstVisible = layoutManager.findFirstVisibleItemPosition();
                     if (firstVisible != RecyclerView.NO_POSITION) {
                         currentPosition = firstVisible;
-                        updateNavigationButtons();
+                        displaySingleQuestion(currentPosition);
+
+        updateNavigationButtons();
                     }
                 }
             }
         });
+
+        displaySingleQuestion(currentPosition);
 
         updateNavigationButtons();
     }
@@ -358,7 +521,9 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
             if (currentPosition > 0) {
                 currentPosition--;
                 rvQuestions.smoothScrollToPosition(currentPosition);
-                updateNavigationButtons();
+                displaySingleQuestion(currentPosition);
+
+        updateNavigationButtons();
             }
         });
 
@@ -366,7 +531,9 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
             if (questions != null && currentPosition < questions.size() - 1) {
                 currentPosition++;
                 rvQuestions.smoothScrollToPosition(currentPosition);
-                updateNavigationButtons();
+                displaySingleQuestion(currentPosition);
+
+        updateNavigationButtons();
             }
         });
 
@@ -498,14 +665,21 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         Log.d(TAG, "QuizActivity: onStop");
 
         // Pause timer and capture duration when user leaves QuizActivity
-        if (isServiceBound && timerService != null) {
-            timerWasRunning = timerService.isRunning();
-            if (timerWasRunning) {
-                timerService.pauseTimer();
+        if (isServiceBound) {
+            if (timerService != null) {
+                timerWasRunning = timerService.isRunning();
+                if (timerWasRunning) {
+                    timerService.pauseTimer();
+                }
+                savedRemainingTimerMillis = timerService.getRemainingTimeMillis();
             }
-            savedRemainingTimerMillis = timerService.getRemainingTimeMillis();
-            unbindService(serviceConnection);
+            try {
+                unbindService(serviceConnection);
+            } catch (Exception e) {
+                Log.e(TAG, "Error unbinding service: " + e.getMessage());
+            }
             isServiceBound = false;
+            timerService = null;
             Log.d(TAG, "QuizActivity: Unbound StudyTimerService");
         }
 

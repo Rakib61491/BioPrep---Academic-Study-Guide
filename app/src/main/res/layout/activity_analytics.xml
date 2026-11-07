@@ -1,45 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutAnalyticsRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bio_background">
+    android:background="@color/bio_surface">
 
-    <!-- Fullscreen Stitch Background Atmosphere -->
+    <!-- Fullscreen Botanical Microscopic Background matching Goal Analysis.jpeg -->
     <ImageView
         android:id="@+id/ivAnalyticsBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.85"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_stitch_biology"
-        android:alpha="0.25"
-        android:contentDescription="@null" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#22001713"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Scrollable Content Body -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
-        android:paddingBottom="72dp">
+        app:layout_constraintBottom_toTopOf="@id/bottomNavBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="24dp">
 
-            <!-- Top Header Bar -->
-            <LinearLayout
+            <!-- Top Header Bar matching Goal Analysis.jpeg -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bio_surface_container"
-                android:elevation="4dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="12dp">
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp">
 
+                <!-- Small Back Button at Top Left -->
                 <ImageButton
                     android:id="@+id/btnAnalyticsBack"
                     android:layout_width="32dp"
@@ -47,36 +64,45 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Back"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="@color/bio_on_surface" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
 
+                <!-- Centered Title -->
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:text="Daily Goal &amp; Analytics"
-                    android:textColor="@color/bio_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/btnAnalyticsMore"
+                    android:id="@+id/tvAnalyticsMainTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="•••"
-                    android:textColor="@color/bio_on_surface"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:text="Daily Goal &amp; Analytics"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Quiz Result Milestone Banner (Displayed when arriving from Quiz completion) -->
+                <!-- Three Dots Options on Right -->
+                <ImageView
+                    android:id="@+id/btnAnalyticsMore"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Options"
+                    android:src="@drawable/ic_more_vert_clean"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Quiz Score Milestone Banner (if arrived from Quiz) -->
             <LinearLayout
                 android:id="@+id/layoutQuizScoreBanner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
                 android:background="@drawable/bg_card_white"
                 android:elevation="4dp"
                 android:orientation="vertical"
@@ -84,65 +110,31 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/tvAnalyticsResultHeader"
+                    android:id="@+id/tvAnalyticsScorePercent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🎉 Exam Practice Completed!"
-                    android:textColor="@color/bio_card_text_dark"
-                    android:textSize="16sp"
+                    android:text="85%"
+                    android:textColor="#059669"
+                    android:textSize="26sp"
                     android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvAnalyticsScoreBreakdown"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvAnalyticsScorePercent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="80%"
-                        android:textColor="#00A572"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvAnalyticsScoreBreakdown"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="4 Correct • 1 Incorrect • 0 Unanswered"
-                            android:textColor="#334155"
-                            android:textSize="13sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Added to your daily accuracy metrics"
-                            android:textColor="#64748B"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-                </LinearLayout>
+                    android:layout_marginTop="2dp"
+                    android:text="4 Correct • 1 Incorrect"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="13sp" />
             </LinearLayout>
 
-            <!-- Horizontal 7-Day Calendar Streak Row -->
+            <!-- Calendar Strip matching Goal Analysis.jpeg -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="14dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/bio_surface_container"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="horizontal">
 
                 <!-- Sun 1 -->
                 <LinearLayout
@@ -162,8 +154,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:text="1"
-                        android:textColor="@color/bio_on_surface"
+                        android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -185,8 +178,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:text="2"
-                        android:textColor="@color/bio_on_surface"
+                        android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -208,16 +202,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:text="3"
-                        android:textColor="@color/bio_on_surface"
+                        android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 
-                <!-- Today (Active Neon Circular Dial) -->
+                <!-- Today (Active Glowing Dial) -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.4"
+                    android:layout_weight="1.6"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -225,33 +220,32 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Today"
-                        android:textColor="@color/bio_primary"
+                        android:textColor="@color/bio_mint_accent"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/bg_chip_cyan"
+                        android:layout_width="54dp"
+                        android:layout_height="54dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_card_glow_cyan"
                         android:gravity="center"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tvTodayGoalPercent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="85%"
-                            android:textColor="@color/bio_primary"
-                            android:textSize="12sp"
+                            android:textColor="@color/bio_neon_cyan"
+                            android:textSize="13sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="DONE"
-                            android:textColor="@color/bio_secondary"
-                            android:textSize="8sp" />
+                            android:text="Completed"
+                            android:textColor="@color/bio_on_surface_variant"
+                            android:textSize="7sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -273,8 +267,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:text="5"
-                        android:textColor="@color/bio_on_surface"
+                        android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -296,8 +291,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:text="6"
-                        android:textColor="@color/bio_on_surface"
+                        android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -319,29 +315,301 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:text="7"
-                        android:textColor="@color/bio_on_surface"
+                        android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
+
             </LinearLayout>
 
-            <!-- Daily Progress Breakdown Card with Luminescent Border -->
+            <!-- Daily Progress Breakdown Card matching Goal Analysis.jpeg -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/bg_card"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_card_glow_cyan"
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Header and Time Filters -->
+                <!-- Header and Daily/Weekly/Monthly Toggle -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Daily Progress\nBreakdown"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- Toggle Pills -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_card_dark_teal"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="2dp">
+
+                        <TextView
+                            android:id="@+id/btnFilterDaily"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_card_white"
+                            android:gravity="center"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="Daily"
+                            android:textColor="@color/bio_card_text_dark"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/btnFilterWeekly"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="Weekly"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/btnFilterMonthly"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="Monthly"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Progress This Week"
+                    android:textColor="@color/bio_on_surface_variant"
+                    android:textSize="12sp" />
+
+                <!-- Chart Representation & Metrics -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
+                    <!-- Stacked visual bars -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1.2"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <!-- Bar 1 -->
+                        <LinearLayout
+                            android:layout_width="14dp"
+                            android:layout_height="80dp"
+                            android:background="#F59E0B"
+                            android:orientation="vertical" />
+
+                        <!-- Bar 2 -->
+                        <LinearLayout
+                            android:layout_width="14dp"
+                            android:layout_height="100dp"
+                            android:layout_marginStart="8dp"
+                            android:background="#3B82F6"
+                            android:orientation="vertical" />
+
+                        <!-- Bar 3 -->
+                        <LinearLayout
+                            android:layout_width="14dp"
+                            android:layout_height="90dp"
+                            android:layout_marginStart="8dp"
+                            android:background="#A855F7"
+                            android:orientation="vertical" />
+
+                        <!-- Bar 4 -->
+                        <LinearLayout
+                            android:layout_width="14dp"
+                            android:layout_height="60dp"
+                            android:layout_marginStart="8dp"
+                            android:background="#14B8A6"
+                            android:orientation="vertical" />
+
+                        <!-- Bar 5 -->
+                        <LinearLayout
+                            android:layout_width="14dp"
+                            android:layout_height="110dp"
+                            android:layout_marginStart="8dp"
+                            android:background="#F59E0B"
+                            android:orientation="vertical" />
+                    </LinearLayout>
+
+                    <!-- Breakdown Legend matching Goal Analysis.jpeg -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1.4"
+                        android:orientation="vertical">
+
+                        <!-- Quizzes Done -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:background="#F59E0B" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_weight="1"
+                                android:text="Quizzes Done\n5/5"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="100%"
+                                android:textColor="#F59E0B"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Active Recall -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:background="#3B82F6" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_weight="1"
+                                android:text="Active Recall\n12/15"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="80%"
+                                android:textColor="#3B82F6"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Flash Cards -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:background="#A855F7" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_weight="1"
+                                android:text="Flash Cards\n35/40"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="87%"
+                                android:textColor="#A855F7"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- Exam Practice -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:background="#14B8A6" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:layout_weight="1"
+                                android:text="Exam Practice\n1/2"
+                                android:textColor="@color/white"
+                                android:textSize="11sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="50%"
+                                android:textColor="#14B8A6"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- 4 Metric Cards (2x2 Grid) matching Goal Analysis.jpeg -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <!-- Metric 1: Study Time -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -352,649 +620,451 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Daily Progress Breakdown"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:text="Study Time"
+                            android:textColor="@color/bio_on_surface_variant"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Progress This Week"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="11sp" />
+                            android:layout_marginTop="2dp"
+                            android:text="2h 45m"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_chip_cyan"
-                        android:orientation="horizontal"
-                        android:padding="2dp">
-
-                        <TextView
-                            android:id="@+id/btnFilterDaily"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/bio_primary"
-                            android:paddingStart="8dp"
-                            android:paddingTop="3dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="3dp"
-                            android:text="Daily"
-                            android:textColor="@color/bio_surface_container_lowest"
-                            android:textSize="10sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btnFilterWeekly"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="8dp"
-                            android:paddingTop="3dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="3dp"
-                            android:text="Weekly"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:id="@+id/btnFilterMonthly"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingStart="8dp"
-                            android:paddingTop="3dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="3dp"
-                            android:text="Monthly"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="10sp" />
-                    </LinearLayout>
+                        android:text="🕒"
+                        android:textSize="22sp" />
                 </LinearLayout>
 
-                <!-- Metric Breakdown List -->
+                <!-- Metric 2: Accuracy Rate -->
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:orientation="vertical">
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
 
-                    <!-- MCQ Practice -->
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:background="#F59E0B" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:text="MCQ Practice"
-                            android:textColor="@color/bio_on_surface"
+                            android:text="Accuracy Rate"
+                            android:textColor="@color/bio_on_surface_variant"
                             android:textSize="12sp" />
 
                         <TextView
-                            android:id="@+id/tvMcqBreakdownCount"
+                            android:id="@+id/tvAnalyticsAccuracyRate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5/5"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:id="@+id/tvMcqBreakdownPercent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="100%"
-                            android:textColor="@color/bio_primary"
-                            android:textSize="12sp"
+                            android:layout_marginTop="2dp"
+                            android:text="78%"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- Active Recall -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:background="#3B82F6" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:text="Active Recall"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="12/15"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="80%"
-                            android:textColor="#3B82F6"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Flashcards -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:background="#A855F7" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:text="Flashcards"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="35/40"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="87%"
-                            android:textColor="#A855F7"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Exam Practice -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:background="@color/bio_secondary" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="1"
-                            android:text="Exam Practice"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1/2"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="50%"
-                            android:textColor="@color/bio_secondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                        android:text="🎯"
+                        android:textSize="22sp" />
                 </LinearLayout>
+
             </LinearLayout>
 
-            <!-- Quick KPI Metrics 2x2 Grid -->
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="16dp"
-                android:columnCount="2"
-                android:rowCount="2">
-
-                <!-- 1. Study Time -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@color/bio_surface_container"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="⏱ Study Time"
-                        android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="2h 45m"
-                        android:textColor="@color/bio_on_surface"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- 2. Accuracy Rate -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@color/bio_surface_container"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🎯 Accuracy Rate"
-                        android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:id="@+id/tvAnalyticsAccuracyRate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="78%"
-                        android:textColor="@color/bio_secondary"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- 3. Review Needed -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginEnd="6dp"
-                    android:background="@color/bio_surface_container"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="⚠️ Review Needed"
-                        android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:id="@+id/tvAnalyticsReviewCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="12 Items"
-                        android:textColor="#F97316"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- 4. Active Streak -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginStart="6dp"
-                    android:background="@color/bio_surface_container"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔥 Active Streak"
-                        android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="11sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="5 Days 🔥"
-                        android:textColor="@color/bio_on_surface"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </GridLayout>
-
-            <!-- Performance Insights & Highlights Card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/bio_surface_container"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <!-- Metric 3: Review Needed -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Review Needed"
+                            android:textColor="@color/bio_on_surface_variant"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="12 Items"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⚠️"
+                        android:textSize="22sp" />
+                </LinearLayout>
+
+                <!-- Metric 4: Active Streak -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="76dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Active Streak"
+                            android:textColor="@color/bio_on_surface_variant"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="5 Days 🔥"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔥"
+                        android:textSize="22sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Performance Insights & Highlights matching Goal Analysis.jpeg -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Performance Insights &amp; Highlights 🧠"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_card_dark_teal"
                 android:orientation="vertical"
                 android:padding="16dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Performance Insights &amp; Highlights 🧠"
-                    android:textColor="@color/bio_on_surface"
-                    android:textSize="15sp"
+                    android:text="✅ Strongest Area: Flash Cards (87% Completed)"
+                    android:textColor="#34D399"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
-                <!-- Insight 1 -->
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/bio_surface_container_high"
-                    android:padding="10dp"
-                    android:text="🟢 Strongest Area: Flashcards (87% Completed)"
-                    android:textColor="@color/bio_secondary"
-                    android:textSize="12sp" />
-
-                <!-- Insight 2 -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/bio_surface_container_high"
-                    android:padding="10dp"
-                    android:text="🔴 Focus Needed: Exam Practice (Only 50% Completed)"
-                    android:textColor="#FFB4AB"
-                    android:textSize="12sp" />
-
-                <!-- Insight 3 -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/bio_surface_container_high"
-                    android:padding="10dp"
-                    android:text="🎯 Daily Goal: 85% Completed, 15% remaining for today."
-                    android:textColor="@color/bio_primary"
-                    android:textSize="12sp" />
-
-                <!-- Insight 4 -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/bio_surface_container_high"
-                    android:padding="10dp"
-                    android:text="🔥 Consistent streak for 5 days. Keep it up for HSC botany revision!"
-                    android:textColor="@color/bio_tertiary_fixed"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <!-- Other Options Section (3 Grid Buttons) -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="24dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Other Options"
-                    android:textColor="@color/bio_on_surface"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
+                    android:text="❗ Focus Needed: Exam Practice (Only 50% Completed)"
+                    android:textColor="#F87171"
+                    android:textSize="13sp" />
 
-                    <!-- Option 1: Set Custom Daily Goals -->
-                    <LinearLayout
-                        android:id="@+id/btnSetCustomGoals"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="4dp"
-                        android:layout_weight="1"
-                        android:background="@color/bio_surface_container_high"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical"
-                        android:padding="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="🎯 Daily Goal: 85% Completed, 15% remaining for today."
+                    android:textColor="@color/bio_mint_accent"
+                    android:textSize="13sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Set Custom Daily Goals"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginTop="12dp"
-                            android:text="📅"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <!-- Option 2: Share Report -->
-                    <LinearLayout
-                        android:id="@+id/btnShareReport"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_weight="1"
-                        android:background="@color/bio_surface_container_high"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Share Analytics Report"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginTop="12dp"
-                            android:text="📤"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <!-- Option 3: Reminder Alerts -->
-                    <LinearLayout
-                        android:id="@+id/btnAdjustAlerts"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:layout_weight="1"
-                        android:background="@color/bio_surface_container_high"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Adjust Reminder Alerts"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginTop="12dp"
-                            android:text="🔔"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="🔥 Consistent streak for 5 days."
+                    android:textColor="#FBBF24"
+                    android:textSize="13sp" />
             </LinearLayout>
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+            <!-- Other Options matching Goal Analysis.jpeg -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Other Options"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
-    <!-- Bottom Navigation Bar (Stitch Specification: 4 destinations, Study active) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <!-- Option 1: Set Custom Daily Goals -->
+                <LinearLayout
+                    android:id="@+id/btnSetCustomGoals"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Set Custom\nDaily Goals"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="📝"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <!-- Option 2: Share Analytics Report -->
+                <LinearLayout
+                    android:id="@+id/btnShareReport"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Share\nAnalytics"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="🔗"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <!-- Option 3: Adjust Reminder Alerts -->
+                <LinearLayout
+                    android:id="@+id/btnAdjustAlerts"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Adjust\nReminder"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="🔔"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Hidden components for backwards compatibility -->
+            <TextView
+                android:id="@+id/tvMcqBreakdownCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvMcqBreakdownPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation Dock matching Goal Analysis.jpeg -->
     <LinearLayout
-        android:id="@+id/bottomNavAnalytics"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:background="@color/bio_surface_container_low"
-        android:elevation="10dp"
+        android:id="@+id/bottomNavBar"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_bottom_nav_dock"
+        android:elevation="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <!-- Tab 1: Home -->
         <LinearLayout
             android:id="@+id/navTabHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🏠"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home_nav"
+                app:tint="@color/bio_nav_inactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Home"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
 
+        <!-- Tab 2: Study -->
         <LinearLayout
             android:id="@+id/navTabStudy"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_chip_cyan"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📖"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_study_nav"
+                app:tint="@color/bio_nav_inactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Study"
-                android:textColor="@color/bio_primary"
-                android:textSize="10sp"
-                android:textStyle="bold" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
 
+        <!-- Tab 3: Saved -->
         <LinearLayout
             android:id="@+id/navTabSaved"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🔖"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_saved_nav" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Saved"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
 
+        <!-- Tab 4: Profile -->
         <LinearLayout
             android:id="@+id/navTabProfile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="👤"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_profile_nav" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Profile"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
+
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

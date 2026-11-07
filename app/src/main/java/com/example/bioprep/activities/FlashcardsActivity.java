@@ -116,10 +116,25 @@ public class FlashcardsActivity extends AppCompatActivity {
             btnBack.setOnClickListener(v -> finish());
         }
 
-        View btnBookmark = findViewById(R.id.btnBookmarkDeck);
-        if (btnBookmark != null) {
-            btnBookmark.setOnClickListener(v ->
-                    Toast.makeText(this, "Deck bookmarked to Saved Items!", Toast.LENGTH_SHORT).show());
+        View btnOptions = findViewById(R.id.btnFlashcardsOptions);
+        if (btnOptions != null) {
+            btnOptions.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(FlashcardsActivity.this, v);
+                popup.getMenu().add("Bookmark this Card");
+                popup.getMenu().add("Shuffle Deck");
+                popup.getMenu().add("Toggle Lab Specimen List");
+                popup.setOnMenuItemClickListener(item -> {
+                    Toast.makeText(FlashcardsActivity.this, item.getTitle() + " selected", Toast.LENGTH_SHORT).show();
+                    if ("Toggle Lab Specimen List".equals(item.getTitle())) {
+                        View controls = findViewById(R.id.layoutLabManualControls);
+                        if (controls != null) {
+                            controls.setVisibility(controls.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                        }
+                    }
+                    return true;
+                });
+                popup.show();
+            });
         }
 
         updateFlashcardDisplay();
@@ -189,9 +204,17 @@ public class FlashcardsActivity extends AppCompatActivity {
             }
         };
 
-        findViewById(R.id.btnFlipToAnswer).setOnClickListener(flipListener);
-        findViewById(R.id.btnFlipToQuestion).setOnClickListener(flipListener);
-        findViewById(R.id.cardFlipContainer).setOnClickListener(flipListener);
+        View btnShowAnswerFront = findViewById(R.id.btnShowAnswerFront);
+        if (btnShowAnswerFront != null) btnShowAnswerFront.setOnClickListener(flipListener);
+
+        View btnFlipFront = findViewById(R.id.btnFlipFront);
+        if (btnFlipFront != null) btnFlipFront.setOnClickListener(flipListener);
+
+        View btnFlipBack = findViewById(R.id.btnFlipBack);
+        if (btnFlipBack != null) btnFlipBack.setOnClickListener(flipListener);
+
+        if (cardFront != null) cardFront.setOnClickListener(flipListener);
+        if (cardBack != null) cardBack.setOnClickListener(flipListener);
     }
 
     private void setupRecallRatings() {
@@ -258,25 +281,6 @@ public class FlashcardsActivity extends AppCompatActivity {
             btnToggleListView.setBackgroundTintList(getColorStateList(R.color.bio_primary_container));
             btnToggleRecyclerView.setBackgroundTintList(getColorStateList(R.color.bio_surface_variant));
             Toast.makeText(this, "Switched to ListView (Experiments A - C)", Toast.LENGTH_SHORT).show();
-        });
-
-        // Simple ArrayAdapter demonstration (Experiment A) via category pill
-        findViewById(R.id.pillLabFruits).setOnClickListener(v -> {
-            ArrayAdapter<String> simpleAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, FRUIT_NAMES);
-            listView.setAdapter(simpleAdapter);
-            listView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-            Toast.makeText(this, "Loaded Simple ArrayAdapter (Experiment A)", Toast.LENGTH_SHORT).show();
-        });
-
-        findViewById(R.id.pillBotany).setOnClickListener(v -> {
-            listView.setAdapter(customAdapter);
-            Toast.makeText(this, "Deck: Botany 12 Chapters", Toast.LENGTH_SHORT).show();
-        });
-
-        findViewById(R.id.pillZoology).setOnClickListener(v -> {
-            listView.setAdapter(customAdapter);
-            Toast.makeText(this, "Deck: Zoology 12 Chapters", Toast.LENGTH_SHORT).show();
         });
     }
 

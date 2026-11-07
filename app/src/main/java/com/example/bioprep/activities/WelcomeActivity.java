@@ -52,6 +52,11 @@ public class WelcomeActivity extends AppCompatActivity {
         tvLoadingStatus = findViewById(R.id.tvLoadingStatus);
         tvLoadingSubStatus = findViewById(R.id.tvLoadingSubStatus);
 
+        View root = findViewById(R.id.layoutWelcomeRoot);
+        if (root != null) {
+            root.setOnClickListener(v -> navigateToHome());
+        }
+
         ImageButton btnBack = findViewById(R.id.btnWelcomeBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> {

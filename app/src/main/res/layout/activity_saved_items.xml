@@ -1,45 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutSavedItemsRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bio_background">
+    android:background="@color/bio_surface">
 
-    <!-- Fullscreen Stitch Background Atmosphere -->
+    <!-- Fullscreen Botanical Microscopic Background matching Saved Item.jpeg -->
     <ImageView
         android:id="@+id/ivSavedItemsBackground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.85"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_stitch_biology"
-        android:alpha="0.25"
-        android:contentDescription="@null" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#22001713"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Scrollable Main Container -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
-        android:paddingBottom="72dp">
+        app:layout_constraintBottom_toTopOf="@id/bottomNavBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="24dp">
 
-            <!-- Top Header -->
-            <LinearLayout
+            <!-- Top Header Bar matching Saved Item.jpeg -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bio_surface_container"
-                android:elevation="4dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="12dp">
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp">
 
+                <!-- Small Back Button at Top Left -->
                 <ImageButton
                     android:id="@+id/btnSavedBack"
                     android:layout_width="32dp"
@@ -47,82 +64,84 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Back"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="@color/bio_primary" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Saved Items"
-                        android:textColor="@color/bio_on_surface"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="জীববিজ্ঞান (HSC Biology)"
-                        android:textColor="@color/bio_primary"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
+                <!-- Centered Title -->
                 <TextView
-                    android:id="@+id/btnSavedMore"
+                    android:id="@+id/tvSavedHeaderTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="•••"
-                    android:textColor="@color/bio_on_surface"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:text="Saved Items"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Search Field & Filter Button -->
+                <!-- Three dots options button -->
+                <ImageView
+                    android:id="@+id/btnSavedMore"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Options"
+                    android:src="@drawable/ic_more_vert_clean"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Search Bar matching Saved Item.jpeg -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="14dp"
-                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_card_dark_teal"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="Search"
+                    android:src="@drawable/ic_search_clean"
+                    app:tint="@color/bio_card_text_muted" />
 
                 <EditText
                     android:id="@+id/etSearchSaved"
                     android:layout_width="0dp"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_card"
-                    android:hint="Search your saved biology materials..."
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:textColor="@color/bio_on_surface"
-                    android:textColorHint="@color/bio_outline"
-                    android:textSize="13sp" />
-
-                <ImageButton
-                    android:id="@+id/btnSavedFilter"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_card"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="Search your saved items..."
+                    android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/bio_on_surface_variant"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/btnSavedFilter"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Filter"
-                    android:src="@drawable/ic_notification"
-                    app:tint="@color/bio_primary" />
+                    android:src="@drawable/ic_filter_clean" />
             </LinearLayout>
 
-            <!-- Category Filter Pills (Horizontal Scroll) -->
+            <!-- Horizontal Category Filter Pills matching Saved Item.jpeg -->
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
+                android:layout_marginTop="14dp"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -130,209 +149,210 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
+                    <!-- Pill 1: All (Active Neon Cyan) -->
                     <TextView
                         android:id="@+id/pillFilterAll"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_chip_cyan"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:paddingStart="14dp"
-                        android:paddingTop="6dp"
-                        android:paddingEnd="14dp"
-                        android:paddingBottom="6dp"
+                        android:layout_height="34dp"
+                        android:background="@drawable/bg_pill_cyan"
+                        android:gravity="center"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
                         android:text="All"
-                        android:textColor="@color/bio_primary"
+                        android:textColor="#0A382C"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
+                    <!-- Pill 2: Saved Notes -->
                     <TextView
                         android:id="@+id/pillFilterNotes"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:background="@color/bio_surface_container"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:paddingStart="12dp"
-                        android:paddingTop="6dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="6dp"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_card_dark_teal"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
                         android:text="Saved Notes"
-                        android:textColor="@color/bio_on_surface_variant"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
+                    <!-- Pill 3: Saved Active Recall -->
                     <TextView
                         android:id="@+id/pillFilterRecall"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:background="@color/bio_surface_container"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:paddingStart="12dp"
-                        android:paddingTop="6dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="6dp"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_card_dark_teal"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
                         android:text="Saved Active Recall"
-                        android:textColor="@color/bio_on_surface_variant"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
+                    <!-- Pill 4: Saved MCQ / Questions -->
+                    <TextView
+                        android:id="@+id/pillFilterMcq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_card_dark_teal"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Saved MCQ / Questions"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                    <!-- Pill 5: Saved Flash Cards -->
                     <TextView
                         android:id="@+id/pillFilterFlashcards"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:background="@color/bio_surface_container"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:paddingStart="12dp"
-                        android:paddingTop="6dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="6dp"
-                        android:text="Saved Flashcards"
-                        android:textColor="@color/bio_on_surface_variant"
+                        android:layout_height="34dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_card_dark_teal"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Saved Flash Cards"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
+                    <!-- Hidden for backwards compatibility -->
                     <TextView
                         android:id="@+id/pillFilterResources"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:background="@color/bio_surface_container"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:paddingStart="12dp"
-                        android:paddingTop="6dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="6dp"
-                        android:text="Saved Resources"
-                        android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="12sp" />
+                        android:visibility="gone" />
+
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <!-- Feed Container -->
+            <!-- Saved Items List matching Saved Item.jpeg -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
-                <!-- 1. Saved Note Card -->
-                <LinearLayout
+                <!-- Card 1: Photosynthesis & Respiration (Notes) -->
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cardSavedNote"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:background="@color/bio_surface_container"
-                    android:orientation="vertical"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:padding="16dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvSavedNoteTitle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_chip_cyan"
-                            android:paddingStart="8dp"
-                            android:paddingTop="2dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="2dp"
-                            android:text="উদ্ভিদ শারীরতত্ত্ব"
-                            android:textColor="@color/bio_primary"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:background="@color/bio_surface_bright"
-                            android:paddingStart="8dp"
-                            android:paddingTop="2dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="2dp"
-                            android:text="Notes"
-                            android:textColor="@color/bio_on_surface_variant"
-                            android:textSize="11sp" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🔖"
-                            android:textSize="18sp" />
-                    </LinearLayout>
+                        android:layout_marginEnd="12dp"
+                        android:text="Photosynthesis &amp; Respiration"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/btnBookmarkItem1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/tvTagNote"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/bg_chip_cyan"
+                        android:paddingStart="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="2dp"
+                        android:text="Notes"
+                        android:textColor="#0A382C"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvSavedNoteTitle" />
+
+                    <TextView
+                        android:id="@+id/tvSubNote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Cell &amp; Its Function"
+                        android:textColor="@color/bio_mint_accent"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@id/tvTagNote"
+                        app:layout_constraintStart_toEndOf="@id/tvTagNote"
+                        app:layout_constraintTop_toTopOf="@id/tvTagNote" />
+
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Photosynthesis &amp; Respiration"
-                        android:textColor="@color/bio_on_surface"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Important stages of photosynthesis, the Calvin Cycle, light-dependent reactions, and cellular respiration."
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="Photosynthesis &amp; Respiration shows the respiration and cellular energy cycle..."
                         android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="12sp" />
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvTagNote" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                    <!-- Blue Bookmark Ribbon matching Saved Item.jpeg -->
+                    <ImageView
+                        android:id="@+id/btnBookmarkItem1"
+                        android:layout_width="28dp"
+                        android:layout_height="32dp"
+                        android:contentDescription="Bookmark"
+                        android:src="@drawable/ic_bookmark_ribbon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="⏱ Saved 2 days ago"
-                            android:textColor="@color/bio_outline"
-                            android:textSize="11sp" />
+                    <View
+                        android:id="@+id/btnOpenSavedNote"
+                        android:layout_width="1dp"
+                        android:layout_height="1dp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/btnOpenSavedNote"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Read Note >"
-                            android:textColor="@color/bio_primary"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- 2. Saved Active Recall Card -->
-                <LinearLayout
+                <!-- Card 2: Steps of the Calvin Cycle (Active Recall) -->
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cardSavedRecall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:background="@color/bio_surface_container"
-                    android:orientation="vertical"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:padding="16dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvSavedRecallTitle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_marginEnd="12dp"
+                        android:text="Active Recall: Steps of the\nCalvin Cycle"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/btnBookmarkItem2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/layoutRecallTags"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvSavedRecallTitle">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -342,9 +362,10 @@
                             android:paddingTop="2dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="2dp"
-                            android:text="উদ্ভিদ শারীরতত্ত্ব"
-                            android:textColor="@color/bio_primary"
-                            android:textSize="11sp" />
+                            android:text="Active Recall"
+                            android:textColor="#0A382C"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -355,231 +376,209 @@
                             android:paddingTop="2dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="2dp"
-                            android:text="Active Recall"
-                            android:textColor="@color/bio_secondary"
+                            android:text="Genetics"
+                            android:textColor="@color/white"
                             android:textSize="11sp" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🔖"
-                            android:textSize="18sp" />
                     </LinearLayout>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Active Recall: Steps of the Calvin Cycle"
-                        android:textColor="@color/bio_on_surface"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Recall carbon fixation, reduction, regeneration of RuBP, and the role of ATP and NADPH."
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="Query? What is special steps of the Calvin Cycle is as single slower testing to the scientific recall..."
                         android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="12sp" />
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/layoutRecallTags" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                    <!-- Blue Bookmark Ribbon -->
+                    <ImageView
+                        android:id="@+id/btnBookmarkItem2"
+                        android:layout_width="28dp"
+                        android:layout_height="32dp"
+                        android:contentDescription="Bookmark"
+                        android:src="@drawable/ic_bookmark_ribbon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="🧠 Mastery: 85%"
-                            android:textColor="@color/bio_outline"
-                            android:textSize="11sp" />
+                    <View
+                        android:id="@+id/btnOpenSavedRecall"
+                        android:layout_width="1dp"
+                        android:layout_height="1dp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/btnOpenSavedRecall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Practice Drill >"
-                            android:textColor="@color/bio_secondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- 3. Saved Flashcard -->
-                <LinearLayout
+                <!-- Card 3: Botany & Zoology (Flash Card) -->
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cardSavedFlashcard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:background="@color/bio_surface_container"
-                    android:orientation="vertical"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:padding="16dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvSavedFlashcardTitle"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_marginEnd="12dp"
+                        android:text="Botany &amp; Zoology"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/btnBookmarkItem3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_chip_cyan"
-                            android:paddingStart="8dp"
-                            android:paddingTop="2dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="2dp"
-                            android:text="কোষ ও এর গঠন"
-                            android:textColor="@color/bio_primary"
-                            android:textSize="11sp" />
+                    <TextView
+                        android:id="@+id/tvTagFlashcard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/bg_chip_cyan"
+                        android:paddingStart="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="2dp"
+                        android:text="Flash Card"
+                        android:textColor="#0A382C"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvSavedFlashcardTitle" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:background="@drawable/bg_chip_amber"
-                            android:paddingStart="8dp"
-                            android:paddingTop="2dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="2dp"
-                            android:text="Flashcard"
-                            android:textColor="@color/bio_tertiary_container"
-                            android:textSize="11sp" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🔖"
-                            android:textSize="18sp" />
-                    </LinearLayout>
-
-                    <!-- Clinical White Embedded Card -->
+                    <!-- Subcard inside matching Saved Item.jpeg -->
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_card_white"
-                        android:orientation="vertical"
-                        android:padding="14dp">
+                        android:padding="12dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvTagFlashcard">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="CARD QUESTION • HSC QUICK REVIEW"
-                            android:textColor="#0F766E"
-                            android:textSize="10sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
                             android:text="What is the powerhouse of the cell?"
                             android:textColor="@color/bio_card_text_dark"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btnOpenSavedFlashcard"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginTop="8dp"
-                            android:text="Tap to Reveal Answer 👁️"
-                            android:textColor="#006257"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textStyle="bold" />
                     </LinearLayout>
-                </LinearLayout>
 
-                <!-- 4. Saved Resource Card (PDF) -->
+                    <!-- Blue Bookmark Ribbon -->
+                    <ImageView
+                        android:id="@+id/btnBookmarkItem3"
+                        android:layout_width="28dp"
+                        android:layout_height="32dp"
+                        android:contentDescription="Bookmark"
+                        android:src="@drawable/ic_bookmark_ribbon"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/btnOpenSavedFlashcard"
+                        android:layout_width="1dp"
+                        android:layout_height="1dp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Card 4: 2025 Past Paper - PDF (Resources) -->
                 <LinearLayout
                     android:id="@+id/cardSavedResource"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/bio_surface_container"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_card_dark_teal"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="14dp">
+                    android:padding="16dp">
 
+                    <!-- Blue Notebook Icon Thumbnail -->
                     <TextView
                         android:layout_width="44dp"
-                        android:layout_height="44dp"
-                        android:background="@drawable/bg_chip_cyan"
+                        android:layout_height="48dp"
+                        android:background="#38BDF8"
                         android:gravity="center"
-                        android:text="📄"
-                        android:textSize="20sp" />
+                        android:text="📘"
+                        android:textSize="22sp" />
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="14dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="2025 Past Board Exam Paper - PDF"
-                            android:textColor="@color/bio_on_surface"
-                            android:textSize="14sp"
+                            android:text="2025 Past Paper - PDF"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="4dp"
                             android:text="Resources • 1.2 MB"
-                            android:textColor="@color/bio_outline"
-                            android:textSize="11sp" />
+                            android:textColor="@color/bio_mint_accent"
+                            android:textSize="12sp" />
                     </LinearLayout>
 
-                    <Button
+                    <ImageView
+                        android:id="@+id/btnDownloadSavedPaper"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Download"
+                        android:src="@drawable/ic_download_clean"
+                        app:tint="@color/white" />
+
+                    <View
                         android:id="@+id/btnOpenSavedResource"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:backgroundTint="@color/bio_primary_container"
-                        android:text="Download"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_surface_container_lowest"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
+                        android:layout_width="1dp"
+                        android:layout_height="1dp"
+                        android:visibility="gone" />
+
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
 
-    <!-- Bottom Navigation Bar (Stitch Specification: 4 destinations, Saved active) -->
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation Dock matching Saved Item.jpeg -->
     <LinearLayout
-        android:id="@+id/bottomNavSaved"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        android:background="@color/bio_surface_container_low"
-        android:elevation="10dp"
+        android:id="@+id/bottomNavBar"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_bottom_nav_dock"
+        android:elevation="8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <!-- Tab 1: Home -->
         <LinearLayout
@@ -587,23 +586,22 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🏠"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home_nav"
+                app:tint="@color/bio_nav_inactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Home"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
 
         <!-- Tab 2: Study -->
@@ -612,49 +610,46 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📖"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_study_nav"
+                app:tint="@color/bio_nav_inactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Study"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
 
-        <!-- Tab 3: Saved (ACTIVE WITH CYAN GLOWING DOT) -->
+        <!-- Tab 3: Saved (Active) -->
         <LinearLayout
             android:id="@+id/navTabSaved"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_chip_cyan"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🔖"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_saved_nav"
+                app:tint="@color/bio_nav_active" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Saved"
-                android:textColor="@color/bio_primary"
-                android:textSize="10sp"
+                android:textColor="@color/bio_nav_active"
+                android:textSize="11sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -664,24 +659,23 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="👤"
-                android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_profile_nav" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Profile"
-                android:textColor="@color/bio_on_surface_variant"
-                android:textSize="10sp" />
+                android:textColor="@color/bio_nav_inactive"
+                android:textSize="11sp" />
         </LinearLayout>
+
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

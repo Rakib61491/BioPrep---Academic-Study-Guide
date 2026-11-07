@@ -54,6 +54,36 @@ public class NotesActivity extends AppCompatActivity {
             btnNotesBack.setOnClickListener(v -> finish());
         }
 
+        // "+ Add New Note" button from Notes.jpeg
+        View btnAddNewNote = findViewById(R.id.btnAddNewNote);
+        if (btnAddNewNote != null) {
+            btnAddNewNote.setOnClickListener(v -> showAddNoteDialog());
+        }
+
+        // Category filter chips from Notes.jpeg
+        setupCategoryFilters();
+
+        View btnNotesOptions = findViewById(R.id.btnNotesOptions);
+        if (btnNotesOptions != null) {
+            btnNotesOptions.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(NotesActivity.this, v);
+                popup.getMenu().add("New Note");
+                popup.getMenu().add("Sort by Date");
+                popup.getMenu().add("Clear All Notes");
+                popup.setOnMenuItemClickListener(item -> {
+                    if ("New Note".equals(item.getTitle())) {
+                        showAddNoteDialog();
+                    } else if ("Clear All Notes".equals(item.getTitle())) {
+                        getContentResolver().delete(BioNotesProvider.CONTENT_URI, null, null);
+                        displayNotesFromProvider("");
+                        Toast.makeText(NotesActivity.this, "All notes cleared", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                });
+                popup.show();
+            });
+        }
+
         // Live Search Filter for Notes
         EditText etSearchNotes = findViewById(R.id.etSearchNotes);
         if (etSearchNotes != null) {
@@ -76,6 +106,62 @@ public class NotesActivity extends AppCompatActivity {
 
         // Initial load of notes from provider
         displayNotesFromProvider("");
+    }
+
+    private void setupCategoryFilters() {
+        View.OnClickListener filterListener = v -> {
+            String cat = "";
+            int id = v.getId();
+            if (id == R.id.catPhotosynthesis) cat = "Photosynthesis";
+            else if (id == R.id.catGenetics) cat = "Genetics";
+            else if (id == R.id.catCellBiology) cat = "Cell Biology";
+            else if (id == R.id.catEcology) cat = "Ecology";
+
+            Toast.makeText(this, "Filter: " + (cat.isEmpty() ? "All" : cat), Toast.LENGTH_SHORT).show();
+            displayNotesFromProvider(cat);
+        };
+
+        if (findViewById(R.id.catPhotosynthesis) != null) findViewById(R.id.catPhotosynthesis).setOnClickListener(filterListener);
+        if (findViewById(R.id.catGenetics) != null) findViewById(R.id.catGenetics).setOnClickListener(filterListener);
+        if (findViewById(R.id.catCellBiology) != null) findViewById(R.id.catCellBiology).setOnClickListener(filterListener);
+        if (findViewById(R.id.catEcology) != null) findViewById(R.id.catEcology).setOnClickListener(filterListener);
+    }
+
+    private void showAddNoteDialog() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Create Biology Note");
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(32, 24, 32, 16);
+
+        final EditText inputTitle = new EditText(this);
+        inputTitle.setHint("Note Title (e.g. Calvin Cycle Steps)");
+        layout.addView(inputTitle);
+
+        final EditText inputDetails = new EditText(this);
+        inputDetails.setHint("Details / Summary...");
+        inputDetails.setMinLines(3);
+        layout.addView(inputDetails);
+
+        builder.setView(layout);
+        builder.setPositiveButton("Save Note", (dialog, which) -> {
+            String title = inputTitle.getText().toString().trim();
+            String details = inputDetails.getText().toString().trim();
+            if (!title.isEmpty() && !details.isEmpty()) {
+                String currentDate = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
+                ContentValues values = new ContentValues();
+                values.put(BioNotesProvider.TITLE, title);
+                values.put(BioNotesProvider.DETAILS, details);
+                values.put(BioNotesProvider.CATEGORY, "Biology");
+                values.put(BioNotesProvider.CREATED_AT, currentDate);
+                getContentResolver().insert(BioNotesProvider.CONTENT_URI, values);
+                displayNotesFromProvider("");
+                Toast.makeText(this, "Note saved to BioNotesProvider!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
     }
 
     private void setupNavigation() {
@@ -156,6 +242,29 @@ public class NotesActivity extends AppCompatActivity {
         Toast.makeText(this, "Notes queried from BioNotesProvider", Toast.LENGTH_SHORT).show();
     }
 
+    private void seedDefaultNotes() {
+        ContentValues v1 = new ContentValues();
+        v1.put(BioNotesProvider.TITLE, "Photosynthesis & Respiration");
+        v1.put(BioNotesProvider.DETAILS, "Features key stages like the Calvin cycle, light-dependent reactions, and photolysis.");
+        v1.put(BioNotesProvider.CATEGORY, "Biology");
+        v1.put(BioNotesProvider.CREATED_AT, "Oct 25, 2026");
+        getContentResolver().insert(BioNotesProvider.CONTENT_URI, v1);
+
+        ContentValues v2 = new ContentValues();
+        v2.put(BioNotesProvider.TITLE, "Mitosis & Meiosis");
+        v2.put(BioNotesProvider.DETAILS, "Stages of cell division (Prophase, Metaphase, Anaphase, Telophase) and crossing over.");
+        v2.put(BioNotesProvider.CATEGORY, "Genetics");
+        v2.put(BioNotesProvider.CREATED_AT, "Oct 18, 2026");
+        getContentResolver().insert(BioNotesProvider.CONTENT_URI, v2);
+
+        ContentValues v3 = new ContentValues();
+        v3.put(BioNotesProvider.TITLE, "Structure of DNA");
+        v3.put(BioNotesProvider.DETAILS, "Understanding the double helix, nucleotide bonds, base pairings (A-T, G-C).");
+        v3.put(BioNotesProvider.CATEGORY, "Biochemistry");
+        v3.put(BioNotesProvider.CREATED_AT, "Oct 12, 2026");
+        getContentResolver().insert(BioNotesProvider.CONTENT_URI, v3);
+    }
+
     private void displayNotesFromProvider() {
         displayNotesFromProvider("");
     }
@@ -178,6 +287,20 @@ public class NotesActivity extends AppCompatActivity {
                 selectionArgs,
                 BioNotesProvider._ID + " DESC"
         );
+
+        if (cursor == null || cursor.getCount() == 0) {
+            if (cursor != null) cursor.close();
+            if (filterQuery == null || filterQuery.isEmpty()) {
+                seedDefaultNotes();
+                cursor = getContentResolver().query(
+                        BioNotesProvider.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        BioNotesProvider._ID + " DESC"
+                );
+            }
+        }
 
         if (cursor == null) return;
 
@@ -221,20 +344,50 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     private void renderNoteCard(String id, String title, String details, String category, String date) {
-        View card = LayoutInflater.from(this).inflate(R.layout.item_fruit, layoutNotesListContainer, false);
+        View card = LayoutInflater.from(this).inflate(R.layout.item_note_card, layoutNotesListContainer, false);
 
-        TextView txtGlyph = card.findViewById(R.id.imgFruitGlyph);
-        TextView txtName = card.findViewById(R.id.txtName);
-        TextView txtDescription = card.findViewById(R.id.txtDescription);
+        TextView txtTitle = card.findViewById(R.id.tvNoteCardTitle);
+        TextView txtDate = card.findViewById(R.id.tvNoteCardDate);
+        TextView txtCategory = card.findViewById(R.id.tvNoteCardCategory);
+        TextView txtDetails = card.findViewById(R.id.tvNoteCardDetails);
+        View btnEdit = card.findViewById(R.id.btnEditNoteCard);
 
-        if (txtGlyph != null) {
-            txtGlyph.setText("📝");
-        }
-        if (txtName != null) {
-            txtName.setText(title + (date.isEmpty() ? "" : " • " + date));
-        }
-        if (txtDescription != null) {
-            txtDescription.setText(details + "\nCategory: " + category);
+        if (txtTitle != null) txtTitle.setText(title);
+        if (txtDate != null) txtDate.setText(date);
+        if (txtCategory != null) txtCategory.setText(category);
+        if (txtDetails != null) txtDetails.setText(details);
+
+        if (btnEdit != null) {
+            btnEdit.setOnClickListener(v -> {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle("Edit Note");
+
+                LinearLayout layout = new LinearLayout(this);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                layout.setPadding(32, 24, 32, 16);
+
+                final EditText editTitle = new EditText(this);
+                editTitle.setText(title);
+                layout.addView(editTitle);
+
+                final EditText editDetails = new EditText(this);
+                editDetails.setText(details);
+                editDetails.setMinLines(3);
+                layout.addView(editDetails);
+
+                builder.setView(layout);
+                builder.setPositiveButton("Update", (dialog, which) -> {
+                    ContentValues cv = new ContentValues();
+                    cv.put(BioNotesProvider.TITLE, editTitle.getText().toString());
+                    cv.put(BioNotesProvider.DETAILS, editDetails.getText().toString());
+                    Uri updateUri = Uri.withAppendedPath(BioNotesProvider.CONTENT_URI, id);
+                    getContentResolver().update(updateUri, cv, null, null);
+                    displayNotesFromProvider("");
+                    Toast.makeText(this, "Note updated!", Toast.LENGTH_SHORT).show();
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.show();
+            });
         }
 
         // Long click to delete record via ContentResolver.delete()
@@ -243,7 +396,7 @@ public class NotesActivity extends AppCompatActivity {
             int rowsDeleted = getContentResolver().delete(deleteUri, null, null);
             if (rowsDeleted > 0) {
                 Toast.makeText(this, "Deleted note #" + id, Toast.LENGTH_SHORT).show();
-                displayNotesFromProvider();
+                displayNotesFromProvider("");
             }
             return true;
         });

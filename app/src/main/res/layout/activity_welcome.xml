@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Lab 08 Topic 7: Relative Layout in Android
-    Matches Stitch UI Screen: "Loading Screen" (ID: 5e7d8e45d1a747eb843fd7a0f5d2c67d)
+    Matches Stitch UI Design: "Loading Screen" (ID: 5e7d8e45d1a747eb843fd7a0f5d2c67d)
     Demonstrates attributes:
     - layout_alignParentTop
     - layout_alignParentBottom
@@ -19,21 +19,21 @@
     android:layout_height="match_parent"
     android:background="#031510">
 
-    <!-- Fullscreen Bioluminescent Cellular Background Art -->
+    <!-- Fullscreen Bioluminescent Cellular Background Art matching Loading Screen.jpeg -->
     <ImageView
         android:id="@+id/ivWelcomeBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.45"
+        android:alpha="0.85"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_stitch_biology" />
 
-    <!-- Dark gradient overlay to create depth -->
+    <!-- Subtle gradient overlay for typography readability -->
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#80001713" />
+        android:background="#33001713" />
 
     <!-- Topic 7: Top Left Status/Back Anchor using layout_alignParentTop and layout_alignParentLeft -->
     <ImageButton
@@ -186,7 +186,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:text="Master Biology through Active Recall &amp; Practice"
-            android:textColor="#69A997"
+            android:textColor="#A7F3D0"
             android:textSize="13sp" />
 
         <!-- HSC Brand Mark & Attribution -->
@@ -205,7 +205,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Powered by Active Study"
-            android:textColor="#4D9782"
+            android:textColor="#6EE7B7"
             android:textSize="11sp" />
     </LinearLayout>
 
