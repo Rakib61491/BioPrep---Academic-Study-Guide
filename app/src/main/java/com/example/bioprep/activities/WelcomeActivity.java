@@ -52,6 +52,9 @@ public class WelcomeActivity extends AppCompatActivity {
         tvLoadingStatus = findViewById(R.id.tvLoadingStatus);
         tvLoadingSubStatus = findViewById(R.id.tvLoadingSubStatus);
 
+        // Pre-initialize Room Database in background
+        com.example.bioprep.database.DatabaseInitializer.initializeDatabaseAsync(getApplicationContext(), null);
+
         View root = findViewById(R.id.layoutWelcomeRoot);
         if (root != null) {
             root.setOnClickListener(v -> navigateToHome());
@@ -113,9 +116,13 @@ public class WelcomeActivity extends AppCompatActivity {
         if (isNavigated || isFinishing()) return;
         isNavigated = true;
 
-        // Topic 3: Explicit Intent with getApplicationContext()
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(intent);
+        if (!com.example.bioprep.utils.UserPreferences.isAgreementAccepted(this)) {
+            Intent intent = new Intent(getApplicationContext(), AgreementActivity.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(intent);
+        }
         finish();
     }
 

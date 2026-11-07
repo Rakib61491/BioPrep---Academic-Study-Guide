@@ -56,18 +56,32 @@
                 android:paddingTop="4dp"
                 android:paddingBottom="8dp">
 
-                <!-- Small Back Button at Top Left -->
-                <ImageButton
-                    android:id="@+id/btnProfileBack"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Back"
-                    android:src="@drawable/ic_arrow_back"
+                <!-- Small Back Button and Logo at Top Left -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/btnProfileBack"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Back"
+                        android:src="@drawable/ic_arrow_back"
+                        app:tint="@color/white" />
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginStart="4dp"
+                        android:contentDescription="BioPrep App Logo"
+                        android:src="@drawable/app_logo" />
+                </LinearLayout>
 
                 <!-- Centered Title -->
                 <TextView
@@ -110,13 +124,22 @@
                     android:layout_width="104dp"
                     android:layout_height="104dp">
 
+                    <ImageView
+                        android:id="@+id/ivProfileAvatarImage"
+                        android:layout_width="104dp"
+                        android:layout_height="104dp"
+                        android:contentDescription="Profile Avatar"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/app_logo"
+                        android:visibility="visible" />
+
                     <TextView
+                        android:id="@+id/tvProfileAvatarPlaceholder"
                         android:layout_width="104dp"
                         android:layout_height="104dp"
                         android:background="@drawable/bg_avatar_circle"
                         android:gravity="center"
-                        android:text="👨‍🎓"
-                        android:textSize="56sp" />
+                        android:visibility="gone" />
 
                     <!-- Edit Pen Circular Badge -->
                     <TextView
@@ -161,7 +184,7 @@
                     android:paddingTop="6dp"
                     android:paddingEnd="16dp"
                     android:paddingBottom="6dp"
-                    android:text="Level 5 - Biology Scout 🧬"
+                    android:text="HSC Biology Student 🧬"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -239,9 +262,10 @@
                                 android:textSize="11sp" />
 
                             <TextView
+                                android:id="@+id/tvProfileStudyTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="42h 15m"
+                                android:text="0h 0m"
                                 android:textColor="@color/white"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -278,9 +302,10 @@
                                 android:textSize="11sp" />
 
                             <TextView
+                                android:id="@+id/tvProfileStreak"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="12 Days 🔥"
+                                android:text="0 Days 🔥"
                                 android:textColor="@color/white"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -325,16 +350,17 @@
                                 android:textSize="11sp" />
 
                             <TextView
+                                android:id="@+id/tvProfileQuizCompleted"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="48"
+                                android:text="0"
                                 android:textColor="@color/white"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Metric 4: Rank -->
+                    <!-- Metric 4: Accuracy Rate (Replacing Rank) -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -346,7 +372,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🏆"
+                            android:text="🎯"
                             android:textSize="22sp" />
 
                         <LinearLayout
@@ -359,14 +385,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Rank"
+                                android:text="Accuracy Rate"
                                 android:textColor="@color/bio_on_surface_variant"
                                 android:textSize="11sp" />
 
                             <TextView
+                                android:id="@+id/tvProfileAccuracyRate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="#42 (School)"
+                                android:text="0%"
                                 android:textColor="@color/white"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
@@ -485,82 +512,6 @@
                         android:layout_marginStart="14dp"
                         android:layout_weight="1"
                         android:text="Achievements &amp; Badges"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="›"
-                        android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="20sp" />
-                </LinearLayout>
-
-                <!-- Row 4: Notification Settings -->
-                <LinearLayout
-                    android:id="@+id/rowNotifications"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_card_dark_teal"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔔"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
-                        android:layout_weight="1"
-                        android:text="Notification Settings"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="›"
-                        android:textColor="@color/bio_on_surface_variant"
-                        android:textSize="20sp" />
-                </LinearLayout>
-
-                <!-- Row 5: App Theme / Appearance -->
-                <LinearLayout
-                    android:id="@+id/rowTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_card_dark_teal"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🎨"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
-                        android:layout_weight="1"
-                        android:text="App Theme / Appearance"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold" />

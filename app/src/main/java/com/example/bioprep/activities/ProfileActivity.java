@@ -2,229 +2,408 @@ package com.example.bioprep.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bioprep.R;
-import com.example.bioprep.utils.NotificationHelper;
+import com.example.bioprep.database.AppDatabase;
+import com.example.bioprep.utils.UserPreferences;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
- * My Profile Activity implementing Stitch UI Design (Screen ID: 71d77bd7d6c14a188f6ba5eede1863d9).
- * Displays student stats, total study time, streak, school rank, and rich interactive settings.
+ * Profile Activity implementing Requirement 12:
+ * - Avatar Image Picker via Pen Icon, saved persistently and reflected in both Profile and Home.
+ * - Student level displayed as "HSC Biology Student".
+ * - Achievements displaying: Study Time, Active Streak, Quiz Completed, Accuracy Rate.
+ * - Achievements and Badges dialog showing ONLY: Number of Streak, Number of Practice Sessions Completed, Accuracy Rate.
+ * - Dedicated Help & Support launch (HelpSupportActivity).
+ * - Full Log Out confirmation clearing personal user data (notes, avatar, sessions, attempts, streak)
+ *   while preserving bundled educational content.
  */
 public class ProfileActivity extends AppCompatActivity {
 
-    private static final String PREFS_NAME = "BioPrepProfilePrefs";
-    private static final String KEY_NAME = "user_name";
-    private static final String KEY_YEAR = "user_year";
-    private static final String KEY_ID = "user_id";
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     private TextView tvProfileName;
     private TextView tvProfileSubtitle;
-    private SharedPreferences prefs;
+    private TextView tvProfileLevel;
+    private TextView tvAvatarPlaceholder;
+    private ImageView ivAvatarImage;
+
+    // Achievement Views
+    private TextView tvProfileStudyTime;
+    private TextView tvProfileStreak;
+    private TextView tvProfileQuizCompleted;
+    private TextView tvProfileAccuracyRate;
+
+    // Cache of dynamic stats for badges dialog
+    private int cachedStreak = 0;
+    private int cachedSessionsCount = 0;
+    private int cachedAccuracyRate = 0;
+
+    // Avatar Image Picker Launcher
+    private final ActivityResultLauncher<String> avatarPickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    saveAvatarFromUri(uri);
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-
         initViews();
-        loadProfileData();
-        setupSettingsRows();
+        setupActionRows();
         setupNavigation();
     }
 
-    private void initViews() {
-        tvProfileName = findViewById(R.id.tvProfileName);
-        tvProfileSubtitle = findViewById(R.id.tvProfileSubtitle);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadProfileData();
+        loadDynamicAchievements();
+    }
 
-        View btnBack = findViewById(R.id.btnProfileBack);
+    private void initViews() {
+        ImageButton btnBack = findViewById(R.id.btnProfileBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }
 
-        View btnSettings = findViewById(R.id.btnProfileSettings);
-        if (btnSettings != null) {
-            btnSettings.setOnClickListener(v -> showPreferencesDialog());
+        tvProfileName = findViewById(R.id.tvProfileName);
+        tvProfileSubtitle = findViewById(R.id.tvProfileSubtitle);
+        tvProfileLevel = findViewById(R.id.tvProfileLevel);
+        tvAvatarPlaceholder = findViewById(R.id.tvProfileAvatarPlaceholder);
+        ivAvatarImage = findViewById(R.id.ivProfileAvatarImage);
+
+        tvProfileStudyTime = findViewById(R.id.tvProfileStudyTime);
+        tvProfileStreak = findViewById(R.id.tvProfileStreak);
+        tvProfileQuizCompleted = findViewById(R.id.tvProfileQuizCompleted);
+        tvProfileAccuracyRate = findViewById(R.id.tvProfileAccuracyRate);
+
+        if (tvProfileLevel != null) {
+            tvProfileLevel.setText(UserPreferences.STUDENT_LEVEL_TITLE + " 🧬");
         }
 
+        // Pen icon on avatar picture to change avatar
         View btnEditAvatar = findViewById(R.id.btnEditAvatar);
         if (btnEditAvatar != null) {
-            btnEditAvatar.setOnClickListener(v -> showEditProfileDialog());
+            btnEditAvatar.setOnClickListener(v -> avatarPickerLauncher.launch("image/*"));
+        }
+
+        View btnSettings = findViewById(R.id.btnProfileSettings);
+        if (btnSettings != null) {
+            btnSettings.setOnClickListener(v -> startActivity(new Intent(this, AnalyticsActivity.class)));
         }
 
         View btnLogout = findViewById(R.id.btnProfileLogout);
         if (btnLogout != null) {
-            btnLogout.setOnClickListener(v -> {
-                new AlertDialog.Builder(this)
-                        .setTitle("Log Out")
-                        .setMessage("Are you sure you want to log out of BioVerdant HSC?")
-                        .setPositiveButton("Log Out", (dialog, which) -> {
-                            Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(this, WelcomeActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            finish();
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            });
+            btnLogout.setOnClickListener(v -> showLogoutConfirmationDialog());
         }
     }
 
     private void loadProfileData() {
-        String name = prefs.getString(KEY_NAME, "HSC Warrior!");
-        String year = prefs.getString(KEY_YEAR, "Year 12");
-        String id = prefs.getString(KEY_ID, "#98324");
+        String name = UserPreferences.getUserName(this);
+        String email = UserPreferences.getUserEmail(this);
 
-        if (tvProfileName != null) tvProfileName.setText(name);
-        if (tvProfileSubtitle != null) tvProfileSubtitle.setText("Biology Enthusiast | " + year + "\nID: " + id);
+        if (tvProfileName != null) {
+            tvProfileName.setText(name);
+        }
+        if (tvProfileSubtitle != null) {
+            tvProfileSubtitle.setText(email.isEmpty() ? "HSC Candidate | Biology Major" : email);
+        }
+
+        // Load Avatar
+        String avatarPath = UserPreferences.getAvatarPath(this);
+        if (avatarPath != null && new File(avatarPath).exists()) {
+            try {
+                Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+                if (bitmap != null && ivAvatarImage != null) {
+                    ivAvatarImage.setImageBitmap(bitmap);
+                    ivAvatarImage.setVisibility(View.VISIBLE);
+                    if (tvAvatarPlaceholder != null) tvAvatarPlaceholder.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                if (ivAvatarImage != null) {
+                    ivAvatarImage.setImageResource(R.drawable.app_logo);
+                    ivAvatarImage.setVisibility(View.VISIBLE);
+                }
+                if (tvAvatarPlaceholder != null) tvAvatarPlaceholder.setVisibility(View.GONE);
+            }
+        } else {
+            if (ivAvatarImage != null) {
+                ivAvatarImage.setImageResource(R.drawable.app_logo);
+                ivAvatarImage.setVisibility(View.VISIBLE);
+            }
+            if (tvAvatarPlaceholder != null) tvAvatarPlaceholder.setVisibility(View.GONE);
+        }
     }
 
-    private void setupSettingsRows() {
-        // 1. Edit Personal Info
+    private void saveAvatarFromUri(Uri uri) {
+        executor.execute(() -> {
+            try {
+                File dir = new File(getFilesDir(), "avatars");
+                if (!dir.exists()) dir.mkdirs();
+                File destFile = new File(dir, "avatar_user_" + System.currentTimeMillis() + ".jpg");
+
+                try (InputStream in = getContentResolver().openInputStream(uri);
+                     OutputStream out = new FileOutputStream(destFile)) {
+                    byte[] buffer = new byte[8192];
+                    int read;
+                    while ((read = in.read(buffer)) != -1) {
+                        out.write(buffer, 0, read);
+                    }
+                    out.flush();
+                }
+
+                UserPreferences.setAvatarPath(this, destFile.getAbsolutePath());
+
+                mainHandler.post(() -> {
+                    loadProfileData();
+                    Toast.makeText(this, "Profile picture updated successfully!", Toast.LENGTH_SHORT).show();
+                });
+            } catch (Exception e) {
+                mainHandler.post(() ->
+                        Toast.makeText(this, "Failed to update profile picture: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        });
+    }
+
+    private void loadDynamicAchievements() {
+        executor.execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(this);
+
+            int totalStudySeconds = db.studySessionDao().getTotalStudySeconds();
+            int quizCompletedCount = db.practiceDao().getCompletedQuizCount();
+            int totalCorrect = db.practiceDao().getTotalCorrectAnswers();
+            int totalAnswered = db.practiceDao().getTotalAnsweredQuestions();
+            int accuracyPercent = totalAnswered > 0 ? (int) Math.round((totalCorrect / (double) totalAnswered) * 100.0) : 0;
+
+            // Calculate active streak (days with >= 120 minutes of study time)
+            SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            String todayDate = dbDateFormat.format(new Date());
+            int todaySecs = db.studySessionDao().getStudySecondsForDate(todayDate);
+
+            int streak = 0;
+            if (todaySecs >= 120 * 60) {
+                streak++;
+            }
+
+            Calendar cal = Calendar.getInstance();
+            while (true) {
+                cal.add(Calendar.DAY_OF_YEAR, -1);
+                String prevDate = dbDateFormat.format(cal.getTime());
+                int secs = db.studySessionDao().getStudySecondsForDate(prevDate);
+                if (secs >= 120 * 60) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+
+            String studyTimeDisplay;
+            if (totalStudySeconds >= 3600) {
+                studyTimeDisplay = (totalStudySeconds / 3600) + "h " + ((totalStudySeconds % 3600) / 60) + "m";
+            } else if (totalStudySeconds >= 60) {
+                studyTimeDisplay = (totalStudySeconds / 60) + "m " + (totalStudySeconds % 60) + "s";
+            } else {
+                studyTimeDisplay = totalStudySeconds + "s";
+            }
+
+            cachedStreak = streak;
+            cachedSessionsCount = quizCompletedCount;
+            cachedAccuracyRate = accuracyPercent;
+
+            final String finalStudyTime = studyTimeDisplay;
+            final int finalStreak = streak;
+            final int finalQuizzes = quizCompletedCount;
+            final int finalAccuracy = accuracyPercent;
+
+            mainHandler.post(() -> {
+                if (tvProfileStudyTime != null) tvProfileStudyTime.setText(finalStudyTime);
+                if (tvProfileStreak != null) tvProfileStreak.setText(finalStreak + (finalStreak == 1 ? " Day 🔥" : " Days 🔥"));
+                if (tvProfileQuizCompleted != null) tvProfileQuizCompleted.setText(String.valueOf(finalQuizzes));
+                if (tvProfileAccuracyRate != null) tvProfileAccuracyRate.setText(finalAccuracy + "%");
+            });
+        });
+    }
+
+    private void setupActionRows() {
+        // Row 1: Edit Personal Info
         View rowPersonalInfo = findViewById(R.id.rowPersonalInfo);
         if (rowPersonalInfo != null) {
             rowPersonalInfo.setOnClickListener(v -> showEditProfileDialog());
         }
 
-        // 2. Preferences & Daily Goals -> opens Daily Goal & Analytics screen
+        // Row 2: Preferences & Daily Goals -> Opens Daily Goal & Analytics Screen
         View rowGoals = findViewById(R.id.rowGoals);
         if (rowGoals != null) {
             rowGoals.setOnClickListener(v -> startActivity(new Intent(this, AnalyticsActivity.class)));
         }
 
-        // 3. Achievements & Badges
+        // Row 3: Achievements & Badges Dialog
         View rowBadges = findViewById(R.id.rowBadges);
         if (rowBadges != null) {
-            rowBadges.setOnClickListener(v -> showBadgesDialog());
+            rowBadges.setOnClickListener(v -> showAchievementsDialog());
         }
 
-        // 4. Notification Settings
-        View rowNotifications = findViewById(R.id.rowNotifications);
-        if (rowNotifications != null) {
-            rowNotifications.setOnClickListener(v -> showNotificationSettingsDialog());
-        }
-
-        // 5. App Theme / Appearance
-        View rowTheme = findViewById(R.id.rowTheme);
-        if (rowTheme != null) {
-            rowTheme.setOnClickListener(v -> {
-                Toast.makeText(this, "Active Theme: Bioluminescent Abyssal Forest (Stitch Edition)", Toast.LENGTH_SHORT).show();
-            });
-        }
-
-        // 6. Help & Support
+        // Row 6: Help & Support -> Opens dedicated HelpSupportActivity
         View rowSupport = findViewById(R.id.rowSupport);
         if (rowSupport != null) {
-            rowSupport.setOnClickListener(v -> showHelpDialog());
+            rowSupport.setOnClickListener(v -> startActivity(new Intent(this, HelpSupportActivity.class)));
         }
+    }
+
+    /**
+     * Requirement 12: Displays ONLY these three metrics:
+     * 1. Number of Streak
+     * 2. Number of Practice/Active Recall Sessions Completed
+     * 3. Accuracy Rate
+     * No dummy badges or unrelated achievements.
+     */
+    private void showAchievementsDialog() {
+        String message = String.format(
+                Locale.getDefault(),
+                "1. Active Study Streak: %d Day%s (120m/day qualifying rule)\n\n" +
+                        "2. Practice & Active Recall Sessions Completed: %d Session%s\n\n" +
+                        "3. Overall Accuracy Rate: %d%%",
+                cachedStreak, cachedStreak == 1 ? "" : "s",
+                cachedSessionsCount, cachedSessionsCount == 1 ? "" : "s",
+                cachedAccuracyRate
+        );
+
+        new AlertDialog.Builder(this)
+                .setTitle("Your Study Achievements 🏆")
+                .setMessage(message)
+                .setPositiveButton("Close", null)
+                .show();
     }
 
     private void showEditProfileDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Edit Personal Profile");
+        builder.setTitle("Edit Personal Info");
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(32, 24, 32, 16);
+        layout.setPadding(48, 24, 48, 16);
 
         final EditText editName = new EditText(this);
-        editName.setHint("Warrior Name");
-        editName.setText(prefs.getString(KEY_NAME, "HSC Warrior!"));
+        editName.setHint("Student Name");
+        editName.setText(UserPreferences.getUserName(this));
         layout.addView(editName);
 
-        final EditText editYear = new EditText(this);
-        editYear.setHint("Batch / Year (e.g. Year 12)");
-        editYear.setText(prefs.getString(KEY_YEAR, "Year 12"));
-        layout.addView(editYear);
-
-        final EditText editId = new EditText(this);
-        editId.setHint("Student ID (e.g. #98324)");
-        editId.setText(prefs.getString(KEY_ID, "#98324"));
-        layout.addView(editId);
-
         builder.setView(layout);
-        builder.setPositiveButton("Save Profile", (dialog, which) -> {
+        builder.setPositiveButton("Save", (dialog, which) -> {
             String name = editName.getText().toString().trim();
-            String year = editYear.getText().toString().trim();
-            String id = editId.getText().toString().trim();
-
             if (!name.isEmpty()) {
-                prefs.edit()
-                        .putString(KEY_NAME, name)
-                        .putString(KEY_YEAR, year.isEmpty() ? "Year 12" : year)
-                        .putString(KEY_ID, id.isEmpty() ? "#98324" : id)
-                        .apply();
+                UserPreferences.setUserName(this, name);
                 loadProfileData();
-                Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Name updated successfully!", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
 
-    private void showPreferencesDialog() {
+    /**
+     * Requirement 12: Confirmation dialog explaining data removal on logout.
+     * Clears personal data (notes, avatar, study sessions, attempts, streak)
+     * while preserving bundled curriculum content.
+     */
+    private void showLogoutConfirmationDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Study Preferences")
-                .setMessage("Target: HSC Biology 2026\nDaily Focus: 20 MCQs & 10 Flashcards\nActive Recall Algorithm: Spaced Repetition (Anki)")
-                .setPositiveButton("Adjust in Analytics", (dialog, which) -> startActivity(new Intent(this, AnalyticsActivity.class)))
-                .setNegativeButton("Close", null)
-                .show();
-    }
-
-    private void showBadgesDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Your Badges & Honors 🏆")
-                .setMessage("• 🧬 Biology Scout (Level 5)\n• 🔥 12-Day Study Streak\n• 🎯 100% MCQ Mastery (Cell & Function)\n• 🧠 Active Recall Champion\n• 📚 Full Syllabus Explorer")
-                .setPositiveButton("Keep Learning!", null)
-                .show();
-    }
-
-    private void showNotificationSettingsDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Daily Study Notifications 🔔")
-                .setMessage("Daily study reminder is active for 8:00 PM every evening.\nWould you like to test a study alert now?")
-                .setPositiveButton("Send Test Alert", (dialog, which) -> {
-                    NotificationHelper.sendNotification(this, true);
-                    Toast.makeText(this, "Test Study Notification Sent!", Toast.LENGTH_SHORT).show();
-                })
+                .setTitle("Log Out of BioPrep?")
+                .setMessage("Logging out will remove your personal user data from this device:\n\n" +
+                        "• Personal notes and attachments\n" +
+                        "• Profile picture / avatar\n" +
+                        "• Study sessions and study time records\n" +
+                        "• Exam practice attempts and scores\n" +
+                        "• Daily goals and streak history\n" +
+                        "• Current login session\n\n" +
+                        "Bundled educational content (chapters, questions, flashcards, and syllabus resources) will remain available.\n\n" +
+                        "Are you sure you want to log out?")
+                .setPositiveButton("Log Out", (dialog, which) -> performLogout())
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    private void showHelpDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("BioPrep Study Guide Help")
-                .setMessage("Welcome to BioPrep Academic Study Guide!\n\n• Active Recall: Test your memory without looking at notes.\n• Flashcards: Spaced repetition for Botany & Zoology.\n• Notes: SQLite-backed notebook for your own revision summaries.\n• Exam Practice: Board chapter MCQs and timed full mock exams.\n• Resources: Official NCTB textbooks and syllabus PDFs.\n\nNeed technical help? Email: support@bioprephsc.org")
-                .setPositiveButton("Got It", null)
-                .show();
+    private void performLogout() {
+        executor.execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(this);
+
+            // 1. Delete user personal data
+            db.noteDao().clearAllNotes();
+            db.studySessionDao().clearAllSessions();
+            db.practiceDao().clearAllAttempts();
+            db.practiceDao().clearAllAnswers();
+
+            // 2. Clear avatar file
+            String avatarPath = UserPreferences.getAvatarPath(this);
+            if (avatarPath != null) {
+                File f = new File(avatarPath);
+                if (f.exists()) f.delete();
+            }
+
+            // 3. Clear user preferences session
+            UserPreferences.clearSession(this);
+
+            mainHandler.post(() -> {
+                Toast.makeText(this, "Logged out and personal data cleared.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, SignInActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
+        });
     }
 
     private void setupNavigation() {
-        findViewById(R.id.navTabHome).setOnClickListener(v -> {
+        View navHome = findViewById(R.id.navTabHome);
+        if (navHome != null) navHome.setOnClickListener(v -> {
             Intent intent = new Intent(this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
 
-        findViewById(R.id.navTabStudy).setOnClickListener(v ->
+        View navStudy = findViewById(R.id.navTabStudy);
+        if (navStudy != null) navStudy.setOnClickListener(v ->
                 startActivity(new Intent(this, ChapterActivity.class)));
 
-        findViewById(R.id.navTabSaved).setOnClickListener(v ->
+        View navSaved = findViewById(R.id.navTabSaved);
+        if (navSaved != null) navSaved.setOnClickListener(v ->
                 startActivity(new Intent(this, SavedItemsActivity.class)));
 
-        findViewById(R.id.navTabProfile).setOnClickListener(v ->
+        View navProfile = findViewById(R.id.navTabProfile);
+        if (navProfile != null) navProfile.setOnClickListener(v ->
                 Toast.makeText(this, "Already on My Profile", Toast.LENGTH_SHORT).show());
     }
 }

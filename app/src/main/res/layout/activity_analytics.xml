@@ -56,32 +56,63 @@
                 android:paddingTop="4dp"
                 android:paddingBottom="8dp">
 
-                <!-- Small Back Button at Top Left -->
-                <ImageButton
-                    android:id="@+id/btnAnalyticsBack"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Back"
-                    android:src="@drawable/ic_arrow_back"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <!-- Centered Title -->
-                <TextView
-                    android:id="@+id/tvAnalyticsMainTitle"
+                <!-- Small Back Button and Logo at Top Left -->
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Daily Goal &amp; Analytics"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/btnAnalyticsBack"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Back"
+                        android:src="@drawable/ic_arrow_back"
+                        app:tint="@color/white" />
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginStart="4dp"
+                        android:contentDescription="BioPrep App Logo"
+                        android:src="@drawable/app_logo" />
+                </LinearLayout>
+
+                <!-- Centered Title & Dynamic Date -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tvAnalyticsMainTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Daily Goal &amp; Analytics"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvAnalyticsDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Saturday, 7 November 2026"
+                        android:textColor="@color/bio_mint_accent"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <!-- Three Dots Options on Right -->
                 <ImageView
@@ -233,9 +264,10 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvAnalyticsTodayPercent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="85%"
+                            android:text="0%"
                             android:textColor="@color/bio_neon_cyan"
                             android:textSize="13sp"
                             android:textStyle="bold" />
@@ -625,10 +657,11 @@
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/tvAnalyticsStudyTime"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="2h 45m"
+                            android:text="0h 0m"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -670,7 +703,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="78%"
+                            android:text="0%"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -691,13 +724,16 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <!-- Metric 3: Review Needed -->
+                <!-- Metric 3: Review Needed (Clickable to open recommended chapters) -->
                 <LinearLayout
+                    android:id="@+id/cardReviewNeeded"
                     android:layout_width="0dp"
                     android:layout_height="76dp"
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_card_dark_teal"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="12dp">
@@ -716,10 +752,11 @@
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/tvAnalyticsReviewNeeded"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="12 Items"
+                            android:text="0 Chapters"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -757,10 +794,11 @@
                             android:textSize="12sp" />
 
                         <TextView
+                            android:id="@+id/tvAnalyticsStreak"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="5 Days 🔥"
+                            android:text="0 Days 🔥"
                             android:textColor="@color/white"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -773,57 +811,6 @@
                         android:textSize="22sp" />
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <!-- Performance Insights & Highlights matching Goal Analysis.jpeg -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Performance Insights &amp; Highlights 🧠"
-                android:textColor="@color/white"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/bg_card_dark_teal"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="✅ Strongest Area: Flash Cards (87% Completed)"
-                    android:textColor="#34D399"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="❗ Focus Needed: Exam Practice (Only 50% Completed)"
-                    android:textColor="#F87171"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="🎯 Daily Goal: 85% Completed, 15% remaining for today."
-                    android:textColor="@color/bio_mint_accent"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="🔥 Consistent streak for 5 days."
-                    android:textColor="#FBBF24"
-                    android:textSize="13sp" />
             </LinearLayout>
 
             <!-- Other Options matching Goal Analysis.jpeg -->

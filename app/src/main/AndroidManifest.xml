@@ -2,9 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Lab 08 Topic 12: <uses-permission> tags -->
+    <!-- Permissions for Academic Study Guide & Attachment features -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <uses-feature android:name="android.hardware.location" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +34,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Terms and Conditions Agreement Screen -->
+        <activity
+            android:name=".activities.AgreementActivity"
+            android:exported="false" />
 
         <!-- Screen 2: Home Dashboard (Stitch UI 42f918aa14ed4adaa9691586e244cea1 & Topics 2, 4, 6, 8, 9, 11, 12) -->
         <activity
@@ -81,6 +95,50 @@
             android:name=".activities.AfterNotification"
             android:exported="false" />
 
+        <!-- Add Note Screen -->
+        <activity
+            android:name=".activities.AddNoteActivity"
+            android:exported="false" />
+
+        <!-- View Note Screen -->
+        <activity
+            android:name=".activities.ViewNoteActivity"
+            android:exported="false" />
+
+        <!-- Native PDF Reader Screen -->
+        <activity
+            android:name=".activities.PdfReaderActivity"
+            android:exported="false" />
+
+        <!-- Resource Destination Detail Screen -->
+        <activity
+            android:name=".activities.ResourceDetailActivity"
+            android:exported="false" />
+
+        <!-- Exam Practice Results Screen -->
+        <activity
+            android:name=".activities.QuizResultActivity"
+            android:exported="false" />
+
+        <!-- Review Needed Chapters Screen -->
+        <activity
+            android:name=".activities.ReviewNeededActivity"
+            android:exported="false" />
+
+        <!-- Help & Support Screen -->
+        <activity
+            android:name=".activities.HelpSupportActivity"
+            android:exported="false" />
+
+        <!-- Authentication Screens -->
+        <activity
+            android:name=".activities.SignInActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false" />
+
         <!-- Bound Study Timer Service -->
         <service
             android:name=".services.StudyTimerService"
@@ -99,6 +157,17 @@
             android:name=".providers.BioNotesProvider"
             android:authorities="com.example.bioprep.provider.notes"
             android:exported="false" />
+
+        <!-- FileProvider for Note camera captures and private files -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.bioprep.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <!-- Topic 9: Broadcast Receiver for Airplane Mode -->
         <receiver

@@ -56,18 +56,32 @@
                 android:paddingTop="4dp"
                 android:paddingBottom="8dp">
 
-                <!-- Small Back Button at Top Left -->
-                <ImageButton
-                    android:id="@+id/btnNotesBack"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Back"
-                    android:src="@drawable/ic_arrow_back"
+                <!-- Small Back Button and Logo at Top Left -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/btnNotesBack"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Back"
+                        android:src="@drawable/ic_arrow_back"
+                        app:tint="@color/white" />
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginStart="4dp"
+                        android:contentDescription="BioPrep App Logo"
+                        android:src="@drawable/app_logo" />
+                </LinearLayout>
 
                 <!-- Centered Title: Notes -->
                 <TextView
@@ -167,246 +181,49 @@
                 android:textStyle="bold"
                 app:backgroundTint="@null" />
 
-            <!-- Categories Section Header -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Categories"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- Horizontal Categories Bubbles matching Notes.jpeg -->
-            <HorizontalScrollView
+            <!-- Empty State when no notes exist (Requirement 5) -->
+            <LinearLayout
+                android:id="@+id/layoutNotesEmpty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:scrollbars="none">
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:visibility="gone">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:text="📝"
+                    android:textSize="48sp" />
 
-                    <!-- Category 1: Photosynthesis -->
-                    <LinearLayout
-                        android:id="@+id/catPhotosynthesis"
-                        android:layout_width="92dp"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="No notes yet"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:background="@drawable/bg_chip_amber"
-                            android:gravity="center"
-                            android:text="🌿"
-                            android:textSize="26sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="Create your first note by tapping '+ Add New Note' above."
+                    android:textColor="@color/bio_on_surface_variant"
+                    android:textSize="13sp" />
+            </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Photosynthesis"
-                            android:textColor="@color/white"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-
-                    <!-- Category 2: Genetics -->
-                    <LinearLayout
-                        android:id="@+id/catGenetics"
-                        android:layout_width="92dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:background="@drawable/bg_chip_cyan"
-                            android:gravity="center"
-                            android:text="🧬"
-                            android:textSize="26sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Genetics"
-                            android:textColor="@color/white"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-
-                    <!-- Category 3: Cell Biology -->
-                    <LinearLayout
-                        android:id="@+id/catCellBiology"
-                        android:layout_width="92dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:background="@drawable/bg_card_glow"
-                            android:gravity="center"
-                            android:text="🔬"
-                            android:textSize="26sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Cell Biology"
-                            android:textColor="@color/white"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-
-                    <!-- Category 4: Ecology -->
-                    <LinearLayout
-                        android:id="@+id/catEcology"
-                        android:layout_width="92dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:background="@drawable/bg_chip_emerald"
-                            android:gravity="center"
-                            android:text="🌱"
-                            android:textSize="26sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Ecology"
-                            android:textColor="@color/white"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <!-- Your Notes Section Header -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:text="Your Notes"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <!-- Container for Notes Cards (Populated from ContentProvider & Sample Notes) -->
+            <!-- Container for Notes Cards (Populated from Room Database) -->
             <LinearLayout
                 android:id="@+id/layoutNotesListContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical" />
-
-            <!-- Topic 10 Content Provider Controls Card (Expandable for Lab evaluation) -->
-            <LinearLayout
-                android:id="@+id/layoutTopic10Form"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/bg_card_dark_teal"
-                android:orientation="vertical"
-                android:padding="14dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Topic 10: ContentProvider SQLite Engine"
-                    android:textColor="@color/bio_neon_cyan"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/etNoteTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="42dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_card_white"
-                    android:hint="Note Title (e.g., Photosynthesis &amp; Respiration)"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:textColor="@color/bio_card_text_dark"
-                    android:textSize="13sp" />
-
-                <EditText
-                    android:id="@+id/etNoteDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_card_white"
-                    android:gravity="top|start"
-                    android:hint="Detailed notes summary..."
-                    android:padding="10dp"
-                    android:textColor="@color/bio_card_text_dark"
-                    android:textSize="13sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <!-- android:onClick="onClickAddDetails" specified in Topic 10 -->
-                    <Button
-                        android:id="@+id/btnAddDetails"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_primary_container"
-                        android:onClick="onClickAddDetails"
-                        android:text="Add Details"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_on_primary_container"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <!-- android:onClick="onClickShowDetails" specified in Topic 10 -->
-                    <Button
-                        android:id="@+id/btnShowDetails"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_surface_container_highest"
-                        android:onClick="onClickShowDetails"
-                        android:text="Show Details"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_primary"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvQueryResult"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Provider query status will appear here..."
-                    android:textColor="@color/bio_on_surface_variant"
-                    android:textSize="11sp" />
-            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"

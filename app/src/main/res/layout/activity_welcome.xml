@@ -82,11 +82,11 @@
         <!-- Bioluminescent Circular Logo Emblem from Stitch -->
         <ImageView
             android:id="@+id/imgWelcomeLogo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_marginBottom="16dp"
             android:contentDescription="HSC Biology Emblem"
-            android:src="@drawable/ic_bio_emblem" />
+            android:src="@drawable/app_logo" />
 
         <!-- App Title Typography verbatim from Stitch -->
         <TextView

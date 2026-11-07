@@ -1,100 +1,102 @@
 package com.example.bioprep.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bioprep.R;
-import com.example.bioprep.adapters.FruitAdapter;
-import com.example.bioprep.adapters.FruitRecyclerAdapter;
-import com.example.bioprep.data.SampleBiologyData;
-import com.example.bioprep.data.SampleBiologyData.FlashcardItem;
+import com.example.bioprep.database.AppDatabase;
+import com.example.bioprep.database.FlashcardEntity;
+import com.example.bioprep.database.StudySessionEntity;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.Executors;
 
 /**
- * Flashcards Activity implementing Stitch UI Design (Screen ID: 629273b7864d428ba53d656d62c9e39f).
- * Also integrates the Attached PDF Lab Manual experiments:
- * - Simple ListView (Experiments A and B): ArrayAdapter, setOnItemClickListener
- * - Custom ListView (Experiment C): FruitAdapter, getView
- * - RecyclerView (Experiment D): FruitRecyclerAdapter, LinearLayoutManager, ViewHolder
+ * Flashcards Activity implementing Requirements 2, 3, and 4:
+ * - Fullscreen flashcard layout occupying almost the entire screen height.
+ * - Organized strictly by subject and chapter from Room Database.
+ * - Single "Flip Card" action and tap on card reveals the answer.
+ * - Exactly two navigation buttons below card: Again and Next.
+ * - "Again" re-queues the card for review in the current session.
+ * - Tracks actual active elapsed study time in Room Database (StudySessionEntity).
  */
 public class FlashcardsActivity extends AppCompatActivity {
+
+    public static final String EXTRA_PAPER_ID = "extra_paper_id";
+    public static final String EXTRA_CHAPTER_ID = "extra_chapter_id";
+    public static final String EXTRA_CHAPTER_TITLE = "extra_chapter_title";
 
     private View cardFront;
     private View cardBack;
     private boolean isFlipped = false;
 
+    private TextView tvFlashcardsHeaderTitle;
+    private TextView tvCardCategory;
     private TextView tvCardProgressBadge;
     private TextView tvCardProgressPercent;
     private ProgressBar pbFlashcardProgress;
-    private TextView tvCardCategory;
+
     private TextView tvFlashcardQuestion;
     private TextView tvFlashcardQuestionBn;
     private TextView tvFlashcardAnswerTitle;
     private TextView tvFlashcardAnswerDesc;
     private TextView tvFlashcardMedicalTip;
 
-    private List<FlashcardItem> flashcards;
-    private int currentCardIndex = 0;
+    private Button btnFlipFront;
+    private Button btnFlipBack;
+    private Button btnRateAgain;
+    private Button btnRateNext;
 
-    private ListView listView;
-    private RecyclerView recyclerView;
-    private Button btnToggleRecyclerView;
-    private Button btnToggleListView;
+    private String chapterId;
+    private String chapterTitle;
+    private String paperId;
 
-    // Specimen fruit dataset directly from the Lab Manual PDF
-    private static final String[] FRUIT_NAMES = {
-            "Apple (Malus domestica)",
-            "Banana (Musa acuminata)",
-            "Orange (Citrus sinensis)",
-            "Mango (Mangifera indica)",
-            "Grapes (Vitis vinifera)",
-            "Pineapple (Ananas comosus)",
-            "Strawberry (Fragaria ananassa)",
-            "Jackfruit (Artocarpus heterophyllus)"
-    };
+    private final List<FlashcardEntity> flashcardQueue = new ArrayList<>();
+    private int currentQueueIndex = 0;
+    private int totalUniqueCards = 0;
 
-    private static final String[] FRUIT_DESCRIPTIONS = {
-            "Pome fruit rich in dietary fiber and vitamin C; Rosaceae family",
-            "Botanical berry with high potassium content; Musaceae family",
-            "Hesperidium citrus fruit packed with ascorbic acid; Rutaceae family",
-            "Fleshy drupe, national tree of Bangladesh; Anacardiaceae family",
-            "True berry growing in clusters, rich in resveratrol antioxidants",
-            "Multiple/composite fruit formed from coalesced berries; Bromeliaceae",
-            "Aggregate accessory fruit with achenes on exterior surface",
-            "National fruit of Bangladesh; multiple fruit of the Moraceae family"
-    };
+    // Study session timer
+    private long sessionStartTime = 0;
+    private boolean isSessionSaved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flashcards);
 
+        chapterId = getIntent().getStringExtra(EXTRA_CHAPTER_ID);
+        chapterTitle = getIntent().getStringExtra(EXTRA_CHAPTER_TITLE);
+        paperId = getIntent().getStringExtra(EXTRA_PAPER_ID);
+
+        if (chapterId == null) chapterId = "botany_ch01";
+        if (chapterTitle == null) chapterTitle = "Chapter Flashcards";
+
+        sessionStartTime = System.currentTimeMillis();
+
         initViews();
         setupFlipCard();
-        setupRecallRatings();
-        setupLabManualAdapters();
-        setupNavigation();
+        setupActionButtons();
+        loadFlashcardsFromDatabase();
     }
 
     private void initViews() {
-        flashcards = SampleBiologyData.getFlashcards();
-
+        tvFlashcardsHeaderTitle = findViewById(R.id.tvFlashcardsHeaderTitle);
+        tvCardCategory = findViewById(R.id.tvCardCategory);
         tvCardProgressBadge = findViewById(R.id.tvCardProgressBadge);
         tvCardProgressPercent = findViewById(R.id.tvCardProgressPercent);
         pbFlashcardProgress = findViewById(R.id.pbFlashcardProgress);
-        tvCardCategory = findViewById(R.id.tvCardCategory);
+
         tvFlashcardQuestion = findViewById(R.id.tvFlashcardQuestion);
         tvFlashcardQuestionBn = findViewById(R.id.tvFlashcardQuestionBn);
         tvFlashcardAnswerTitle = findViewById(R.id.tvFlashcardAnswerTitle);
@@ -104,91 +106,21 @@ public class FlashcardsActivity extends AppCompatActivity {
         cardFront = findViewById(R.id.cardFront);
         cardBack = findViewById(R.id.cardBack);
 
-        // PDF Lab Manual: findViewById for ListView & RecyclerView
-        listView = findViewById(R.id.listView);
-        recyclerView = findViewById(R.id.recyclerView);
+        btnFlipFront = findViewById(R.id.btnFlipFront);
+        btnFlipBack = findViewById(R.id.btnFlipBack);
+        btnRateAgain = findViewById(R.id.btnRateAgain);
+        btnRateNext = findViewById(R.id.btnRateNext);
 
-        btnToggleRecyclerView = findViewById(R.id.btnToggleRecyclerView);
-        btnToggleListView = findViewById(R.id.btnToggleListView);
+        if (tvFlashcardsHeaderTitle != null) {
+            tvFlashcardsHeaderTitle.setText("Flashcards: " + chapterTitle);
+        }
+        if (tvCardCategory != null) {
+            tvCardCategory.setText(chapterTitle);
+        }
 
         View btnBack = findViewById(R.id.btnFlashcardsBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
-        }
-
-        View btnOptions = findViewById(R.id.btnFlashcardsOptions);
-        if (btnOptions != null) {
-            btnOptions.setOnClickListener(v -> {
-                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(FlashcardsActivity.this, v);
-                popup.getMenu().add("Bookmark this Card");
-                popup.getMenu().add("Shuffle Deck");
-                popup.getMenu().add("Toggle Lab Specimen List");
-                popup.setOnMenuItemClickListener(item -> {
-                    Toast.makeText(FlashcardsActivity.this, item.getTitle() + " selected", Toast.LENGTH_SHORT).show();
-                    if ("Toggle Lab Specimen List".equals(item.getTitle())) {
-                        View controls = findViewById(R.id.layoutLabManualControls);
-                        if (controls != null) {
-                            controls.setVisibility(controls.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                        }
-                    }
-                    return true;
-                });
-                popup.show();
-            });
-        }
-
-        updateFlashcardDisplay();
-    }
-
-    private void updateFlashcardDisplay() {
-        if (flashcards == null || flashcards.isEmpty()) return;
-        FlashcardItem item = flashcards.get(currentCardIndex);
-
-        if (tvCardProgressBadge != null) {
-            tvCardProgressBadge.setText("CARD " + (currentCardIndex + 1) + " OF " + flashcards.size());
-        }
-        int percent = (int) (((currentCardIndex + 1) / (float) flashcards.size()) * 100);
-        if (tvCardProgressPercent != null) {
-            tvCardProgressPercent.setText("• " + percent + "% Complete");
-        }
-        if (pbFlashcardProgress != null) {
-            pbFlashcardProgress.setProgress(percent);
-        }
-        if (tvCardCategory != null) {
-            tvCardCategory.setText(item.chapterName);
-        }
-        if (tvFlashcardQuestion != null) {
-            tvFlashcardQuestion.setText(item.questionEn);
-        }
-        if (tvFlashcardQuestionBn != null) {
-            tvFlashcardQuestionBn.setText(item.questionBn);
-        }
-        if (tvFlashcardAnswerTitle != null) {
-            tvFlashcardAnswerTitle.setText(item.answerEn);
-        }
-        if (tvFlashcardAnswerDesc != null) {
-            tvFlashcardAnswerDesc.setText(item.answerBn);
-        }
-        if (tvFlashcardMedicalTip != null) {
-            tvFlashcardMedicalTip.setText(item.medicalTip);
-        }
-
-        // Reset flip to front
-        isFlipped = false;
-        if (cardBack != null) cardBack.setVisibility(View.GONE);
-        if (cardFront != null) cardFront.setVisibility(View.VISIBLE);
-    }
-
-    private void advanceNextCard() {
-        if (flashcards != null && !flashcards.isEmpty()) {
-            if (currentCardIndex < flashcards.size() - 1) {
-                currentCardIndex++;
-                updateFlashcardDisplay();
-            } else {
-                Toast.makeText(this, "🎉 Mastered this deck! Cycling to beginning.", Toast.LENGTH_SHORT).show();
-                currentCardIndex = 0;
-                updateFlashcardDisplay();
-            }
         }
     }
 
@@ -204,101 +136,162 @@ public class FlashcardsActivity extends AppCompatActivity {
             }
         };
 
-        View btnShowAnswerFront = findViewById(R.id.btnShowAnswerFront);
-        if (btnShowAnswerFront != null) btnShowAnswerFront.setOnClickListener(flipListener);
-
-        View btnFlipFront = findViewById(R.id.btnFlipFront);
         if (btnFlipFront != null) btnFlipFront.setOnClickListener(flipListener);
-
-        View btnFlipBack = findViewById(R.id.btnFlipBack);
         if (btnFlipBack != null) btnFlipBack.setOnClickListener(flipListener);
-
         if (cardFront != null) cardFront.setOnClickListener(flipListener);
         if (cardBack != null) cardBack.setOnClickListener(flipListener);
     }
 
-    private void setupRecallRatings() {
-        // Anki tetrad: Again (<10m), Hard (1d), Good (3d), Easy (5d)
-        findViewById(R.id.btnRateAgain).setOnClickListener(v -> {
-            Toast.makeText(this, "Rated: Again (<10 min repeat)", Toast.LENGTH_SHORT).show();
-            advanceNextCard();
-        });
+    private void setupActionButtons() {
+        // "Again" button: marks for review and adds to the end of the current session queue
+        if (btnRateAgain != null) {
+            btnRateAgain.setOnClickListener(v -> {
+                if (flashcardQueue.isEmpty() || currentQueueIndex >= flashcardQueue.size()) return;
 
-        findViewById(R.id.btnRateHard).setOnClickListener(v -> {
-            Toast.makeText(this, "Rated: Hard (1 day repeat)", Toast.LENGTH_SHORT).show();
-            advanceNextCard();
-        });
+                FlashcardEntity current = flashcardQueue.get(currentQueueIndex);
+                current.setAgain(true);
+                flashcardQueue.add(current); // Re-queue at the end for this review session
 
-        findViewById(R.id.btnRateGood).setOnClickListener(v -> {
-            Toast.makeText(this, "Rated: Good (3 days repeat)", Toast.LENGTH_SHORT).show();
-            advanceNextCard();
-        });
+                Toast.makeText(this, "Marked 'Again' — queued for repeat in this session", Toast.LENGTH_SHORT).show();
+                advanceCard();
+            });
+        }
 
-        findViewById(R.id.btnRateEasy).setOnClickListener(v -> {
-            Toast.makeText(this, "Rated: Easy (5 days repeat)", Toast.LENGTH_SHORT).show();
-            advanceNextCard();
+        // "Next" button: advances to the next flashcard
+        if (btnRateNext != null) {
+            btnRateNext.setOnClickListener(v -> {
+                advanceCard();
+            });
+        }
+    }
+
+    private void advanceCard() {
+        if (flashcardQueue.isEmpty()) return;
+
+        currentQueueIndex++;
+        if (currentQueueIndex < flashcardQueue.size()) {
+            displayCurrentCard();
+        } else {
+            showCompletionDialog();
+        }
+    }
+
+    private void displayCurrentCard() {
+        if (flashcardQueue.isEmpty() || currentQueueIndex >= flashcardQueue.size()) return;
+
+        FlashcardEntity item = flashcardQueue.get(currentQueueIndex);
+
+        // Progress display
+        int displayNum = currentQueueIndex + 1;
+        int total = flashcardQueue.size();
+        if (tvCardProgressBadge != null) {
+            tvCardProgressBadge.setText("CARD " + displayNum + " OF " + total);
+        }
+
+        int percent = Math.min(100, (int) (((float) displayNum / total) * 100));
+        if (tvCardProgressPercent != null) {
+            tvCardProgressPercent.setText(percent + "% Complete");
+        }
+        if (pbFlashcardProgress != null) {
+            pbFlashcardProgress.setProgress(percent);
+        }
+
+        // Question Face
+        if (tvFlashcardQuestion != null) {
+            tvFlashcardQuestion.setText(item.getQuestionEn());
+        }
+        if (tvFlashcardQuestionBn != null) {
+            tvFlashcardQuestionBn.setText(item.getQuestionBn());
+        }
+
+        // Answer Face
+        if (tvFlashcardAnswerTitle != null) {
+            tvFlashcardAnswerTitle.setText(item.getAnswerEn());
+        }
+        if (tvFlashcardAnswerDesc != null) {
+            tvFlashcardAnswerDesc.setText(item.getAnswerBn());
+        }
+        if (tvFlashcardMedicalTip != null) {
+            tvFlashcardMedicalTip.setText(item.getMedicalTip());
+        }
+
+        // Reset flip to front
+        isFlipped = false;
+        if (cardBack != null) cardBack.setVisibility(View.GONE);
+        if (cardFront != null) cardFront.setVisibility(View.VISIBLE);
+    }
+
+    private void loadFlashcardsFromDatabase() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+            List<FlashcardEntity> cards;
+
+            if ("all".equalsIgnoreCase(chapterId)) {
+                cards = db.flashcardDao().getAllFlashcards();
+            } else {
+                cards = db.flashcardDao().getFlashcardsByChapter(chapterId);
+            }
+
+            // Fallback: if database seed is still executing, get all cards
+            if (cards == null || cards.isEmpty()) {
+                cards = db.flashcardDao().getAllFlashcards();
+            }
+
+            final List<FlashcardEntity> finalCards = cards;
+            runOnUiThread(() -> {
+                if (finalCards != null && !finalCards.isEmpty()) {
+                    flashcardQueue.clear();
+                    flashcardQueue.addAll(finalCards);
+                    totalUniqueCards = finalCards.size();
+                    currentQueueIndex = 0;
+                    displayCurrentCard();
+                } else {
+                    Toast.makeText(this, "Loading flashcard database...", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 
-    /**
-     * Integrates Attached PDF Lab Manual:
-     * - Experiments A and B (Simple ListView with ArrayAdapter and setOnItemClickListener)
-     * - Experiment C (Custom FruitAdapter with getView, R.layout.item_fruit)
-     * - Experiment D (RecyclerView with LinearLayoutManager and FruitRecyclerAdapter)
-     */
-    private void setupLabManualAdapters() {
-        // =====================================================================
-        // Experiment D: RecyclerView (LinearLayoutManager + FruitRecyclerAdapter)
-        // =====================================================================
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        FruitRecyclerAdapter recyclerAdapter = new FruitRecyclerAdapter(FRUIT_NAMES, FRUIT_DESCRIPTIONS);
-        recyclerView.setAdapter(recyclerAdapter);
+    private void showCompletionDialog() {
+        saveStudySessionTime();
 
-        // =====================================================================
-        // Experiment C: Custom ListView (FruitAdapter)
-        // =====================================================================
-        FruitAdapter customAdapter = new FruitAdapter(this, FRUIT_NAMES, FRUIT_DESCRIPTIONS);
-        listView.setAdapter(customAdapter);
+        new AlertDialog.Builder(this)
+                .setTitle("🎉 Session Completed!")
+                .setMessage("Great work! You have reviewed all flashcards in this deck.\n\nActive study time has been recorded to your Daily Goal.")
+                .setPositiveButton("Review Again", (dialog, which) -> {
+                    currentQueueIndex = 0;
+                    displayCurrentCard();
+                })
+                .setNegativeButton("Back to Chapters", (dialog, which) -> finish())
+                .setCancelable(false)
+                .show();
+    }
 
-        // Experiment B: setOnItemClickListener with Toast
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            String selected = FRUIT_NAMES[position];
-            Toast.makeText(getApplicationContext(), "ListView Item: " + selected, Toast.LENGTH_SHORT).show();
-        });
+    private void saveStudySessionTime() {
+        if (isSessionSaved) return;
+        isSessionSaved = true;
 
-        // Toggle between RecyclerView (Experiment D) and ListView (Experiment A-C)
-        btnToggleRecyclerView.setOnClickListener(v -> {
-            recyclerView.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
-            btnToggleRecyclerView.setBackgroundTintList(getColorStateList(R.color.bio_primary_container));
-            btnToggleListView.setBackgroundTintList(getColorStateList(R.color.bio_surface_variant));
-            Toast.makeText(this, "Switched to RecyclerView (Experiment D)", Toast.LENGTH_SHORT).show();
-        });
+        long elapsedMillis = System.currentTimeMillis() - sessionStartTime;
+        int durationSeconds = (int) (elapsedMillis / 1000L);
+        if (durationSeconds < 5) return; // Ignore accidental open/close under 5s
 
-        btnToggleListView.setOnClickListener(v -> {
-            listView.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-            btnToggleListView.setBackgroundTintList(getColorStateList(R.color.bio_primary_container));
-            btnToggleRecyclerView.setBackgroundTintList(getColorStateList(R.color.bio_surface_variant));
-            Toast.makeText(this, "Switched to ListView (Experiments A - C)", Toast.LENGTH_SHORT).show();
+        String dateString = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+            db.studySessionDao().insertSession(new StudySessionEntity(
+                    "FLASHCARD",
+                    chapterId,
+                    durationSeconds,
+                    System.currentTimeMillis(),
+                    dateString
+            ));
         });
     }
 
-    private void setupNavigation() {
-        findViewById(R.id.navTabHome).setOnClickListener(v -> {
-            Intent intent = new Intent(this, HomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
-        findViewById(R.id.navTabStudy).setOnClickListener(v ->
-                startActivity(new Intent(this, ChapterActivity.class)));
-
-        findViewById(R.id.navTabSaved).setOnClickListener(v ->
-                startActivity(new Intent(this, SavedItemsActivity.class)));
-
-        findViewById(R.id.navTabProfile).setOnClickListener(v ->
-                startActivity(new Intent(this, ProfileActivity.class)));
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveStudySessionTime();
     }
 }
-

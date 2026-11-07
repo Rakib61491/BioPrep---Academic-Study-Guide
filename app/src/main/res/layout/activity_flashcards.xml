@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutFlashcardsRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bio_surface">
 
-    <!-- Fullscreen Botanical Microscopic Background matching FlashCard.jpeg -->
+    <!-- Botanical Microscopic Background -->
     <ImageView
         android:id="@+id/ivFlashcardsBackground"
         android:layout_width="0dp"
@@ -30,231 +29,282 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Scrollable Main Container -->
-    <ScrollView
+    <!-- Top Rounded Banner Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bannerFlashcardHeader"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavBar"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_header_banner_teal"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/layoutFlashcardsTopLeft"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/btnFlashcardsBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/bio_banner_header_text" />
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="BioPrep App Logo"
+                android:src="@drawable/app_logo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
             android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingTop="24dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="24dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/layoutFlashcardsTopLeft"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Rounded Mint/Teal Banner Header matching FlashCard.jpeg -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bannerFlashcardHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_header_banner_teal"
-                android:paddingStart="14dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="12dp">
-
-                <!-- Small Back Button at Top Left -->
-                <ImageButton
-                    android:id="@+id/btnFlashcardsBack"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Back"
-                    android:src="@drawable/ic_arrow_back"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/bio_banner_header_text" />
-
-                <!-- Centered Title -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/btnFlashcardsOptions"
-                    app:layout_constraintStart_toEndOf="@id/btnFlashcardsBack"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/tvFlashcardsHeaderTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Flashcards:\nBotany &amp; Zoology"
-                        android:textColor="@color/bio_banner_header_text"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- Three dots options button -->
-                <ImageView
-                    android:id="@+id/btnFlashcardsOptions"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Options"
-                    android:src="@drawable/ic_more_vert_clean"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/bio_banner_header_text" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Card Counter & Progress Bar -->
             <TextView
-                android:id="@+id/tvCardProgressBadge"
+                android:id="@+id/tvFlashcardsHeaderTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:text="Card 12 of 45"
-                android:textColor="@color/white"
-                android:textSize="14sp"
+                android:gravity="center"
+                android:text="Flashcards"
+                android:textColor="@color/bio_banner_header_text"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <ProgressBar
-                android:id="@+id/pbFlashcardProgress"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:layout_marginTop="8dp"
-                android:max="100"
-                android:progress="27"
-                android:progressDrawable="@drawable/progress_bar_cyan" />
-
-            <!-- Stacked Flashcard Depth Wrapper matching FlashCard.jpeg -->
-            <FrameLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvCardCategory"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp">
+                android:gravity="center"
+                android:text="Botany &amp; Zoology Recall"
+                android:textColor="@color/bio_banner_header_text"
+                android:textSize="12sp" />
+        </LinearLayout>
 
-                <!-- Stack Shadow Layer 2 -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:layout_marginStart="14dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="14dp"
-                    android:alpha="0.4"
-                    android:background="@drawable/bg_card_white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- Stack Shadow Layer 1 -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:layout_marginStart="7dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginEnd="7dp"
-                    android:alpha="0.7"
-                    android:background="@drawable/bg_card_white" />
+    <!-- Card Counter & Progress Indicator -->
+    <LinearLayout
+        android:id="@+id/layoutProgressSection"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bannerFlashcardHeader">
 
-                <!-- Foreground Card: Question Face (cardFront) -->
+        <TextView
+            android:id="@+id/tvCardProgressBadge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CARD 1 OF 25"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCardProgressPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4% Complete"
+            android:textColor="@color/bio_mint_accent"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbFlashcardProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="6dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        android:max="100"
+        android:progress="4"
+        android:progressDrawable="@drawable/progress_bar_cyan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutProgressSection" />
+
+    <!-- Fullscreen Flashcard Occupying Screen Height (Requirement 3) -->
+    <FrameLayout
+        android:id="@+id/frameCardContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@id/layoutFlashcardButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pbFlashcardProgress">
+
+        <!-- Stack Shadow Layer -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:alpha="0.4"
+            android:background="@drawable/bg_card_white" />
+
+        <!-- Card Front (Question Face) -->
+        <LinearLayout
+            android:id="@+id/cardFront"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_card_white"
+            android:clickable="true"
+            android:elevation="6dp"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="visible">
+
+            <!-- Card Category Pill -->
+            <TextView
+                android:id="@+id/tvFrontBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_chip_emerald"
+                android:paddingStart="12dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="4dp"
+                android:text="Question (প্রশ্ন)"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- Question Text (fills middle) -->
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
+                android:layout_weight="1"
+                android:fillViewport="true">
+
                 <LinearLayout
-                    android:id="@+id/cardFront"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_card_white"
-                    android:clickable="true"
-                    android:elevation="6dp"
-                    android:focusable="true"
-                    android:minHeight="280dp"
-                    android:orientation="vertical"
-                    android:padding="20dp"
-                    android:visibility="visible">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <!-- Mini dark/light progress bar inside card -->
-                    <ProgressBar
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp"
-                        android:max="100"
-                        android:progress="35"
-                        android:progressDrawable="@drawable/progress_bar_cyan" />
-
-                    <!-- Question Text -->
                     <TextView
                         android:id="@+id/tvFlashcardQuestion"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="28dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:lineSpacingExtra="4dp"
                         android:text="What is the powerhouse of the cell and its primary function?"
                         android:textColor="@color/bio_card_text_dark"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <!-- Answer Pill Button -->
-                    <Button
-                        android:id="@+id/btnShowAnswerFront"
+                    <TextView
+                        android:id="@+id/tvFlashcardQuestionBn"
                         android:layout_width="match_parent"
-                        android:layout_height="46dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_pill_emerald"
-                        android:text="Answer"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        app:backgroundTint="@null" />
-
-                    <!-- Flip Card Sub-Action -->
-                    <LinearLayout
-                        android:id="@+id/btnFlipFront"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="12dp"
-                        android:clickable="true"
-                        android:focusable="true"
+                        android:layout_marginTop="14dp"
                         android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="6dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🧬"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:text="Flip Card"
-                            android:textColor="@color/bio_card_text_dark"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
+                        android:lineSpacingExtra="3dp"
+                        android:text="কোষের শক্তিঘর কোনটি এবং এর প্রধান ভূমিকা কী?"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="16sp" />
                 </LinearLayout>
+            </ScrollView>
 
-                <!-- Foreground Card: Answer Face (cardBack) -->
+            <!-- Flip Card Button -->
+            <Button
+                android:id="@+id/btnFlipFront"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_pill_emerald"
+                android:text="Flip Card"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
+
+        </LinearLayout>
+
+        <!-- Card Back (Answer Face) -->
+        <LinearLayout
+            android:id="@+id/cardBack"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_card_white"
+            android:clickable="true"
+            android:elevation="6dp"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="gone">
+
+            <!-- Answer Badge -->
+            <TextView
+                android:id="@+id/tvBackBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_chip_cyan"
+                android:paddingStart="12dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="4dp"
+                android:text="Answer (উত্তর)"
+                android:textColor="@color/bio_primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <!-- Answer Content Scroll -->
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="12dp"
+                android:layout_weight="1"
+                android:fillViewport="true">
+
                 <LinearLayout
-                    android:id="@+id/cardBack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_card_white"
-                    android:clickable="true"
-                    android:elevation="6dp"
-                    android:focusable="true"
-                    android:minHeight="280dp"
-                    android:orientation="vertical"
-                    android:padding="20dp"
-                    android:visibility="gone">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tvFlashcardAnswerTitle"
@@ -263,338 +313,92 @@
                         android:gravity="center"
                         android:text="Mitochondria (মাইটোকন্ড্রিয়া)"
                         android:textColor="#059669"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvFlashcardAnswerDesc"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
                         android:gravity="center"
                         android:lineSpacingExtra="3dp"
-                        android:text="Generates ATP through aerobic cellular respiration and oxidative phosphorylation. Contains its own circular DNA and 70S ribosomes."
+                        android:text="Generates ATP through aerobic cellular respiration and oxidative phosphorylation."
                         android:textColor="@color/bio_card_text_dark"
-                        android:textSize="15sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tvFlashcardMedicalTip"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="16dp"
                         android:background="#F0FDF4"
-                        android:padding="10dp"
-                        android:text="Clinical Note: Inherited maternally. Found heavily in high-energy tissue like cardiomyocytes."
+                        android:padding="12dp"
+                        android:text="Exam Tip: Inherited maternally. Contains circular DNA and 70S ribosomes."
                         android:textColor="#166534"
-                        android:textSize="12sp" />
-
-                    <!-- Flip Back Sub-Action -->
-                    <LinearLayout
-                        android:id="@+id/btnFlipBack"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="14dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="6dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🔄"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:text="Flip to Question"
-                            android:textColor="@color/bio_card_text_dark"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
+                        android:textSize="13sp" />
                 </LinearLayout>
+            </ScrollView>
 
-            </FrameLayout>
-
-            <!-- Spaced Repetition Rating Buttons Row matching FlashCard.jpeg -->
-            <LinearLayout
+            <!-- Flip Back Button -->
+            <Button
+                android:id="@+id/btnFlipBack"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:orientation="horizontal">
-
-                <!-- Again (Red) -->
-                <Button
-                    android:id="@+id/btnRateAgain"
-                    android:layout_width="0dp"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_pill_emerald"
-                    android:backgroundTint="@color/bio_rate_again"
-                    android:text="Again"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <!-- Hard (Orange) -->
-                <Button
-                    android:id="@+id/btnRateHard"
-                    android:layout_width="0dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_pill_emerald"
-                    android:backgroundTint="@color/bio_rate_hard"
-                    android:text="Hard"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <!-- Good (Yellow/Lime) -->
-                <Button
-                    android:id="@+id/btnRateGood"
-                    android:layout_width="0dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_pill_emerald"
-                    android:backgroundTint="@color/bio_rate_good"
-                    android:text="Good"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <!-- Easy (Emerald Green) -->
-                <Button
-                    android:id="@+id/btnRateEasy"
-                    android:layout_width="0dp"
-                    android:layout_height="44dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_pill_emerald"
-                    android:backgroundTint="@color/bio_rate_easy"
-                    android:text="Easy"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <!-- Hidden Views for backward compatibility / tests -->
-            <TextView
-                android:id="@+id/tvCardProgressPercent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvCardCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvFlashcardQuestionBn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
-            <!-- Lab Manual Adapter Toggle Header (ListView & RecyclerView Experiments) -->
-            <LinearLayout
-                android:id="@+id/layoutLabManualControls"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_card_dark_teal"
-                android:orientation="vertical"
-                android:padding="14dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lab Manual Specimen List Demos"
-                    android:textColor="@color/bio_neon_cyan"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Experiments A-C (ListView/FruitAdapter) &amp; D (RecyclerView)"
-                    android:textColor="@color/bio_on_surface_variant"
-                    android:textSize="11sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/btnToggleListView"
-                        android:layout_width="0dp"
-                        android:layout_height="36dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_surface_container_highest"
-                        android:text="ListView (A-C)"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="11sp" />
-
-                    <Button
-                        android:id="@+id/btnToggleRecyclerView"
-                        android:layout_width="0dp"
-                        android:layout_height="36dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_secondary_container"
-                        android:text="RecyclerView (D)"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <ListView
-                    android:id="@+id/listView"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_card_white"
-                    android:visibility="gone" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/bg_card_white"
-                    android:visibility="gone" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="16dp" />
+                android:layout_height="48dp"
+                android:background="@drawable/bg_pill_emerald"
+                android:text="Flip Card"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
 
         </LinearLayout>
-    </ScrollView>
 
-    <!-- Bottom Navigation Dock matching FlashCard.jpeg -->
+    </FrameLayout>
+
+    <!-- Bottom Controls: ONLY TWO BUTTONS: Again and Next (Requirement 3) -->
     <LinearLayout
-        android:id="@+id/bottomNavBar"
+        android:id="@+id/layoutFlashcardButtons"
         android:layout_width="0dp"
-        android:layout_height="64dp"
-        android:background="@drawable/bg_bottom_nav_dock"
-        android:elevation="8dp"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Tab 1: Home -->
-        <LinearLayout
-            android:id="@+id/navTabHome"
+        <!-- 1. Again Button (Coral / Orange) -->
+        <Button
+            android:id="@+id/btnRateAgain"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:background="@drawable/bg_pill_emerald"
+            android:backgroundTint="@color/bio_rate_again"
+            android:text="Again"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_home_nav"
-                app:tint="@color/bio_nav_inactive" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Home"
-                android:textColor="@color/bio_nav_inactive"
-                android:textSize="11sp" />
-        </LinearLayout>
-
-        <!-- Tab 2: Study (Active) -->
-        <LinearLayout
-            android:id="@+id/navTabStudy"
+        <!-- 2. Next Button (Emerald Green) -->
+        <Button
+            android:id="@+id/btnRateNext"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_study_nav"
-                app:tint="@color/bio_nav_active" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Study"
-                android:textColor="@color/bio_nav_active"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Tab 3: Saved -->
-        <LinearLayout
-            android:id="@+id/navTabSaved"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_saved_nav" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Saved"
-                android:textColor="@color/bio_nav_inactive"
-                android:textSize="11sp" />
-        </LinearLayout>
-
-        <!-- Tab 4: Profile -->
-        <LinearLayout
-            android:id="@+id/navTabProfile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_profile_nav" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Profile"
-                android:textColor="@color/bio_nav_inactive"
-                android:textSize="11sp" />
-        </LinearLayout>
+            android:background="@drawable/bg_pill_emerald"
+            android:backgroundTint="#059669"
+            android:text="Next"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    android:background="@drawable/bg_card_white"
+    android:elevation="3dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Top Row: Question number & status badge -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvReviewQuestionNum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Question 1"
+            android:textColor="@color/bio_card_text_muted"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvReviewStatusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#DCFCE7"
+            android:paddingStart="8dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="3dp"
+            android:text="Correct"
+            android:textColor="#15803D"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Question Text -->
+    <TextView
+        android:id="@+id/tvReviewQuestionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="3dp"
+        android:text="Which organelle is the power generator of the cell?"
+        android:textColor="@color/bio_card_text_dark"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <!-- 4 Options Stack -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvReviewOptionA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="#F8FAFC"
+            android:padding="8dp"
+            android:text="A) Option A"
+            android:textColor="@color/bio_card_text_dark"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvReviewOptionB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="#F8FAFC"
+            android:padding="8dp"
+            android:text="B) Option B"
+            android:textColor="@color/bio_card_text_dark"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvReviewOptionC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="#F8FAFC"
+            android:padding="8dp"
+            android:text="C) Option C"
+            android:textColor="@color/bio_card_text_dark"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvReviewOptionD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:background="#F8FAFC"
+            android:padding="8dp"
+            android:text="D) Option D"
+            android:textColor="@color/bio_card_text_dark"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Student selection & Correct answer summary -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#F1F5F9"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tvReviewStudentChoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your answer: C) Mitochondria"
+            android:textColor="#334155"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvReviewCorrectAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Correct answer: C) Mitochondria"
+            android:textColor="#166534"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Explanation Box -->
+    <LinearLayout
+        android:id="@+id/layoutReviewExplanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#EFF6FF"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💡 Scientific Explanation"
+            android:textColor="#1D4ED8"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvReviewExplanation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:lineSpacingExtra="2dp"
+            android:text="Mitochondria generate most of the cell's ATP through oxidative phosphorylation."
+            android:textColor="#1E293B"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>
+

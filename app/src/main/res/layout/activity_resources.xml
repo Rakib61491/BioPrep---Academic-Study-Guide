@@ -56,18 +56,32 @@
                 android:paddingTop="4dp"
                 android:paddingBottom="8dp">
 
-                <!-- Small Back Button at Top Left -->
-                <ImageButton
-                    android:id="@+id/btnResourcesBack"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Back"
-                    android:src="@drawable/ic_arrow_back"
+                <!-- Small Back Button and Logo at Top Left -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/btnResourcesBack"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Back"
+                        android:src="@drawable/ic_arrow_back"
+                        app:tint="@color/white" />
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginStart="4dp"
+                        android:contentDescription="BioPrep App Logo"
+                        android:src="@drawable/app_logo" />
+                </LinearLayout>
 
                 <!-- Centered Title: Resources -->
                 <TextView
@@ -236,6 +250,37 @@
                             android:textColor="@color/bio_card_text_muted"
                             android:textSize="11sp" />
                     </LinearLayout>
+
+                    <!-- Progress bar for Syllabus download -->
+                    <LinearLayout
+                        android:id="@+id/layoutProgressSyllabus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ProgressBar
+                            android:id="@+id/pbSyllabus"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:layout_weight="1"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressTint="#0284C7" />
+
+                        <TextView
+                            android:id="@+id/tvProgressSyllabus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="0%"
+                            android:textColor="#0284C7"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <!-- Download Pill Button -->
@@ -388,37 +433,72 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Standard Board\ntextbooks"
+                        android:text="Sample Biology Books\n(NCTB Standard)"
                         android:textColor="@color/bio_card_text_dark"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
 
-                    <!-- Download Row with teal icon button -->
+                    <!-- Progress bar for Sample Books download -->
+                    <LinearLayout
+                        android:id="@+id/layoutProgressSampleBook"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ProgressBar
+                            android:id="@+id/pbSampleBook"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="6dp"
+                            android:layout_weight="1"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressTint="#0F766E" />
+
+                        <TextView
+                            android:id="@+id/tvProgressSampleBook"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="0%"
+                            android:textColor="#0F766E"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Download Row with button -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="14dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/tvSampleBookStatus"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Download"
+                            android:text="1.8 MB"
                             android:textColor="@color/bio_card_text_muted"
-                            android:textSize="12sp" />
+                            android:textSize="11sp" />
 
-                        <ImageView
+                        <Button
                             android:id="@+id/btnDownloadBoardBook"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:background="@drawable/bg_chip_cyan"
-                            android:clickable="true"
-                            android:contentDescription="Download"
-                            android:focusable="true"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_download_clean" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_pill_emerald"
+                            android:backgroundTint="#0F766E"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="Download"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -464,7 +544,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2025 Past Paper"
+                        android:text="2025 Test Papers"
                         android:textColor="@color/bio_card_text_dark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -473,9 +553,40 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="2025 • 1.2 MB"
+                        android:text="Board Questions • 2.4 MB"
                         android:textColor="@color/bio_card_text_muted"
                         android:textSize="11sp" />
+
+                    <!-- Progress bar for 2025 Test Papers -->
+                    <LinearLayout
+                        android:id="@+id/layoutProgress2025"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ProgressBar
+                            android:id="@+id/pb2025"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="6dp"
+                            android:layout_weight="1"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressTint="#0284C7" />
+
+                        <TextView
+                            android:id="@+id/tvProgress2025"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="0%"
+                            android:textColor="#0284C7"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <Button
@@ -486,7 +597,7 @@
                     android:backgroundTint="#0F766E"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:text="View File"
+                    android:text="Download"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="12sp"
@@ -522,7 +633,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2024 Past Paper"
+                        android:text="2024 Test Papers"
                         android:textColor="@color/bio_card_text_dark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -531,9 +642,40 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="2025 • 1.3 MB"
+                        android:text="Board Questions • 2.1 MB"
                         android:textColor="@color/bio_card_text_muted"
                         android:textSize="11sp" />
+
+                    <!-- Progress bar for 2024 Test Papers -->
+                    <LinearLayout
+                        android:id="@+id/layoutProgress2024"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ProgressBar
+                            android:id="@+id/pb2024"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="6dp"
+                            android:layout_weight="1"
+                            android:max="100"
+                            android:progress="0"
+                            android:progressTint="#0284C7" />
+
+                        <TextView
+                            android:id="@+id/tvProgress2024"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="0%"
+                            android:textColor="#0284C7"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <Button
@@ -544,7 +686,7 @@
                     android:backgroundTint="#0F766E"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:text="View File"
+                    android:text="Download"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="12sp"
@@ -668,6 +810,126 @@
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
                     android:text="Open Link"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Video 1: HSC Biology Video Lectures -->
+            <LinearLayout
+                android:id="@+id/cardVideoLectures"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_card_white"
+                android:clickable="true"
+                android:elevation="3dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="#FEE2E2"
+                    android:gravity="center"
+                    android:text="📺"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Video Lectures &amp; CQ Solving"
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="YouTube • Comprehensive Tutorials"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnOpenVideoLectures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_pill_danger"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:text="Watch"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Video 2: Diagram Drawing Guide -->
+            <LinearLayout
+                android:id="@+id/cardVideoDiagrams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_card_white"
+                android:clickable="true"
+                android:elevation="3dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="#FEE2E2"
+                    android:gravity="center"
+                    android:text="✏️"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Diagram Drawing Practical Guides"
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="YouTube • Botanical &amp; Zoological Sketches"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnOpenVideoDiagrams"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_pill_danger"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:text="Watch"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="12sp"

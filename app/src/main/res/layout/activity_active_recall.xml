@@ -61,18 +61,33 @@
                 android:paddingEnd="14dp"
                 android:paddingBottom="12dp">
 
-                <!-- Small Back Button at Top Left -->
-                <ImageButton
-                    android:id="@+id/btnRecallBack"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Back"
-                    android:src="@drawable/ic_arrow_back"
+                <!-- Small Back Button and Logo at Top Left -->
+                <LinearLayout
+                    android:id="@+id/layoutRecallTopLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/bio_banner_header_text" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/btnRecallBack"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Back"
+                        android:src="@drawable/ic_arrow_back"
+                        app:tint="@color/bio_banner_header_text" />
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginStart="4dp"
+                        android:contentDescription="BioPrep App Logo"
+                        android:src="@drawable/app_logo" />
+                </LinearLayout>
 
                 <!-- Centered Title -->
                 <LinearLayout

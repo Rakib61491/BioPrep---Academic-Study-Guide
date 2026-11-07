@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <!-- Student Avatar (Click opens Profile) -->
+                <!-- Student Avatar / App Logo (Click opens Profile) -->
                 <FrameLayout
                     android:id="@+id/frameHomeAvatar"
                     android:layout_width="56dp"
@@ -70,13 +70,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/ivHomeAvatarImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="BioPrep App Logo"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/app_logo"
+                        android:visibility="visible" />
+
                     <TextView
                         android:id="@+id/ivHeaderAvatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="👨‍🎓"
-                        android:textSize="28sp" />
+                        android:visibility="gone" />
                 </FrameLayout>
 
                 <!-- Greeting Texts -->
@@ -664,175 +672,6 @@
 
             </LinearLayout>
 
-            <!-- Lab 08 Topic Demonstration Hub -->
-            <LinearLayout
-                android:id="@+id/cardLabControls"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/bg_card_glow"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lab 08 Demonstration Hub"
-                    android:textColor="@color/bio_neon_cyan"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="Topics 4 (Clicks), 8 (Services), 9 (Broadcasts), 11 &amp; 12 (Notif/Perms)"
-                    android:textColor="@color/bio_on_surface_variant"
-                    android:textSize="11sp" />
-
-                <!-- Topic 4: Click Events (android:onClick="sendMessage", findViewById(R.id.text_after), setText) -->
-                <TextView
-                    android:id="@+id/text_after"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_card_white"
-                    android:padding="10dp"
-                    android:text="Click status will appear here..."
-                    android:textColor="@color/bio_card_text_dark"
-                    android:textSize="13sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
-
-                    <!-- android:onClick="sendMessage" specified in Topic 4 -->
-                    <Button
-                        android:id="@+id/btnXmlClick"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_surface_container_highest"
-                        android:onClick="sendMessage"
-                        android:text="XML onClick"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_primary"
-                        android:textSize="12sp" />
-
-                    <!-- setOnClickListener(this) / anonymous class in Topic 4 -->
-                    <Button
-                        android:id="@+id/btnInterfaceClick"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="6dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_surface_container_highest"
-                        android:text="Interface Click"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_secondary"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <!-- Topic 8: Services (findViewById(R.id.startButton), stopService) -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Topic 8: Focus Audio Service (MediaPlayer &amp; START_STICKY)"
-                    android:textColor="@color/bio_on_surface"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/startButton"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_primary_container"
-                        android:text="Start Service"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_on_primary_container"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/stopButton"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="6dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_error_container"
-                        android:text="Stop Service"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- Topic 11: Notification Button (findViewById(R.id.btn)) -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Topic 11 &amp; 12: NotificationChannel &amp; Runtime Permission"
-                    android:textColor="@color/bio_on_surface"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:orientation="horizontal">
-
-                    <!-- Button with id 'btn' as listed in Topic 11 -->
-                    <Button
-                        android:id="@+id/btn"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_surface_container_highest"
-                        android:text="Post Notification"
-                        android:textAllCaps="false"
-                        android:textColor="@color/bio_primary"
-                        android:textSize="12sp" />
-
-                    <!-- Runtime permission request button for Topic 12 -->
-                    <Button
-                        android:id="@+id/btnRequestPerm"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="6dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/bio_secondary_container"
-                        android:text="Request Perms"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <!-- Topic 9: Airplane Mode Broadcast Receiver Status -->
-                <TextView
-                    android:id="@+id/tvAirplaneStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="#204EDEA3"
-                    android:padding="8dp"
-                    android:text="✈️ Topic 9 Receiver Active: Toggle Airplane mode to test."
-                    android:textColor="@color/bio_secondary"
-                    android:textSize="11sp" />
-
-            </LinearLayout>
-
             <!-- Bottom spacing before scroll ends -->
             <View
                 android:layout_width="match_parent"
@@ -947,6 +786,45 @@
                 android:textSize="11sp" />
         </LinearLayout>
 
+    </LinearLayout>
+
+    <!-- Hidden Views for backward compatibility with Lab 08 Topic methods in HomeActivity -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/text_after"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnInterfaceClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/stopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnRequestPerm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

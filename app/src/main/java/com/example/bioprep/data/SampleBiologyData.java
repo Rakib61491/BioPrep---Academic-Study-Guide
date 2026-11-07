@@ -90,39 +90,39 @@ public final class SampleBiologyData {
 
     static {
         // ==========================================
-        // 1. All 12 Botany Chapters (Biology 1st Paper)
+        // 1. All 12 Botany Chapters (Biology 1st Paper) - Exact Requirement 8
         // ==========================================
         List<Chapter> paper1Chapters = new ArrayList<>();
-        paper1Chapters.add(new Chapter("c1_p1", PAPER_BIOLOGY_1, "১. কোষ ও এর গঠন (Cell & Structure)", 1));
-        paper1Chapters.add(new Chapter("c2_p1", PAPER_BIOLOGY_1, "২. কোষ বিভাজন (Cell Division)", 2));
-        paper1Chapters.add(new Chapter("c3_p1", PAPER_BIOLOGY_1, "৩. কোষ রসায়ন (Cell Chemistry)", 3));
-        paper1Chapters.add(new Chapter("c4_p1", PAPER_BIOLOGY_1, "৪. অণুজীব (Microorganisms)", 4));
-        paper1Chapters.add(new Chapter("c5_p1", PAPER_BIOLOGY_1, "৫. শৈবাল ও ছত্রাক (Algae & Fungi)", 5));
-        paper1Chapters.add(new Chapter("c6_p1", PAPER_BIOLOGY_1, "৬. ব্রায়োফাইটা ও টেরিডোফাইটা (Bryophyta & Pteridophyta)", 6));
-        paper1Chapters.add(new Chapter("c7_p1", PAPER_BIOLOGY_1, "৭. নগ্নবীজী ও আবৃতবীজী উদ্ভিদ (Gymnosperm & Angiosperm)", 7));
-        paper1Chapters.add(new Chapter("c8_p1", PAPER_BIOLOGY_1, "৮. টিস্যু ও টিস্যুতন্ত্র (Tissue & Tissue System)", 8));
-        paper1Chapters.add(new Chapter("c9_p1", PAPER_BIOLOGY_1, "৯. উদ্ভিদ শারীরতত্ত্ব (Plant Physiology)", 9));
-        paper1Chapters.add(new Chapter("c10_p1", PAPER_BIOLOGY_1, "১০. উদ্ভিদ প্রজনন (Plant Reproduction)", 10));
-        paper1Chapters.add(new Chapter("c11_p1", PAPER_BIOLOGY_1, "১১. জীবপ্রযুক্তি (Biotechnology)", 11));
-        paper1Chapters.add(new Chapter("c12_p1", PAPER_BIOLOGY_1, "১২. জীবের পরিবেশ, বিস্তার ও সংরক্ষণ (Ecology & Conservation)", 12));
+        paper1Chapters.add(new Chapter("botany_ch01", PAPER_BIOLOGY_1, "Chapter 1: Cell and Its Structure (কোষ ও এর গঠন)", 1));
+        paper1Chapters.add(new Chapter("botany_ch02", PAPER_BIOLOGY_1, "Chapter 2: Cell Division (কোষ বিভাজন)", 2));
+        paper1Chapters.add(new Chapter("botany_ch03", PAPER_BIOLOGY_1, "Chapter 3: Cell Chemistry (কোষ রসায়ন)", 3));
+        paper1Chapters.add(new Chapter("botany_ch04", PAPER_BIOLOGY_1, "Chapter 4: Microorganisms (অণুজীব)", 4));
+        paper1Chapters.add(new Chapter("botany_ch05", PAPER_BIOLOGY_1, "Chapter 5: Algae and Fungi (শৈবাল ও ছত্রাক)", 5));
+        paper1Chapters.add(new Chapter("botany_ch06", PAPER_BIOLOGY_1, "Chapter 6: Bryophyta and Pteridophyta (ব্রায়োফাইটা ও টেরিডোফাইটা)", 6));
+        paper1Chapters.add(new Chapter("botany_ch07", PAPER_BIOLOGY_1, "Chapter 7: Gymnosperms and Angiosperms (নগ্নবীজী ও আবৃতবীজী উদ্ভিদ)", 7));
+        paper1Chapters.add(new Chapter("botany_ch08", PAPER_BIOLOGY_1, "Chapter 8: Tissue and Tissue System (টিস্যু ও টিস্যুতন্ত্র)", 8));
+        paper1Chapters.add(new Chapter("botany_ch09", PAPER_BIOLOGY_1, "Chapter 9: Plant Physiology (উদ্ভিদ শারীরতত্ত্ব)", 9));
+        paper1Chapters.add(new Chapter("botany_ch10", PAPER_BIOLOGY_1, "Chapter 10: Plant Reproduction (উদ্ভিদ প্রজনন)", 10));
+        paper1Chapters.add(new Chapter("botany_ch11", PAPER_BIOLOGY_1, "Chapter 11: Biotechnology (জীবপ্রযুক্তি)", 11));
+        paper1Chapters.add(new Chapter("botany_ch12", PAPER_BIOLOGY_1, "Chapter 12: Environment, Distribution and Conservation of Organisms (জীবের পরিবেশ, বিস্তার ও সংরক্ষণ)", 12));
         CHAPTERS_BY_PAPER.put(PAPER_BIOLOGY_1, Collections.unmodifiableList(paper1Chapters));
 
         // ==========================================
-        // 2. All 12 Zoology Chapters (Biology 2nd Paper)
+        // 2. All 12 Zoology Chapters (Biology 2nd Paper) - Exact Requirement 8
         // ==========================================
         List<Chapter> paper2Chapters = new ArrayList<>();
-        paper2Chapters.add(new Chapter("c1_p2", PAPER_BIOLOGY_2, "১. প্রাণীর বিভিন্নতা ও শ্রেণিবিন্যাস (Diversity & Classification)", 1));
-        paper2Chapters.add(new Chapter("c2_p2", PAPER_BIOLOGY_2, "২. প্রাণীর পরিচিতি (Animal Identity)", 2));
-        paper2Chapters.add(new Chapter("c3_p2", PAPER_BIOLOGY_2, "৩. মানব শারীরতত্ত্ব: পরিপাক ও শোষণ (Digestion & Absorption)", 3));
-        paper2Chapters.add(new Chapter("c4_p2", PAPER_BIOLOGY_2, "৪. মানব শারীরতত্ত্ব: রক্ত ও সঞ্চালন (Blood & Circulation)", 4));
-        paper2Chapters.add(new Chapter("c5_p2", PAPER_BIOLOGY_2, "৫. মানব শারীরতত্ত্ব: শ্বসন ও শ্বাসক্রিয়া (Respiration & Breathing)", 5));
-        paper2Chapters.add(new Chapter("c6_p2", PAPER_BIOLOGY_2, "৬. মানব শারীরতত্ত্ব: বর্জ্য ও নিষ্কাশন (Excretion)", 6));
-        paper2Chapters.add(new Chapter("c7_p2", PAPER_BIOLOGY_2, "৭. মানব শারীরতত্ত্ব: চলন ও অঙ্গচালনা (Locomotion & Movement)", 7));
-        paper2Chapters.add(new Chapter("c8_p2", PAPER_BIOLOGY_2, "৮. মানব শারীরতত্ত্ব: সমন্বয় ও নিয়ন্ত্রণ (Coordination & Control)", 8));
-        paper2Chapters.add(new Chapter("c9_p2", PAPER_BIOLOGY_2, "৯. মানব জীবনের ধারাবাহিকতা (Continuity of Life)", 9));
-        paper2Chapters.add(new Chapter("c10_p2", PAPER_BIOLOGY_2, "১০. মানবদেহের প্রতিরক্ষা (Immunity)", 10));
-        paper2Chapters.add(new Chapter("c11_p2", PAPER_BIOLOGY_2, "১১. জিনতত্ত্ব ও বিবর্তন (Genetics & Evolution)", 11));
-        paper2Chapters.add(new Chapter("c12_p2", PAPER_BIOLOGY_2, "১২. প্রাণীর আচরণ (Animal Behavior)", 12));
+        paper2Chapters.add(new Chapter("zoology_ch01", PAPER_BIOLOGY_2, "Chapter 1: Animal Diversity and Classification (প্রাণীর বিভিন্নতা ও শ্রেণিবিন্যাস)", 1));
+        paper2Chapters.add(new Chapter("zoology_ch02", PAPER_BIOLOGY_2, "Chapter 2: Introduction to Animals (প্রাণীর পরিচিতি)", 2));
+        paper2Chapters.add(new Chapter("zoology_ch03", PAPER_BIOLOGY_2, "Chapter 3: Digestion and Absorption (পরিপাক ও শোষণ)", 3));
+        paper2Chapters.add(new Chapter("zoology_ch04", PAPER_BIOLOGY_2, "Chapter 4: Blood Circulation (রক্ত সঞ্চালন)", 4));
+        paper2Chapters.add(new Chapter("zoology_ch05", PAPER_BIOLOGY_2, "Chapter 5: Respiration and Breathing (শ্বাসক্রিয়া ও শ্বসন)", 5));
+        paper2Chapters.add(new Chapter("zoology_ch06", PAPER_BIOLOGY_2, "Chapter 6: Waste and Excretion (বর্জ্য ও নিষ্কাশন)", 6));
+        paper2Chapters.add(new Chapter("zoology_ch07", PAPER_BIOLOGY_2, "Chapter 7: Locomotion and Movement (চলন ও অঙ্গচালনা)", 7));
+        paper2Chapters.add(new Chapter("zoology_ch08", PAPER_BIOLOGY_2, "Chapter 8: Coordination and Control (সমন্বয় ও নিয়ন্ত্রণ)", 8));
+        paper2Chapters.add(new Chapter("zoology_ch09", PAPER_BIOLOGY_2, "Chapter 9: Continuation of Human Life (মানব জীবনের ধারাবাহিকতা)", 9));
+        paper2Chapters.add(new Chapter("zoology_ch10", PAPER_BIOLOGY_2, "Chapter 10: Defence of the Human Body (মানবদেহের প্রতিরক্ষা)", 10));
+        paper2Chapters.add(new Chapter("zoology_ch11", PAPER_BIOLOGY_2, "Chapter 11: Genetics and Evolution (জিনতত্ত্ব ও বিবর্তন)", 11));
+        paper2Chapters.add(new Chapter("zoology_ch12", PAPER_BIOLOGY_2, "Chapter 12: Animal Behaviour (প্রাণীর আচরণ)", 12));
         CHAPTERS_BY_PAPER.put(PAPER_BIOLOGY_2, Collections.unmodifiableList(paper2Chapters));
 
         // ==========================================

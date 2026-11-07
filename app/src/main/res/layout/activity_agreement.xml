@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutAgreementRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bio_surface">
+
+    <ImageView
+        android:id="@+id/ivAgreementBg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.8"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_stitch_biology"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#22001713"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Top Header Banner -->
+    <LinearLayout
+        android:id="@+id/headerAgreement"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_banner_teal"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="BioPrep App Logo"
+            android:src="@drawable/app_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Terms &amp; Conditions Agreement"
+            android:textColor="@color/bio_banner_header_text"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="BioPrep HSC Biology Academic Guide"
+            android:textColor="@color/bio_banner_header_text"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Scrollable Agreement Text Area -->
+    <ScrollView
+        android:id="@+id/scrollAgreement"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_card_dark_teal"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomAgreementPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerAgreement">
+
+        <LinearLayout
+            android:id="@+id/layoutAgreementContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1. Academic Purpose &amp; Curriculum Scope"
+                android:textColor="@color/bio_mint_accent"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="3dp"
+                android:text="BioPrep Academic Study Guide is engineered exclusively for educational and examination preparation purposes following the official Bangladesh National Curriculum and Textbook Board (NCTB) syllabus for Higher Secondary Certificate (HSC) Biology 1st Paper (Botany) and 2nd Paper (Zoology).\n\nAll learning materials, flashcards, simulated examinations, and reference resources are organized to foster conceptual retention, active recall, and scientific mastery."
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="2. Device Permissions &amp; Data Security"
+                android:textColor="@color/bio_mint_accent"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="3dp"
+                android:text="To deliver comprehensive functionality, BioPrep requests access to selected device capabilities:\n• Camera: Allows capturing handwritten biology diagrams, microscope specimens, and study notes directly into your personal notebook.\n• Microphone: Supports prospective voice annotations and verbal recall practices.\n• Contacts: Enables sharing study progress summaries and collaborating with designated study peers.\n• Location: Assists in locating regional board study hubs and examination centers.\n\nAll personal user data, study notes, quiz logs, and achievement records are stored locally within your device's secured private storage. Your data is never sold or shared with unauthorized third parties."
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="3. Student Code of Academic Integrity"
+                android:textColor="@color/bio_mint_accent"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="3dp"
+                android:text="Users agree to utilize this application responsibly, preserving academic integrity during mock assessments. The simulated 10-minute timer and randomized question sequencing are designed to train self-discipline under actual HSC board examination constraints.\n\nDuplication, commercial resale, or unauthorized redistribution of the bundled educational content is strictly prohibited."
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="4. Local Storage &amp; Future Synchronization"
+                android:textColor="@color/bio_mint_accent"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="3dp"
+                android:text="By continuing, you acknowledge that your notes, practice analytics, and custom study goals are preserved persistently in your local Room Database. If you log out, you will be prompted to confirm local data removal.\n\nFuture updates will offer cloud synchronization via Firebase Authentication without disrupting local study continuity."
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="5. Acceptance Confirmation"
+                android:textColor="@color/bio_mint_accent"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="3dp"
+                android:text="By checking the agreement box and clicking 'Agree and Continue', you confirm that you have read, understood, and agreed to be bound by these Terms and Conditions."
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <!-- End Marker -->
+            <View
+                android:id="@+id/viewAgreementBottomMarker"
+                android:layout_width="match_parent"
+                android:layout_height="24dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Controls Panel -->
+    <LinearLayout
+        android:id="@+id/bottomAgreementPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card_white"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Scroll prompt hint -->
+        <TextView
+            android:id="@+id/tvScrollHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="⬇ Scroll to the bottom to unlock the agreement"
+            android:textColor="#D97706"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <!-- Agreement Checkbox -->
+        <CheckBox
+            android:id="@+id/cbAgree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:text="I have read and agree to the Terms and Conditions."
+            android:textColor="@color/bio_card_text_dark"
+            android:textSize="13sp" />
+
+        <!-- Agree and Continue Button (Initially disabled and greyed out) -->
+        <Button
+            android:id="@+id/btnAgreeContinue"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_pill_emerald"
+            android:enabled="false"
+            android:text="Agree and Continue"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:backgroundTint="@null" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

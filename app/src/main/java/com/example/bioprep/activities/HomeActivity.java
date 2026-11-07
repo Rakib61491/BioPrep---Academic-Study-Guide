@@ -115,11 +115,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
 
-        // Card 2: Interactive Flashcards
+        // Card 2: Interactive Flashcards (Opens Chapter Selection for Flashcards)
         View cardLabExperiments = findViewById(R.id.cardLabExperiments);
         if (cardLabExperiments != null) {
             cardLabExperiments.setOnClickListener(v -> {
-                Intent intent = new Intent(getApplicationContext(), FlashcardsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ChapterActivity.class);
+                intent.putExtra(ChapterActivity.EXTRA_MODE, ChapterActivity.MODE_FLASHCARDS);
                 startActivity(intent);
             });
         }
@@ -372,7 +373,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "HomeActivity: onResume");
+        updateUserAvatar();
         Toast.makeText(getApplicationContext(), "HomeActivity: onResume()", Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateUserAvatar() {
+        try {
+            String path = com.example.bioprep.utils.UserPreferences.getAvatarPath(this);
+            android.widget.ImageView ivImg = findViewById(R.id.ivHomeAvatarImage);
+            android.widget.TextView tvEmoji = findViewById(R.id.ivHeaderAvatar);
+            if (ivImg != null) {
+                if (path != null && !path.isEmpty() && new java.io.File(path).exists()) {
+                    ivImg.setImageURI(android.net.Uri.fromFile(new java.io.File(path)));
+                } else {
+                    ivImg.setImageResource(R.drawable.app_logo);
+                }
+                ivImg.setVisibility(View.VISIBLE);
+                if (tvEmoji != null) tvEmoji.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error updating avatar in Home: " + e.getMessage());
+        }
     }
 
     @Override

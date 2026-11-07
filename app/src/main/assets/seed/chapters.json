@@ -1,0 +1,194 @@
+[
+  {
+    "id": "botany_ch01",
+    "paper": "BOTANY",
+    "chapterNumber": 1,
+    "titleEn": "Cell and Its Structure",
+    "titleBn": "কোষ ও এর গঠন",
+    "icon": "🦠"
+  },
+  {
+    "id": "botany_ch02",
+    "paper": "BOTANY",
+    "chapterNumber": 2,
+    "titleEn": "Cell Division",
+    "titleBn": "কোষ বিভাজন",
+    "icon": "➗"
+  },
+  {
+    "id": "botany_ch03",
+    "paper": "BOTANY",
+    "chapterNumber": 3,
+    "titleEn": "Cell Chemistry",
+    "titleBn": "কোষ রসায়ন",
+    "icon": "🧪"
+  },
+  {
+    "id": "botany_ch04",
+    "paper": "BOTANY",
+    "chapterNumber": 4,
+    "titleEn": "Microorganisms",
+    "titleBn": "অণুজীব",
+    "icon": "🧫"
+  },
+  {
+    "id": "botany_ch05",
+    "paper": "BOTANY",
+    "chapterNumber": 5,
+    "titleEn": "Algae and Fungi",
+    "titleBn": "শৈবাল ও ছত্রাক",
+    "icon": "🍄"
+  },
+  {
+    "id": "botany_ch06",
+    "paper": "BOTANY",
+    "chapterNumber": 6,
+    "titleEn": "Bryophyta and Pteridophyta",
+    "titleBn": "ব্রায়োফাইটা ও টেরিডোফাইটা",
+    "icon": "🌿"
+  },
+  {
+    "id": "botany_ch07",
+    "paper": "BOTANY",
+    "chapterNumber": 7,
+    "titleEn": "Gymnosperms and Angiosperms",
+    "titleBn": "নগ্নবীজী ও আবৃতবীজী উদ্ভিদ",
+    "icon": "🌲"
+  },
+  {
+    "id": "botany_ch08",
+    "paper": "BOTANY",
+    "chapterNumber": 8,
+    "titleEn": "Tissue and Tissue System",
+    "titleBn": "টিস্যু ও টিস্যুতন্ত্র",
+    "icon": "🌱"
+  },
+  {
+    "id": "botany_ch09",
+    "paper": "BOTANY",
+    "chapterNumber": 9,
+    "titleEn": "Plant Physiology",
+    "titleBn": "উদ্ভিদ শারীরতত্ত্ব",
+    "icon": "☀️"
+  },
+  {
+    "id": "botany_ch10",
+    "paper": "BOTANY",
+    "chapterNumber": 10,
+    "titleEn": "Plant Reproduction",
+    "titleBn": "উদ্ভিদ প্রজনন",
+    "icon": "🌸"
+  },
+  {
+    "id": "botany_ch11",
+    "paper": "BOTANY",
+    "chapterNumber": 11,
+    "titleEn": "Biotechnology",
+    "titleBn": "জীবপ্রযুক্তি",
+    "icon": "🧬"
+  },
+  {
+    "id": "botany_ch12",
+    "paper": "BOTANY",
+    "chapterNumber": 12,
+    "titleEn": "Environment, Distribution and Conservation of Organisms",
+    "titleBn": "জীবের পরিবেশ, বিস্তার ও সংরক্ষণ",
+    "icon": "🌍"
+  },
+  {
+    "id": "zoology_ch01",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 1,
+    "titleEn": "Animal Diversity and Classification",
+    "titleBn": "প্রাণীর বিভিন্নতা ও শ্রেণিবিন্যাস",
+    "icon": "🦓"
+  },
+  {
+    "id": "zoology_ch02",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 2,
+    "titleEn": "Introduction to Animals",
+    "titleBn": "প্রাণীর পরিচিতি",
+    "icon": "🦗"
+  },
+  {
+    "id": "zoology_ch03",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 3,
+    "titleEn": "Digestion and Absorption",
+    "titleBn": "পরিপাক ও শোষণ",
+    "icon": "🥩"
+  },
+  {
+    "id": "zoology_ch04",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 4,
+    "titleEn": "Blood Circulation",
+    "titleBn": "রক্ত সঞ্চালন",
+    "icon": "❤️"
+  },
+  {
+    "id": "zoology_ch05",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 5,
+    "titleEn": "Respiration and Breathing",
+    "titleBn": "শ্বাসক্রিয়া ও শ্বসন",
+    "icon": "🫁"
+  },
+  {
+    "id": "zoology_ch06",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 6,
+    "titleEn": "Waste and Excretion",
+    "titleBn": "বর্জ্য ও নিষ্কাশন",
+    "icon": "🫘"
+  },
+  {
+    "id": "zoology_ch07",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 7,
+    "titleEn": "Locomotion and Movement",
+    "titleBn": "চলন ও অঙ্গচালনা",
+    "icon": "🦴"
+  },
+  {
+    "id": "zoology_ch08",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 8,
+    "titleEn": "Coordination and Control",
+    "titleBn": "সমন্বয় ও নিয়ন্ত্রণ",
+    "icon": "🧠"
+  },
+  {
+    "id": "zoology_ch09",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 9,
+    "titleEn": "Continuation of Human Life",
+    "titleBn": "মানব জীবনের ধারাবাহিকতা",
+    "icon": "👶"
+  },
+  {
+    "id": "zoology_ch10",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 10,
+    "titleEn": "Defence of the Human Body",
+    "titleBn": "মানবদেহের প্রতিরক্ষা",
+    "icon": "🛡️"
+  },
+  {
+    "id": "zoology_ch11",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 11,
+    "titleEn": "Genetics and Evolution",
+    "titleBn": "জিনতত্ত্ব ও বিবর্তন",
+    "icon": "🧬"
+  },
+  {
+    "id": "zoology_ch12",
+    "paper": "ZOOLOGY",
+    "chapterNumber": 12,
+    "titleEn": "Animal Behaviour",
+    "titleBn": "প্রাণীর আচরণ",
+    "icon": "🐝"
+  }
+]

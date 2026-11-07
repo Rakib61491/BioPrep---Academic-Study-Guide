@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bio_surface">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.85"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_stitch_biology"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#22001713"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Top Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerHelp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingTop="28dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/layoutHelpTopLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/btnHelpBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/white" />
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="BioPrep App Logo"
+                android:src="@drawable/app_logo" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Help &amp; Support"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerHelp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="32dp">
+
+            <!-- 1. About the App -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🧬 1. About BioPrep Academic Study Guide"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="BioPrep is a dedicated offline-capable academic study companion tailored for Bangladesh HSC Biology 1st Paper (Botany) and 2nd Paper (Zoology). It integrates spaced-repetition flashcards, timed board-standard MCQ examinations, personal lecture notes with camera capture, and an offline curriculum PDF library."
+                    android:textColor="#334155"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- 2. Flashcards -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🗂️ 2. How to Use Flashcards"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="• Select Botany or Zoology, then pick any of the 12 curriculum chapters.\n• The full-height flashcard displays key definitions, processes, or comparisons.\n• Tap the card or click 'Flip Card' to reveal the scientific answer.\n• Click 'Again' to re-queue the card in your active revision queue for reinforcement.\n• Click 'Next' to proceed to subsequent cards."
+                    android:textColor="#334155"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- 3. Exam Practice MCQs -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⏱️ 3. How to Use Exam Practice MCQs"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="• Each session randomly samples 20–25 authentic MCQs from our 50+ question chapter database.\n• Both the question order and all four options are freshly randomized each attempt.\n• A strict 10-minute countdown timer runs; when the timer reaches 00:00, the exam auto-submits.\n• You may change your selected option freely before advancing.\n• No answers or hints are revealed during the test to simulate real board conditions."
+                    android:textColor="#334155"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- 4. Study Time & Accuracy Tracking -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📊 4. Study Time &amp; Accuracy Tracking"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="• Every second spent actively reviewing flashcards or taking chapter exams is persistently measured in local Room SQLite.\n• Total Study Time sums all sessions.\n• Accuracy Rate is calculated dynamically: (Total Correct Answers ÷ Total Questions Answered) × 100% across all attempts."
+                    android:textColor="#334155"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- 5. Daily Goals & Streak Rules -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔥 5. Daily Goals &amp; Streak Rules"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="• Daily Goal defaults to 120 minutes (2 hours) and can be customized in Daily Goal &amp; Analytics.\n• Streak Rule: A calendar day qualifies for your active streak ONLY if you spend at least 120 minutes of study time on that day.\n• Consecutively qualifying days maintain and advance your streak counter."
+                    android:textColor="#334155"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- 6. Personal Notes -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📝 6. Personal Notes &amp; Diagrams"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="• Create notes with custom titles and detailed markdown descriptions.\n• Attach biological specimen diagrams or microscope captures via device camera or gallery.\n• Notes are stored privately in SQLite and stay persistent across app launches."
+                    android:textColor="#334155"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- 7. Resources & PDFs -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📑 7. Resources &amp; Built-in PDF Reader"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="• Download Sample Biology Books, HSC Syllabus, and 2024/2025 Board Test Papers.\n• Downloaded files are saved locally and never require re-downloading.\n• Read PDFs directly inside the app with multi-page continuous vertical scrolling and dynamic bitmap rendering."
+                    android:textColor="#334155"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- 8. FAQs -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="❓ 8. Frequently Asked Questions (FAQs)"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="Q: Does the app require internet?\nA: No! All 24 curriculum chapters, 1,200 MCQs, 600 flashcards, notes, and PDF readers run 100% offline.\n\nQ: How do I improve chapters needing review?\nA: In Analytics, tap 'Review Needed' to see chapters scoring under 70%, then tap 'Practice' to retake them.\n\nQ: What happens when I Log Out?\nA: Logging out removes your personal study sessions, notes, and avatar from this device while preserving all curriculum books and questions."
+                    android:textColor="#334155"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- 9. Support & Contact Info -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📬 9. Academic Support &amp; Feedback"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="Have feedback on syllabus questions or practical diagrams?\n• Academic Helpdesk: support@bioprephsc.org\n• Curriculum Reference: NCTB National Board Syllabus 2026\n• Version: 2.0.0 (BioVerdant HSC Edition)"
+                    android:textColor="#334155"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
