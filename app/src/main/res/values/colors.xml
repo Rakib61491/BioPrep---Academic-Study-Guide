@@ -2,25 +2,75 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    
-    <!-- BioPrep Theme Colors -->
-    <color name="primary_green">#2E7D32</color>
-    <color name="primary_green_dark">#1B5E20</color>
-    <color name="primary_green_light">#E8F5E9</color>
-    <color name="accent_teal">#00897B</color>
-    <color name="accent_teal_light">#E0F2F1</color>
-    
-    <color name="background_light">#F5F7F6</color>
+
+    <!-- BioVerdant HSC Stitch Theme Palette (Project 15814936439009237240) -->
+    <!-- Surfaces & Canvas (Deep Botanical Abyssal Forest) -->
+    <color name="bio_background">#001713</color>
+    <color name="bio_surface">#001713</color>
+    <color name="bio_surface_dim">#001713</color>
+    <color name="bio_surface_bright">#203E39</color>
+    <color name="bio_surface_variant">#1C3A35</color>
+    <color name="bio_surface_container_lowest">#00110E</color>
+    <color name="bio_surface_container_low">#00201C</color>
+    <color name="bio_surface_container">#042420</color>
+    <color name="bio_surface_container_high">#102F2A</color>
+    <color name="bio_surface_container_highest">#1C3A35</color>
+    <color name="bio_surface_forest">#133E37</color>
+
+    <!-- Content & Typography Colors -->
+    <color name="bio_on_surface">#C8EAE1</color>
+    <color name="bio_on_surface_variant">#B9CAC5</color>
+    <color name="bio_outline">#849490</color>
+    <color name="bio_outline_variant">#3B4A46</color>
+
+    <!-- Primary Accent: Electric Bio-Cyan -->
+    <color name="bio_primary">#7DFFE9</color>
+    <color name="bio_primary_container">#15E6CD</color>
+    <color name="bio_on_primary">#003730</color>
+    <color name="bio_on_primary_container">#006257</color>
+    <color name="bio_primary_fixed">#45FCE2</color>
+
+    <!-- Secondary Accent: Lush Cellular Emerald -->
+    <color name="bio_secondary">#4EDEA3</color>
+    <color name="bio_secondary_container">#00A572</color>
+    <color name="bio_on_secondary">#003824</color>
+    <color name="bio_on_secondary_container">#00311F</color>
+
+    <!-- Tertiary Accent: Amber Mitochondria -->
+    <color name="bio_tertiary">#FFE5CB</color>
+    <color name="bio_tertiary_container">#FFC277</color>
+    <color name="bio_tertiary_fixed">#FFDDB8</color>
+    <color name="bio_on_tertiary">#472A00</color>
+    <color name="bio_on_tertiary_container">#7B4D00</color>
+
+    <!-- Clinical High-Contrast Card Colors -->
+    <color name="bio_card_white">#FFFFFF</color>
+    <color name="bio_card_text_dark">#0B2B26</color>
+    <color name="bio_card_text_muted">#3B4A46</color>
+    <color name="bio_card_border">#E2E8F0</color>
+    <color name="bio_badge_bg">#E6FAF7</color>
+
+    <!-- Semantic Feedback Colors -->
+    <color name="bio_error">#FFB4AB</color>
+    <color name="bio_error_container">#93000A</color>
+    <color name="bio_on_error">#690005</color>
+    <color name="bio_correct">#10B981</color>
+    <color name="bio_incorrect">#EF4444</color>
+
+    <!-- Legacy Compatibility Mappings -->
+    <color name="primary_green">#15E6CD</color>
+    <color name="primary_green_dark">#003730</color>
+    <color name="primary_green_light">#042420</color>
+    <color name="accent_teal">#7DFFE9</color>
+    <color name="accent_teal_light">#102F2A</color>
+    <color name="background_light">#001713</color>
     <color name="card_background">#FFFFFF</color>
-    <color name="divider_color">#E0E0E0</color>
-    
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#616161</color>
-    <color name="text_muted">#9E9E9E</color>
-    
-    <!-- State Colors -->
-    <color name="color_correct">#2E7D32</color>
-    <color name="color_incorrect">#C62828</color>
-    <color name="color_unanswered">#E65100</color>
-    <color name="color_disabled">#BDBDBD</color>
+    <color name="divider_color">#3B4A46</color>
+    <color name="text_primary">#C8EAE1</color>
+    <color name="text_secondary">#B9CAC5</color>
+    <color name="text_muted">#849490</color>
+    <color name="color_correct">#10B981</color>
+    <color name="color_incorrect">#EF4444</color>
+    <color name="color_unanswered">#FFC277</color>
+    <color name="color_disabled">#3B4A46</color>
 </resources>

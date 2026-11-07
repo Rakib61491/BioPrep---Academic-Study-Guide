@@ -5,8 +5,8 @@
     <string name="btn_get_started">Get Started</string>
     
     <!-- Home Screen -->
-    <string name="title_home">BioPrep Dashboard</string>
-    <string name="subtitle_home">Choose a Biology paper to start practicing</string>
+    <string name="title_home">জীববিজ্ঞান (HSC Biology)</string>
+    <string name="subtitle_home">Ready to master Biology today? 🧬</string>
     <string name="paper_1_title">Biology 1st Paper</string>
     <string name="paper_1_desc">Botany • Cells, Genetics, Plant Physiology &amp; Biotechnology</string>
     <string name="paper_2_title">Biology 2nd Paper</string>
@@ -73,4 +73,27 @@
     <string name="notif_channel_name">BioPrep Study Timer</string>
     <string name="notif_title">Study Session Finished</string>
     <string name="notif_content">Your BioPrep study timer countdown has completed!</string>
+
+    <!-- Lab 08 Feature Strings -->
+    <!-- Content Provider / Notes -->
+    <string name="title_notes">Biology Notes Notebook</string>
+    <string name="btn_add_note">+ Add New Note</string>
+    <string name="label_note_title">Note Title</string>
+    <string name="label_note_content">Note Details / Concepts</string>
+    <string name="btn_save_note">Save Note (Provider Insert)</string>
+    <string name="btn_view_notes">Query Notes (Provider Query)</string>
+
+    <!-- Active Recall & Layouts -->
+    <string name="title_active_recall">Active Recall</string>
+    <string name="btn_reveal_answer">Reveal Answer</string>
+    <string name="btn_hide_answer">Hide Model Answer</string>
+
+    <!-- Resources Library -->
+    <string name="title_resources">Bangladeshi Resources Library</string>
+    
+    <!-- Lab Manual ListView & RecyclerView Experiments -->
+    <string name="title_lab_manual">Lab Manual Experiments</string>
+    <string name="tab_simple_listview">Simple ListView (Exp A &amp; B)</string>
+    <string name="tab_custom_listview">Custom ListView (Exp C)</string>
+    <string name="tab_recyclerview">RecyclerView (Exp D)</string>
 </resources>

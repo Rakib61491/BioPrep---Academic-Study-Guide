@@ -1,94 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Lab 08 Topic 7: Relative Layout in Android
+    Matches Stitch UI Screen: "Loading Screen" (ID: 5e7d8e45d1a747eb843fd7a0f5d2c67d)
+    Demonstrates attributes:
+    - layout_alignParentTop
+    - layout_alignParentBottom
+    - layout_alignParentRight
+    - layout_alignParentLeft
+    - layout_centerHorizontal
+    - layout_centerVertical
+    - layout_above
+    - layout_below
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutWelcomeRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:padding="24dp">
+    android:background="#031510">
 
-    <!-- Center Card / Content Container -->
+    <!-- Fullscreen Bioluminescent Cellular Background Art -->
+    <ImageView
+        android:id="@+id/ivWelcomeBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.45"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_stitch_biology" />
+
+    <!-- Dark gradient overlay to create depth -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80001713" />
+
+    <!-- Topic 7: Top Left Status/Back Anchor using layout_alignParentTop and layout_alignParentLeft -->
+    <ImageButton
+        android:id="@+id/btnWelcomeBack"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Exit"
+        android:src="@drawable/ic_arrow_back"
+        android:tint="#7DFFE9" />
+
+    <!-- Topic 7: Top Right Indicator with layout_alignParentTop and layout_alignParentRight -->
+    <TextView
+        android:id="@+id/tvWelcomeBadgeRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="HSC 2026"
+        android:textColor="#25F4DB"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <!-- Center Content Block: layout_centerVertical="true" and layout_centerHorizontal="true" -->
     <LinearLayout
-        android:id="@+id/layoutWelcomeCenter"
+        android:id="@+id/layoutCenterBranding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@drawable/bg_card"
-        android:elevation="4dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="28dp">
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
 
-        <!-- App Icon or Emblem -->
+        <!-- Bioluminescent Circular Logo Emblem from Stitch -->
         <ImageView
-            android:id="@+id/imgWelcomeIcon"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_notification"
-            android:tint="@color/primary_green" />
+            android:id="@+id/imgWelcomeLogo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="HSC Biology Emblem"
+            android:src="@drawable/ic_bio_emblem" />
 
-        <!-- App Title -->
+        <!-- App Title Typography verbatim from Stitch -->
         <TextView
             android:id="@+id/tvWelcomeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/app_name"
-            android:textColor="@color/primary_green_dark"
-            android:textSize="32sp"
+            android:shadowColor="#22F3E0"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="14"
+            android:text="HSC Biology"
+            android:textColor="#FFFFFF"
+            android:textSize="36sp"
             android:textStyle="bold" />
 
-        <!-- Subtitle -->
+        <!-- Subtitles: Warrior Edition & Active Study App -->
         <TextView
             android:id="@+id/tvWelcomeSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/app_subtitle"
-            android:textColor="@color/accent_teal"
+            android:layout_marginTop="2dp"
+            android:shadowColor="#4EEDB8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="8"
+            android:text="Warrior Edition"
+            android:textColor="#25F4DB"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- Short Description -->
         <TextView
-            android:id="@+id/tvWelcomeDesc"
+            android:id="@+id/tvWelcomeTagline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:lineSpacingExtra="4dp"
-            android:text="@string/welcome_desc"
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp" />
+            android:layout_marginTop="2dp"
+            android:text="Active Study App"
+            android:textColor="#55EDC2"
+            android:textSize="15sp" />
 
-        <!-- Get Started Button -->
-        <Button
-            android:id="@+id/btnGetStarted"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="28dp"
-            android:backgroundTint="@color/primary_green"
-            android:elevation="2dp"
-            android:text="@string/btn_get_started"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+        <!-- Circular Neon Loading Spinner from Stitch -->
+        <ProgressBar
+            android:id="@+id/spinnerWelcome"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="12dp"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/spinner_neon_ring" />
+
+        <!-- Microcopy Loading Text Lines (Animated in Java) -->
+        <TextView
+            android:id="@+id/tvLoadingStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Prepping your study desk..."
+            android:textColor="#7CFBD4"
+            android:textSize="15sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tvLoadingSubStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="16dp"
+            android:text="Loading Bio-Universe..."
+            android:textColor="#55EDC2"
+            android:textSize="13sp" />
+
+        <!-- Glowing Horizontal Progress Bar (Fills 0% to 100% during auto-start) -->
+        <ProgressBar
+            android:id="@+id/pbWelcomeAutoProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="260dp"
+            android:layout_height="8dp"
+            android:max="100"
+            android:progress="15"
+            android:progressDrawable="@drawable/progress_bar_cyan" />
 
     </LinearLayout>
 
-    <!-- Lab Demonstration Footer Note -->
-    <TextView
-        android:id="@+id/tvWelcomeFooter"
+    <!-- Topic 7: Footer anchored with layout_alignParentBottom and layout_centerHorizontal -->
+    <LinearLayout
+        android:id="@+id/layoutWelcomeFooter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:text="Advanced Programming Lab • Offline Companion"
-        android:textColor="@color/text_muted"
-        android:textSize="12sp" />
+        android:layout_marginBottom="28dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <!-- Active Recall Slogan -->
+        <TextView
+            android:id="@+id/tvFooterSlogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="Master Biology through Active Recall &amp; Practice"
+            android:textColor="#69A997"
+            android:textSize="13sp" />
+
+        <!-- HSC Brand Mark & Attribution -->
+        <TextView
+            android:id="@+id/tvFooterBrand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.08"
+            android:text="HSC"
+            android:textColor="#3BE7C0"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvFooterPowered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Powered by Active Study"
+            android:textColor="#4D9782"
+            android:textSize="11sp" />
+    </LinearLayout>
 
 </RelativeLayout>
-

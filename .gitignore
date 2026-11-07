@@ -13,11 +13,3 @@
 .externalNativeBuild
 .cxx
 local.properties
-
-# BioPrep AI specifications and agent instructions
-AGENTS.md
-Tasks.md
-Feature_Spec.md
-technical_Spec.md
-PROMPTS.md
-.agents/

@@ -11,158 +11,353 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Local offline repository of HSC Biology sample chapters and MCQs.
- * All questions are original samples authored for this lab project.
+ * Local offline repository of HSC Biology sample chapters, MCQs, Active Recall drills,
+ * Flashcards, and Reference Resources.
+ * All dummy items are clearly structured so real curriculum content can be added easily.
  */
 public final class SampleBiologyData {
 
-    public static final String PAPER_BIOLOGY_1 = "BIOLOGY_1";
-    public static final String PAPER_BIOLOGY_2 = "BIOLOGY_2";
+    public static final String PAPER_BIOLOGY_1 = "BIOLOGY_1"; // 1st Paper: Botany (উদ্ভিদবিজ্ঞান)
+    public static final String PAPER_BIOLOGY_2 = "BIOLOGY_2"; // 2nd Paper: Zoology (প্রাণিবিজ্ঞান)
 
     private static final Map<String, List<Chapter>> CHAPTERS_BY_PAPER = new LinkedHashMap<>();
     private static final Map<String, List<Question>> QUESTIONS_BY_CHAPTER = new LinkedHashMap<>();
 
+    // Data models for Active Recall, Flashcards, and Resources
+    public static class ActiveRecallItem {
+        public final String id;
+        public final String chapterName;
+        public final String promptEn;
+        public final String promptBn;
+        public final String answerEn;
+        public final String answerBn;
+        public final String keywords;
+
+        public ActiveRecallItem(String id, String chapterName, String promptEn, String promptBn,
+                                String answerEn, String answerBn, String keywords) {
+            this.id = id;
+            this.chapterName = chapterName;
+            this.promptEn = promptEn;
+            this.promptBn = promptBn;
+            this.answerEn = answerEn;
+            this.answerBn = answerBn;
+            this.keywords = keywords;
+        }
+    }
+
+    public static class FlashcardItem {
+        public final String id;
+        public final String chapterName;
+        public final String questionEn;
+        public final String questionBn;
+        public final String answerEn;
+        public final String answerBn;
+        public final String medicalTip;
+
+        public FlashcardItem(String id, String chapterName, String questionEn, String questionBn,
+                             String answerEn, String answerBn, String medicalTip) {
+            this.id = id;
+            this.chapterName = chapterName;
+            this.questionEn = questionEn;
+            this.questionBn = questionBn;
+            this.answerEn = answerEn;
+            this.answerBn = answerBn;
+            this.medicalTip = medicalTip;
+        }
+    }
+
+    public static class ResourceItem {
+        public final String id;
+        public final String title;
+        public final String category; // "NCTB", "Guide", "Syllabus", "PastPaper", "Video"
+        public final String subtitle;
+        public final String fileSize;
+        public final String url;
+
+        public ResourceItem(String id, String title, String category, String subtitle, String fileSize, String url) {
+            this.id = id;
+            this.title = title;
+            this.category = category;
+            this.subtitle = subtitle;
+            this.fileSize = fileSize;
+            this.url = url;
+        }
+    }
+
+    private static final List<ActiveRecallItem> DUMMY_RECALL_ITEMS = new ArrayList<>();
+    private static final List<FlashcardItem> DUMMY_FLASHCARDS = new ArrayList<>();
+    private static final List<ResourceItem> DUMMY_RESOURCES = new ArrayList<>();
+
     static {
-        // Initialize Chapters for Biology 1st Paper (Botany)
+        // ==========================================
+        // 1. All 12 Botany Chapters (Biology 1st Paper)
+        // ==========================================
         List<Chapter> paper1Chapters = new ArrayList<>();
-        paper1Chapters.add(new Chapter("c1_p1", PAPER_BIOLOGY_1, "Cell & Its Structure", 1));
-        paper1Chapters.add(new Chapter("c2_p1", PAPER_BIOLOGY_1, "Cell Division", 2));
+        paper1Chapters.add(new Chapter("c1_p1", PAPER_BIOLOGY_1, "১. কোষ ও এর গঠন (Cell & Structure)", 1));
+        paper1Chapters.add(new Chapter("c2_p1", PAPER_BIOLOGY_1, "২. কোষ বিভাজন (Cell Division)", 2));
+        paper1Chapters.add(new Chapter("c3_p1", PAPER_BIOLOGY_1, "৩. কোষ রসায়ন (Cell Chemistry)", 3));
+        paper1Chapters.add(new Chapter("c4_p1", PAPER_BIOLOGY_1, "৪. অণুজীব (Microorganisms)", 4));
+        paper1Chapters.add(new Chapter("c5_p1", PAPER_BIOLOGY_1, "৫. শৈবাল ও ছত্রাক (Algae & Fungi)", 5));
+        paper1Chapters.add(new Chapter("c6_p1", PAPER_BIOLOGY_1, "৬. ব্রায়োফাইটা ও টেরিডোফাইটা (Bryophyta & Pteridophyta)", 6));
+        paper1Chapters.add(new Chapter("c7_p1", PAPER_BIOLOGY_1, "৭. নগ্নবীজী ও আবৃতবীজী উদ্ভিদ (Gymnosperm & Angiosperm)", 7));
+        paper1Chapters.add(new Chapter("c8_p1", PAPER_BIOLOGY_1, "৮. টিস্যু ও টিস্যুতন্ত্র (Tissue & Tissue System)", 8));
+        paper1Chapters.add(new Chapter("c9_p1", PAPER_BIOLOGY_1, "৯. উদ্ভিদ শারীরতত্ত্ব (Plant Physiology)", 9));
+        paper1Chapters.add(new Chapter("c10_p1", PAPER_BIOLOGY_1, "১০. উদ্ভিদ প্রজনন (Plant Reproduction)", 10));
+        paper1Chapters.add(new Chapter("c11_p1", PAPER_BIOLOGY_1, "১১. জীবপ্রযুক্তি (Biotechnology)", 11));
+        paper1Chapters.add(new Chapter("c12_p1", PAPER_BIOLOGY_1, "১২. জীবের পরিবেশ, বিস্তার ও সংরক্ষণ (Ecology & Conservation)", 12));
         CHAPTERS_BY_PAPER.put(PAPER_BIOLOGY_1, Collections.unmodifiableList(paper1Chapters));
 
-        // Initialize Chapters for Biology 2nd Paper (Zoology)
+        // ==========================================
+        // 2. All 12 Zoology Chapters (Biology 2nd Paper)
+        // ==========================================
         List<Chapter> paper2Chapters = new ArrayList<>();
-        paper2Chapters.add(new Chapter("c1_p2", PAPER_BIOLOGY_2, "Animal Diversity & Classification", 1));
-        paper2Chapters.add(new Chapter("c2_p2", PAPER_BIOLOGY_2, "Human Physiology: Circulation", 2));
+        paper2Chapters.add(new Chapter("c1_p2", PAPER_BIOLOGY_2, "১. প্রাণীর বিভিন্নতা ও শ্রেণিবিন্যাস (Diversity & Classification)", 1));
+        paper2Chapters.add(new Chapter("c2_p2", PAPER_BIOLOGY_2, "২. প্রাণীর পরিচিতি (Animal Identity)", 2));
+        paper2Chapters.add(new Chapter("c3_p2", PAPER_BIOLOGY_2, "৩. মানব শারীরতত্ত্ব: পরিপাক ও শোষণ (Digestion & Absorption)", 3));
+        paper2Chapters.add(new Chapter("c4_p2", PAPER_BIOLOGY_2, "৪. মানব শারীরতত্ত্ব: রক্ত ও সঞ্চালন (Blood & Circulation)", 4));
+        paper2Chapters.add(new Chapter("c5_p2", PAPER_BIOLOGY_2, "৫. মানব শারীরতত্ত্ব: শ্বসন ও শ্বাসক্রিয়া (Respiration & Breathing)", 5));
+        paper2Chapters.add(new Chapter("c6_p2", PAPER_BIOLOGY_2, "৬. মানব শারীরতত্ত্ব: বর্জ্য ও নিষ্কাশন (Excretion)", 6));
+        paper2Chapters.add(new Chapter("c7_p2", PAPER_BIOLOGY_2, "৭. মানব শারীরতত্ত্ব: চলন ও অঙ্গচালনা (Locomotion & Movement)", 7));
+        paper2Chapters.add(new Chapter("c8_p2", PAPER_BIOLOGY_2, "৮. মানব শারীরতত্ত্ব: সমন্বয় ও নিয়ন্ত্রণ (Coordination & Control)", 8));
+        paper2Chapters.add(new Chapter("c9_p2", PAPER_BIOLOGY_2, "৯. মানব জীবনের ধারাবাহিকতা (Continuity of Life)", 9));
+        paper2Chapters.add(new Chapter("c10_p2", PAPER_BIOLOGY_2, "১০. মানবদেহের প্রতিরক্ষা (Immunity)", 10));
+        paper2Chapters.add(new Chapter("c11_p2", PAPER_BIOLOGY_2, "১১. জিনতত্ত্ব ও বিবর্তন (Genetics & Evolution)", 11));
+        paper2Chapters.add(new Chapter("c12_p2", PAPER_BIOLOGY_2, "১২. প্রাণীর আচরণ (Animal Behavior)", 12));
         CHAPTERS_BY_PAPER.put(PAPER_BIOLOGY_2, Collections.unmodifiableList(paper2Chapters));
 
-        // Questions for Paper 1, Chapter 1: Cell & Its Structure
-        List<Question> c1p1Questions = new ArrayList<>();
-        c1p1Questions.add(new Question(
-                "q_c1p1_1", PAPER_BIOLOGY_1, "c1_p1", "Cell Organelles",
-                "Which organelle is widely known as the powerhouse of the cell?",
-                Arrays.asList("Ribosome", "Mitochondria", "Lysosome", "Centrosome"),
-                1,
-                "Mitochondria generate cellular energy in the form of ATP.",
-                "Sample", null));
-        c1p1Questions.add(new Question(
-                "q_c1p1_2", PAPER_BIOLOGY_1, "c1_p1", "Cell Wall",
-                "What is the primary structural carbohydrate found in plant cell walls?",
-                Arrays.asList("Peptidoglycan", "Chitin", "Cellulose", "Glycogen"),
+        // ==========================================
+        // 3. Dummy MCQs for Botany Chapters
+        // ==========================================
+        addQuestion("c1_p1", PAPER_BIOLOGY_1, "q_c1p1_1", "Cell Organelles",
+                "Which organelle is responsible for cellular respiration and energy production in eukaryotic cells?",
+                Arrays.asList("Ribosome (রাইবোজোম)", "Chloroplast (ক্লোরোপ্লাস্ট)", "Mitochondria (মাইটোকনড্রিয়া)", "Golgi Apparatus (গলজি বস্তু)"),
                 2,
-                "Plant cell walls are made predominantly of insoluble cellulose fibers.",
-                "Sample", null));
-        c1p1Questions.add(new Question(
-                "q_c1p1_3", PAPER_BIOLOGY_1, "c1_p1", "Plastids",
+                "Mitochondria generate most of the chemical energy in the form of ATP through oxidative phosphorylation.",
+                "Sample");
+
+        addQuestion("c1_p1", PAPER_BIOLOGY_1, "q_c1p1_2", "Cell Wall",
+                "What is the primary structural carbohydrate found in plant cell walls?",
+                Arrays.asList("Peptidoglycan", "Chitin", "Cellulose (সেলুলোজ)", "Glycogen"),
+                2,
+                "Plant cell walls are made predominantly of insoluble cellulose fibers and hemicellulose.",
+                "Sample");
+
+        addQuestion("c1_p1", PAPER_BIOLOGY_1, "q_c1p1_3", "Plastids",
                 "Which type of leucoplast is specialized for starch storage in plant cells?",
-                Arrays.asList("Chloroplast", "Chromoplast", "Amyloplast", "Elaioplast"),
+                Arrays.asList("Chloroplast", "Chromoplast", "Amyloplast (অ্যামাইলোপ্লাস্ট)", "Elaioplast"),
                 2,
                 "Amyloplasts are non-pigmented plastids that synthesize and store starch.",
-                "Sample", null));
-        QUESTIONS_BY_CHAPTER.put("c1_p1", Collections.unmodifiableList(c1p1Questions));
+                "Sample");
 
-        // Questions for Paper 1, Chapter 2: Cell Division
-        List<Question> c2p1Questions = new ArrayList<>();
-        c2p1Questions.add(new Question(
-                "q_c2p1_1", PAPER_BIOLOGY_1, "c2_p1", "Meiosis",
+        addQuestion("c2_p1", PAPER_BIOLOGY_1, "q_c2p1_1", "Meiosis",
                 "In which sub-stage of Prophase I does genetic crossing over take place?",
-                Arrays.asList("Leptotene", "Zygotene", "Pachytene", "Diplotene"),
+                Arrays.asList("Leptotene", "Zygotene", "Pachytene (প্যাকাইটিন)", "Diplotene"),
                 2,
-                "Crossing over between non-sister homologous chromatids occurs in Pachytene.",
-                "Sample", null));
-        c2p1Questions.add(new Question(
-                "q_c2p1_2", PAPER_BIOLOGY_1, "c2_p1", "Mitosis",
+                "Crossing over between non-sister homologous chromatids occurs in the Pachytene stage.",
+                "Sample");
+
+        addQuestion("c2_p1", PAPER_BIOLOGY_1, "q_c2p1_2", "Mitosis",
                 "During which mitotic stage do sister chromatids separate toward opposite poles?",
-                Arrays.asList("Prophase", "Metaphase", "Anaphase", "Telophase"),
+                Arrays.asList("Prophase", "Metaphase", "Anaphase (অ্যানাফেজ)", "Telophase"),
                 2,
-                "Centromeres split and daughter chromosomes migrate toward poles in Anaphase.",
-                "Sample", null));
-        c2p1Questions.add(new Question(
-                "q_c2p1_3", PAPER_BIOLOGY_1, "c2_p1", "Cell Cycle",
-                "What is the specialized cell division that produces haploid gametes?",
-                Arrays.asList("Amitosis", "Mitosis", "Meiosis", "Binary Fission"),
-                2,
-                "Meiosis reduces the chromosome count by half to yield haploid cells.",
-                "Sample", null));
-        QUESTIONS_BY_CHAPTER.put("c2_p1", Collections.unmodifiableList(c2p1Questions));
+                "Centromeres divide and daughter chromosomes migrate to opposite poles in Anaphase.",
+                "Sample");
 
-        // Questions for Paper 2, Chapter 1: Animal Diversity & Classification
-        List<Question> c1p2Questions = new ArrayList<>();
-        c1p2Questions.add(new Question(
-                "q_c1p2_1", PAPER_BIOLOGY_2, "c1_p2", "Phylum Echinodermata",
+        addQuestion("c3_p1", PAPER_BIOLOGY_1, "q_c3p1_1", "Enzymes",
+                "Which model best describes enzyme-substrate specificity and dynamic conformational change?",
+                Arrays.asList("Lock and Key Model", "Induced Fit Model (ইনডিউসড ফিট মডেল)", "Fluid Mosaic Model", "Sliding Filament"),
+                1,
+                "Daniel Koshland proposed the Induced Fit Model where active site conforms upon substrate binding.",
+                "Sample");
+
+        addQuestion("c4_p1", PAPER_BIOLOGY_1, "q_c4p1_1", "Microbiology",
+                "Which genetic material is present inside the T2 bacteriophage?",
+                Arrays.asList("Single-stranded RNA", "Double-stranded DNA (দ্বিসূত্রক DNA)", "Single-stranded DNA", "Double-stranded RNA"),
+                1,
+                "T2 bacteriophage has linear double-stranded DNA inside its hexagonal protein capsid.",
+                "Sample");
+
+        addQuestion("c9_p1", PAPER_BIOLOGY_1, "q_c9p1_1", "Bioenergetics",
+                "In the Calvin Cycle of photosynthesis, which enzyme catalyzes carbon fixation with RuBP?",
+                Arrays.asList("Pepcase", "RuBisCO (রুবিসকো)", "ATP Synthase", "Carbonic Anhydrase"),
+                1,
+                "RuBisCO catalyzes the carboxylation of ribulose-1,5-bisphosphate (RuBP) to produce 3-PGA.",
+                "Sample");
+
+        // ==========================================
+        // 4. Dummy MCQs for Zoology Chapters
+        // ==========================================
+        addQuestion("c1_p2", PAPER_BIOLOGY_2, "q_c1p2_1", "Classification",
                 "Which phylum is distinguished by a unique water vascular (ambulacral) system?",
-                Arrays.asList("Cnidaria", "Mollusca", "Echinodermata", "Annelida"),
+                Arrays.asList("Cnidaria", "Mollusca", "Echinodermata (একাইনোডার্মাটা)", "Annelida"),
                 2,
-                "Echinoderms rely on a water vascular system for locomotion and respiration.",
-                "Sample", null));
-        c1p2Questions.add(new Question(
-                "q_c1p2_2", PAPER_BIOLOGY_2, "c1_p2", "Symmetry",
-                "Which of the following organisms exhibits bilateral symmetry?",
-                Arrays.asList("Hydra", "Sea Anemone", "Tapeworm (Taenia)", "Sycon sponge"),
-                2,
-                "Platyhelminthes like Taenia exhibit triploblastic bilateral symmetry.",
-                "Sample", null));
-        c1p2Questions.add(new Question(
-                "q_c1p2_3", PAPER_BIOLOGY_2, "c1_p2", "Coelom",
-                "Which phylum is characterized by having a pseudocoelom (false body cavity)?",
-                Arrays.asList("Platyhelminthes", "Nematoda", "Annelida", "Arthropoda"),
-                1,
-                "Roundworms in phylum Nematoda possess a pseudocoelom.",
-                "Sample", null));
-        QUESTIONS_BY_CHAPTER.put("c1_p2", Collections.unmodifiableList(c1p2Questions));
+                "Echinoderms rely on a hydraulic water vascular system for locomotion and gas exchange.",
+                "Sample");
 
-        // Questions for Paper 2, Chapter 2: Human Physiology: Circulation
-        List<Question> c2p2Questions = new ArrayList<>();
-        c2p2Questions.add(new Question(
-                "q_c2p2_1", PAPER_BIOLOGY_2, "c2_p2", "Cardiac Conduction",
-                "Which node serves as the primary pacemaker of the human heart?",
-                Arrays.asList("AV node", "SA node", "Bundle of His", "Purkinje fibers"),
+        addQuestion("c1_p2", PAPER_BIOLOGY_2, "q_c1p2_2", "Coelom",
+                "Which phylum is characterized by having a pseudocoelom (false body cavity)?",
+                Arrays.asList("Platyhelminthes", "Nematoda (নেমাটোডা)", "Annelida", "Arthropoda"),
                 1,
-                "The Sinoatrial (SA) node initiates rhythmic electrical impulses in the heart.",
-                "Sample", null));
-        c2p2Questions.add(new Question(
-                "q_c2p2_2", PAPER_BIOLOGY_2, "c2_p2", "Blood Vessels",
-                "Which blood vessel delivers oxygenated blood from lungs to the left atrium?",
-                Arrays.asList("Pulmonary artery", "Superior vena cava", "Pulmonary vein", "Aorta"),
+                "Roundworms in phylum Nematoda possess a pseudocoelom derived from the blastocoel.",
+                "Sample");
+
+        addQuestion("c2_p2", PAPER_BIOLOGY_2, "q_c2p2_1", "Animal Identity",
+                "Which specialized stinging cells are used by Hydra for prey capture and defense?",
+                Arrays.asList("Choanocytes", "Cnidocytes / Nematocysts (নিডোসাইট)", "Flame cells", "Nephridia"),
+                1,
+                "Cnidocytes contain stinging capsules called nematocysts characteristic of Cnidarians.",
+                "Sample");
+
+        addQuestion("c3_p2", PAPER_BIOLOGY_2, "q_c3p2_1", "Human Digestion",
+                "Which enzyme in gastric juice initiates protein digestion into peptones in the human stomach?",
+                Arrays.asList("Amylase", "Pepsin (পেপসিন)", "Lipase", "Trypsin"),
+                1,
+                "Pepsinogen is activated by hydrochloric acid (HCl) into active pepsin to digest proteins.",
+                "Sample");
+
+        addQuestion("c4_p2", PAPER_BIOLOGY_2, "q_c4p2_1", "Human Circulation",
+                "Which node serves as the natural electrical pacemaker of the human heart?",
+                Arrays.asList("AV node", "SA node (এসএ নোড)", "Bundle of His", "Purkinje fibers"),
+                1,
+                "The Sinoatrial (SA) node in the right atrium initiates rhythmic electrical impulses.",
+                "Sample");
+
+        addQuestion("c11_p2", PAPER_BIOLOGY_2, "q_c11p2_1", "Genetics",
+                "What is the classic dihybrid phenotypic ratio observed according to Mendel's Second Law?",
+                Arrays.asList("3:1", "1:2:1", "9:3:3:1", "9:7"),
                 2,
-                "Pulmonary veins uniquely carry oxygenated blood to the left atrium.",
-                "Sample", null));
-        c2p2Questions.add(new Question(
-                "q_c2p2_3", PAPER_BIOLOGY_2, "c2_p2", "Blood Physiology",
-                "Which cellular component of blood plays the primary role in hemostasis and clotting?",
-                Arrays.asList("Erythrocytes", "Leukocytes", "Thrombocytes", "Blood plasma"),
-                2,
-                "Thrombocytes (platelets) aggregate and release thromboplastin for clotting.",
-                "Sample", null));
-        QUESTIONS_BY_CHAPTER.put("c2_p2", Collections.unmodifiableList(c2p2Questions));
+                "Mendel's Law of Independent Assortment yields a 9:3:3:1 phenotypic ratio in F2 generation.",
+                "Sample");
+
+        // Fill remaining chapters with clean sample fallback questions
+        for (Chapter c : paper1Chapters) {
+            if (!QUESTIONS_BY_CHAPTER.containsKey(c.getId())) {
+                addQuestion(c.getId(), PAPER_BIOLOGY_1, "q_" + c.getId() + "_sample", c.getTitle(),
+                        "Sample HSC Question for " + c.getTitle() + ": Which statement is factually accurate?",
+                        Arrays.asList("Option A (Concept Overview)", "Option B (Key Mechanism)", "Option C (Correct Concept)", "Option D (Alternative Explanation)"),
+                        2,
+                        "Explanation: Option C reflects standard HSC curriculum facts for " + c.getTitle(),
+                        "Sample");
+            }
+        }
+        for (Chapter c : paper2Chapters) {
+            if (!QUESTIONS_BY_CHAPTER.containsKey(c.getId())) {
+                addQuestion(c.getId(), PAPER_BIOLOGY_2, "q_" + c.getId() + "_sample", c.getTitle(),
+                        "Sample HSC Question for " + c.getTitle() + ": Which statement is factually accurate?",
+                        Arrays.asList("Option A (Concept Overview)", "Option B (Key Mechanism)", "Option C (Correct Concept)", "Option D (Alternative Explanation)"),
+                        2,
+                        "Explanation: Option C reflects standard HSC curriculum facts for " + c.getTitle(),
+                        "Sample");
+            }
+        }
+
+        // ==========================================
+        // 5. Dummy Active Recall Items (Bilingual)
+        // ==========================================
+        DUMMY_RECALL_ITEMS.add(new ActiveRecallItem(
+                "rec_1", "উদ্ভিদ শারীরতত্ত্ব (Bioenergetics)",
+                "Q1: Without looking at your textbook, explain the major stages of the Calvin Cycle. Describe carbon fixation, reduction, and regeneration of RuBP.",
+                "(ক্যালভিন চক্রের ৩টি প্রধান ধাপ এবং RuBisCO, ATP ও NADPH এর ভূমিকা নিজের ভাষায় রিকল করুন)",
+                "The Calvin Cycle consists of: 1) Carbon fixation catalyzed by RuBisCO, 2) Reduction using ATP and NADPH to yield G3P, and 3) Regeneration of RuBP with ATP.",
+                "ক্যালভিন চক্রের ৩টি ধাপ: ১) রুবিসকো দ্বারা কার্বন সংবন্ধন, ২) ATP ও NADPH দ্বারা বিজারন এবং ৩) RuBP এর পুনরুৎপত্তি।",
+                "RuBisCO, 3-PGA, G3P, RuBP, NADPH"
+        ));
+
+        DUMMY_RECALL_ITEMS.add(new ActiveRecallItem(
+                "rec_2", "কোষ বিভাজন (Mitosis & Meiosis)",
+                "Q2: Explain the significance of crossing over in Pachytene and how it generates genetic variation.",
+                "(মিয়োসিস ১ এর প্যাকাইটিনে ক্রসিং ওভার কীভাবে নতুন প্রকরণ সৃষ্টি করে ব্যাখ্যা করুন)",
+                "Non-sister chromatids of homologous chromosomes break and rejoin at chiasmata, producing recombinant chromosomes with unique allele combinations.",
+                "হোমোলোগাস ক্রোমোজোমের নন-সিস্টার ক্রোমাটিডের মধ্যে খণ্ড বিনিময় কায়াজমার মাধ্যমে নতুন অ্যালিল সমন্বয় ও প্রকরণ ঘটায়।",
+                "Homologous, Non-sister, Chiasma, Recombination"
+        ));
+
+        DUMMY_RECALL_ITEMS.add(new ActiveRecallItem(
+                "rec_3", "রক্ত ও সঞ্চালন (Cardiovascular)",
+                "Q3: Trace the flow of blood through the four chambers of the human heart and mention the valves involved.",
+                "(মানব হৃৎপিণ্ডের ৪টি প্রকোষ্ঠ এবং কপাটিকার মধ্য দিয়ে রক্ত সংবহন পথ বর্ণনা করুন)",
+                "Deoxygenated blood enters right atrium via vena cava -> Tricuspid valve -> Right ventricle -> Pulmonary artery. Oxygenated returns to left atrium -> Bicuspid -> Left ventricle -> Aorta.",
+                "কার্বন-ডাই-অক্সাইডযুক্ত রক্ত ডান অলিন্দ -> ট্রাইকাস্পিড -> ডান নিলয় -> ফুসফুসীয় ধমনি। অক্সিজেনযুক্ত রক্ত বাম অলিন্দ -> বাইকাস্পিড -> বাম নিলয় -> মহাধমনি।",
+                "Tricuspid, Bicuspid, SA Node, Pulmonary Vein"
+        ));
+
+        // ==========================================
+        // 6. Dummy Flashcards (Front & Back)
+        // ==========================================
+        DUMMY_FLASHCARDS.add(new FlashcardItem(
+                "fc_1", "কোষ ও এর গঠন",
+                "What is the powerhouse of the cell, and what is its primary biological function?",
+                "কোষের শক্তিঘর কোনটি এবং এর প্রধান কাজ কী?",
+                "Mitochondria (মাইটোকন্ড্রিয়া)",
+                "Mitochondria produce ATP through oxidative phosphorylation and aerobic respiration for cellular work.",
+                "Medical Tip: Krebs cycle enzymes reside in the mitochondrial matrix."
+        ));
+
+        DUMMY_FLASHCARDS.add(new FlashcardItem(
+                "fc_2", "কোষ রসায়ন",
+                "What are the building blocks of proteins, and what bond links them?",
+                "প্রোটিনের গঠনগত একক কী এবং কোন বন্ধন এদের যুক্ত করে?",
+                "Amino Acids linked by Peptide Bonds (পেপটাইড বন্ধন)",
+                "20 standard amino acids link through covalent peptide bonds (-CONH-) formed by condensation.",
+                "Medical Tip: Essential amino acids must be acquired through human diet."
+        ));
+
+        DUMMY_FLASHCARDS.add(new FlashcardItem(
+                "fc_3", "প্রাণীর বিভিন্নতা",
+                "Which phylum possesses water vascular system and tube feet?",
+                "কোন পর্বের প্রাণীদের পানি সংবহন তন্ত্র ও নালিকা পদ রয়েছে?",
+                "Phylum Echinodermata (একাইনোডার্মাটা)",
+                "Exclusively marine deuterostomes with radial symmetry as adults and calcareous endoskeleton.",
+                "Medical Tip: Starfish (Asterias) and Sea Urchin belong to Echinodermata."
+        ));
+
+        DUMMY_FLASHCARDS.add(new FlashcardItem(
+                "fc_4", "জিনতত্ত্ব ও বিবর্তন",
+                "What is the phenotypic ratio of Mendel's dihybrid test cross?",
+                "মেন্ডেলের দ্বিসংকর টেস্ট ক্রসের ফিনোটাইপিক অনুপাত কী?",
+                "1:1:1:1 Ratio",
+                "Test crossing a dihybrid (RrYy) with a double homozygous recessive (rryy) produces four equal phenotypes.",
+                "Medical Tip: Deviation from 1:1:1:1 indicates genetic linkage."
+        ));
+
+        // ==========================================
+        // 7. Dummy Resources (NCTB, Guides, Past Papers, Links)
+        // ==========================================
+        DUMMY_RESOURCES.add(new ResourceItem("res_1", "জীববিজ্ঞান ১ম পত্র (Botany)", "NCTB", "জাতীয় শিক্ষাক্রম ও পাঠ্যপুস্তক বোর্ড অনুমোদিত", "14.8 MB", "http://www.nctb.gov.bd"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_2", "জীববিজ্ঞান ২য় পত্র (Zoology)", "NCTB", "জাতীয় শিক্ষাক্রম ও পাঠ্যপুস্তক বোর্ড অনুমোদিত", "16.2 MB", "http://www.nctb.gov.bd"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_3", "পাঞ্জেরী জীববিজ্ঞান ১ম পত্র", "Guide", "অধ্যায়ভিত্তিক সৃজনশীল ও MCQ গাইড", "18.5 MB", "https://panjeree.com"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_4", "লেকচার সৃজনশীল ১ম পত্র", "Guide", "বোর্ড প্রশ্ন বিশ্লেষণ ও সমাধান", "21.0 MB", "https://lecturepublications.com"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_5", "ব্যবহারিক জীববিজ্ঞান নোটবুক", "Guide", "১ম ও ২য় পত্র প্র্যাকটিক্যাল নির্দেশিকা", "9.4 MB", "https://aksharpatra.com"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_6", "রয়েল জীববিজ্ঞান সহায়িকা", "Guide", "মেডিকেল ভর্তি প্রস্তুতি ও শর্ট ট্রিকস", "12.0 MB", "https://royalguide.com"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_7", "HSC Biology Complete Syllabus", "Syllabus", "Revised curriculum & marks distribution", "1.4 MB", "https://dhakaeducationboard.gov.bd"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_8", "Botany Chapter-wise Guide", "Syllabus", "কোষ থেকে জীবপ্রযুক্তি সারাংশ", "2.8 MB", "https://dhakaeducationboard.gov.bd"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_9", "Zoology Chapter-wise Guide", "Syllabus", "প্রাণীর বিভিন্নতা ও শারীরতত্ত্ব", "3.1 MB", "https://dhakaeducationboard.gov.bd"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_10", "2025 Model & Mock Board Exam", "PastPaper", "All Bangladesh Education Boards", "1.2 MB", "https://dhakaeducationboard.gov.bd"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_11", "2024 HSC Board Exam Paper", "PastPaper", "All Boards Official Questions with Solution", "1.3 MB", "https://dhakaeducationboard.gov.bd"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_12", "3D Bio Animation Portal", "Video", "DNA Replication & Meiosis in 3D", "Web Link", "https://www.youtube.com/results?search_query=biology+3d+animation"));
+        DUMMY_RESOURCES.add(new ResourceItem("res_13", "HSC Crash Course Playlist", "Video", "YouTube Video Lessons by Top Mentors", "Web Link", "https://www.youtube.com/results?search_query=hsc+biology+crash+course"));
+    }
+
+    private static void addQuestion(String chapterId, String paperId, String qId, String topic,
+                                    String text, List<String> options, int correctIndex, String explanation, String source) {
+        List<Question> list = QUESTIONS_BY_CHAPTER.computeIfAbsent(chapterId, k -> new ArrayList<>());
+        list.add(new Question(qId, paperId, chapterId, topic, text, options, correctIndex, explanation, source, null));
     }
 
     private SampleBiologyData() {
-        // Utility repository
+        // Utility class
     }
 
-    /**
-     * Returns an unmodifiable list of chapters for the specified paper.
-     */
     public static List<Chapter> getChapters(String paperId) {
-        if (paperId == null) {
-            return Collections.emptyList();
-        }
+        if (paperId == null) return Collections.emptyList();
         List<Chapter> chapters = CHAPTERS_BY_PAPER.get(paperId.trim());
         return chapters != null ? chapters : Collections.emptyList();
     }
 
-    /**
-     * Returns an unmodifiable list of questions for the specified paper and chapter.
-     */
     public static List<Question> getQuestions(String paperId, String chapterId) {
-        if (chapterId == null) {
-            return Collections.emptyList();
-        }
+        if (chapterId == null) return Collections.emptyList();
         List<Question> questions = QUESTIONS_BY_CHAPTER.get(chapterId.trim());
-        if (questions == null) {
-            return Collections.emptyList();
-        }
-        // Verify paper alignment
+        if (questions == null) return Collections.emptyList();
         if (paperId != null && !paperId.trim().isEmpty()) {
             List<Question> filtered = new ArrayList<>();
             for (Question q : questions) {
@@ -172,12 +367,17 @@ public final class SampleBiologyData {
             }
             return Collections.unmodifiableList(filtered);
         }
-        return questions;
+        return Collections.unmodifiableList(questions);
     }
 
-    /**
-     * Finds a Chapter by paper and chapter ID.
-     */
+    public static List<Question> getAllQuestions() {
+        List<Question> all = new ArrayList<>();
+        for (List<Question> list : QUESTIONS_BY_CHAPTER.values()) {
+            all.addAll(list);
+        }
+        return Collections.unmodifiableList(all);
+    }
+
     public static Chapter getChapter(String paperId, String chapterId) {
         List<Chapter> chapters = getChapters(paperId);
         for (Chapter c : chapters) {
@@ -187,5 +387,16 @@ public final class SampleBiologyData {
         }
         return null;
     }
-}
 
+    public static List<ActiveRecallItem> getActiveRecallItems() {
+        return Collections.unmodifiableList(DUMMY_RECALL_ITEMS);
+    }
+
+    public static List<FlashcardItem> getFlashcards() {
+        return Collections.unmodifiableList(DUMMY_FLASHCARDS);
+    }
+
+    public static List<ResourceItem> getResources() {
+        return Collections.unmodifiableList(DUMMY_RESOURCES);
+    }
+}

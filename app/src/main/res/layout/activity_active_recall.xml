@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutActiveRecallRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bio_surface">
+
+    <!-- Fullscreen Botanical Microscopic Background (Stitch UI Theme) -->
+    <ImageView
+        android:id="@+id/ivActiveRecallBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.25"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_stitch_biology" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Top App Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnRecallBack"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Back"
+                    android:src="@drawable/ic_arrow_back"
+                    app:tint="@color/bio_primary" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="জীববিজ্ঞান (HSC Biology)"
+                        android:textColor="@color/bio_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Biology 1st Paper / উদ্ভিদ শারীরতত্ত্ব"
+                        android:textColor="@color/bio_on_surface_variant"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvQuestionProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Question 3 of 10"
+                    android:textColor="@color/bio_primary_container"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Medical-grade Progress Bar -->
+            <ProgressBar
+                android:id="@+id/pbRecallProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginBottom="16dp"
+                android:max="10"
+                android:progress="3"
+                android:progressTint="@color/bio_primary_container" />
+
+            <!-- Main High-Contrast Question Card (Clinical White Card) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Header Info Bar -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#E2E8F0"
+                        android:paddingStart="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="2dp"
+                        android:text="HSC Board &amp; Medical Prep"
+                        android:textColor="@color/bio_on_primary_container"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Spaced Recall"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <!-- Chapter Tag -->
+                <TextView
+                    android:id="@+id/tvChapterTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="#E6FAF7"
+                    android:paddingStart="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="3dp"
+                    android:text="Chapter 4 : Bioenergetics"
+                    android:textColor="@color/bio_on_primary_container"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <!-- Prompt Query Text -->
+                <TextView
+                    android:id="@+id/tvRecallPrompt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="4dp"
+                    android:text="Q3: Without looking at your textbook, explain the major stages of the Calvin Cycle. Describe carbon fixation, reduction, and regeneration of RuBP. Mention the role of ATP and NADPH in this process."
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvRecallPromptBn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="(ক্যালভিন চক্রের ৩টি প্রধান ধাপ এবং RuBisCO, ATP ও NADPH এর ভূমিকা নিজের ভাষায় রিকল করুন)"
+                    android:textColor="@color/bio_card_text_muted"
+                    android:textSize="13sp" />
+
+                <!-- Collapsible Answer Container -->
+                <LinearLayout
+                    android:id="@+id/layoutAnswerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:background="#F0FDF4"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✓ Master Biology Synthesis (Model Answer)"
+                        android:textColor="@color/bio_secondary_container"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvModelAnswer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:lineSpacingExtra="3dp"
+                        android:text="The Calvin Cycle consists of three major stages:\n1. Carbon Fixation: CO₂ combines with RuBP catalyzed by RuBisCO to form 3-PGA.\n2. Reduction: ATP and NADPH convert 3-PGA into G3P (glyceraldehyde-3-phosphate).\n3. Regeneration: ATP is used to regenerate RuBP to sustain the cyclic loop."
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvRecallKeywords"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:background="#DCFCE7"
+                        android:padding="6dp"
+                        android:text="Key Terms: RuBisCO, 3-PGA, G3P, RuBP, NADPH"
+                        android:textColor="#166534"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <!-- Self-Assessment Buttons (Anki Matrix) -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="12dp"
+                        android:text="Feedback: How well did you remember?"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="11sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnRecallAgain"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#FEE2E2"
+                            android:text="Again (&lt;1m)"
+                            android:textAllCaps="false"
+                            android:textColor="#B91C1C"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/btnRecallGood"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#ECFDF5"
+                            android:text="Good (1d)"
+                            android:textAllCaps="false"
+                            android:textColor="#047857"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/btnRecallEasy"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#CCFBF1"
+                            android:text="Easy (4d)"
+                            android:textAllCaps="false"
+                            android:textColor="#0F766E"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Toggle Reveal Button -->
+                <Button
+                    android:id="@+id/btnToggleAnswer"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="14dp"
+                    android:backgroundTint="@color/bio_primary_container"
+                    android:text="Reveal Answer"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bio_on_primary_container"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <!-- Private Active Recall Notes Input Workspace -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Your Active Recall Notes (Private Scratchpad)"
+                    android:textColor="@color/bio_card_text_muted"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etActiveRecallText"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="6dp"
+                    android:background="#F8FAFC"
+                    android:gravity="top"
+                    android:hint="Type or recall Calvin cycle steps here before revealing..."
+                    android:padding="10dp"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textColorHint="@color/bio_outline"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Next & Previous Controls -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnRecallPrev"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/bio_surface_container_high"
+                    android:text="Previous"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bio_on_surface" />
+
+                <Button
+                    android:id="@+id/btnRecallNext"
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="2"
+                    android:backgroundTint="@color/bio_primary_container"
+                    android:text="Next Question"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bio_on_primary_container"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Retention Streak Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_card_glow"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_chip_cyan"
+                    android:gravity="center"
+                    android:text="⚡"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Retention Streak"
+                        android:textColor="@color/bio_on_surface"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="14 Cards Reviewed Today"
+                        android:textColor="@color/bio_on_surface_variant"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+85% Acc."
+                    android:textColor="@color/bio_secondary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Topic 5 Demo Container: Dynamic programmatic view addition in code -->
+            <LinearLayout
+                android:id="@+id/dynamicLayoutContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_glow"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Topic 5: Android UI Layouts (Dynamic Views)"
+                    android:textColor="@color/bio_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Programmatic new EditText(this), new Button(this), addView()"
+                    android:textColor="@color/bio_on_surface_variant"
+                    android:textSize="11sp" />
+
+                <!-- Dynamic elements will be inserted here via code -->
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

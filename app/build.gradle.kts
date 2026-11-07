@@ -30,11 +30,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
+    // Lab 08 Topic 6: implementation "androidx.constraintlayout:constraintlayout:2.2.0"
     implementation(libs.constraintlayout)
     implementation(libs.material)
     implementation(libs.recyclerview)

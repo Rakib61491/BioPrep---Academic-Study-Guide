@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    android:background="@drawable/bg_card"
+    android:background="@drawable/bg_card_white"
     android:elevation="3dp"
     android:orientation="vertical"
     android:padding="20dp">
@@ -19,7 +19,7 @@
             android:id="@+id/tvItemQuestionNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_green_dark"
+            android:textColor="@color/bio_primary_container"
             android:textSize="15sp"
             android:textStyle="bold" />
 
@@ -30,7 +30,7 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:gravity="end"
-            android:textColor="@color/accent_teal"
+            android:textColor="@color/bio_card_text_muted"
             android:textSize="13sp" />
     </LinearLayout>
 
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:lineSpacingExtra="3dp"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/bio_card_text_dark"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -50,7 +50,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
-        android:background="@color/divider_color" />
+        android:background="#E2E8F0" />
 
     <!-- RadioGroup for 4 Options -->
     <RadioGroup
@@ -64,11 +64,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:buttonTint="@color/primary_green"
+            android:buttonTint="@color/bio_primary_container"
             android:minHeight="48dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/bio_card_text_dark"
             android:textSize="15sp" />
 
         <RadioButton
@@ -76,11 +76,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:buttonTint="@color/primary_green"
+            android:buttonTint="@color/bio_primary_container"
             android:minHeight="48dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/bio_card_text_dark"
             android:textSize="15sp" />
 
         <RadioButton
@@ -88,22 +88,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:buttonTint="@color/primary_green"
+            android:buttonTint="@color/bio_primary_container"
             android:minHeight="48dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/bio_card_text_dark"
             android:textSize="15sp" />
 
         <RadioButton
             android:id="@+id/rbOption3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:buttonTint="@color/primary_green"
+            android:buttonTint="@color/bio_primary_container"
             android:minHeight="48dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/bio_card_text_dark"
             android:textSize="15sp" />
 
     </RadioGroup>

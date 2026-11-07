@@ -18,7 +18,8 @@ import com.example.bioprep.models.Chapter;
 import java.util.List;
 
 /**
- * Chapter selection activity using ListView and custom BaseAdapter.
+ * Exam Practice Hub Activity implementing Stitch UI Design (Screen ID: 2a7bc4f212844e18a9a7062a2d9e5377).
+ * Features live practice modes (Chapter-wise, Mixed Mock, Botany, Zoology) and displays all 12 Botany & 12 Zoology chapters.
  */
 public class ChapterActivity extends AppCompatActivity {
 
@@ -28,6 +29,15 @@ public class ChapterActivity extends AppCompatActivity {
     private static final String TAG = "BIOPREP_LIFECYCLE";
 
     private String paperId;
+    private TextView tvPaperTitle;
+    private TextView tvChapterCountBadge;
+    private TextView tabBotany;
+    private TextView tabZoology;
+    private ListView lvChapters;
+    private TextView tvEmptyChapters;
+
+    private List<Chapter> allChaptersForPaper;
+    private ChapterAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,68 +50,163 @@ public class ChapterActivity extends AppCompatActivity {
             paperId = SampleBiologyData.PAPER_BIOLOGY_1;
         }
 
-        TextView tvPaperTitle = findViewById(R.id.tvChapterPaperTitle);
-        ListView lvChapters = findViewById(R.id.lvChapters);
-        TextView tvEmptyChapters = findViewById(R.id.tvEmptyChapters);
+        initViews();
+        setupPracticeModes();
+        loadChaptersForPaper(paperId);
+        setupNavigation();
+    }
 
-        if (SampleBiologyData.PAPER_BIOLOGY_2.equalsIgnoreCase(paperId)) {
-            tvPaperTitle.setText(R.string.paper_2_title);
-        } else {
-            tvPaperTitle.setText(R.string.paper_1_title);
+    private void initViews() {
+        tvPaperTitle = findViewById(R.id.tvChapterPaperTitle);
+        tvChapterCountBadge = findViewById(R.id.tvChapterCountBadge);
+        tabBotany = findViewById(R.id.tabBotany);
+        tabZoology = findViewById(R.id.tabZoology);
+        lvChapters = findViewById(R.id.lvChapters);
+        tvEmptyChapters = findViewById(R.id.tvEmptyChapters);
+
+        View btnBack = findViewById(R.id.btnChapterBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
         }
 
-        List<Chapter> chapters = SampleBiologyData.getChapters(paperId);
-        if (chapters == null || chapters.isEmpty()) {
+        View btnSearch = findViewById(R.id.btnChapterSearch);
+        if (btnSearch != null) {
+            btnSearch.setOnClickListener(v ->
+                    Toast.makeText(this, "Searching exam database...", Toast.LENGTH_SHORT).show());
+        }
+
+        View btnBookmark = findViewById(R.id.btnChapterBookmark);
+        if (btnBookmark != null) {
+            btnBookmark.setOnClickListener(v ->
+                    startActivity(new Intent(this, SavedItemsActivity.class)));
+        }
+
+        tabBotany.setOnClickListener(v -> {
+            paperId = SampleBiologyData.PAPER_BIOLOGY_1;
+            tabBotany.setBackgroundResource(R.drawable.bg_chip_cyan);
+            tabBotany.setTextColor(getColor(R.color.bio_primary));
+            tabZoology.setBackgroundColor(getColor(R.color.bio_surface_container));
+            tabZoology.setTextColor(getColor(R.color.bio_on_surface_variant));
+            loadChaptersForPaper(paperId);
+        });
+
+        tabZoology.setOnClickListener(v -> {
+            paperId = SampleBiologyData.PAPER_BIOLOGY_2;
+            tabZoology.setBackgroundResource(R.drawable.bg_chip_cyan);
+            tabZoology.setTextColor(getColor(R.color.bio_primary));
+            tabBotany.setBackgroundColor(getColor(R.color.bio_surface_container));
+            tabBotany.setTextColor(getColor(R.color.bio_on_surface_variant));
+            loadChaptersForPaper(paperId);
+        });
+
+        // Search bar filtering
+        android.widget.EditText etSearchChapters = findViewById(R.id.etSearchChapters);
+        if (etSearchChapters != null) {
+            etSearchChapters.addTextChangedListener(new android.text.TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    filterChapters(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(android.text.Editable s) {}
+            });
+        }
+    }
+
+    private void filterChapters(String query) {
+        if (allChaptersForPaper == null || adapter == null) return;
+        if (query == null || query.trim().isEmpty()) {
+            adapter.updateList(allChaptersForPaper);
+            return;
+        }
+        String lower = query.trim().toLowerCase();
+        java.util.List<Chapter> filtered = new java.util.ArrayList<>();
+        for (Chapter c : allChaptersForPaper) {
+            if (c.getTitle().toLowerCase().contains(lower) || String.valueOf(c.getChapterNumber()).contains(lower)) {
+                filtered.add(c);
+            }
+        }
+        adapter.updateList(filtered);
+    }
+
+    private void setupPracticeModes() {
+        // Mode 1: Chapter-wise MCQ
+        findViewById(R.id.modeChapterMcq).setOnClickListener(v ->
+                Toast.makeText(this, "Select any chapter below to launch topic-focused recall", Toast.LENGTH_SHORT).show());
+
+        // Mode 2: Mixed Mock Speed Test
+        findViewById(R.id.modeMixedMock).setOnClickListener(v -> {
+            Intent intent = new Intent(ChapterActivity.this, QuizActivity.class);
+            intent.putExtra(EXTRA_PAPER_ID, paperId);
+            intent.putExtra(EXTRA_CHAPTER_ID, "mixed_mock");
+            intent.putExtra(EXTRA_CHAPTER_TITLE, "Mixed Chapter Speed Mock");
+            startActivity(intent);
+        });
+
+        // Mode 3: Botany Practice
+        findViewById(R.id.modeBotanyPractice).setOnClickListener(v -> {
+            paperId = SampleBiologyData.PAPER_BIOLOGY_1;
+            tabBotany.performClick();
+        });
+
+        // Mode 4: Zoology Practice
+        findViewById(R.id.modeZoologyPractice).setOnClickListener(v -> {
+            paperId = SampleBiologyData.PAPER_BIOLOGY_2;
+            tabZoology.performClick();
+        });
+    }
+
+    private void loadChaptersForPaper(String targetPaper) {
+        if (SampleBiologyData.PAPER_BIOLOGY_2.equalsIgnoreCase(targetPaper)) {
+            tvPaperTitle.setText("Zoology — Biology 2nd Paper");
+            tvChapterCountBadge.setText("12 Chapters • 300 MCQs");
+        } else {
+            tvPaperTitle.setText("Botany — Biology 1st Paper");
+            tvChapterCountBadge.setText("12 Chapters • 300 MCQs");
+        }
+
+        allChaptersForPaper = SampleBiologyData.getChapters(targetPaper);
+        if (allChaptersForPaper == null || allChaptersForPaper.isEmpty()) {
             lvChapters.setVisibility(View.GONE);
             tvEmptyChapters.setVisibility(View.VISIBLE);
         } else {
             tvEmptyChapters.setVisibility(View.GONE);
             lvChapters.setVisibility(View.VISIBLE);
 
-            ChapterAdapter adapter = new ChapterAdapter(this, chapters);
+            adapter = new ChapterAdapter(this, allChaptersForPaper);
             lvChapters.setAdapter(adapter);
 
             lvChapters.setOnItemClickListener((parent, view, position, id) -> {
-                Chapter selectedChapter = adapter.getItem(position);
-                if (selectedChapter != null) {
+                Chapter selected = adapter.getItem(position);
+                if (selected != null) {
                     Intent intent = new Intent(ChapterActivity.this, QuizActivity.class);
-                    intent.putExtra(EXTRA_PAPER_ID, paperId);
-                    intent.putExtra(EXTRA_CHAPTER_ID, selectedChapter.getId());
-                    intent.putExtra(EXTRA_CHAPTER_TITLE, selectedChapter.getTitle());
+                    intent.putExtra(EXTRA_PAPER_ID, targetPaper);
+                    intent.putExtra(EXTRA_CHAPTER_ID, selected.getId());
+                    intent.putExtra(EXTRA_CHAPTER_TITLE, selected.getTitle());
                     startActivity(intent);
                 }
             });
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "ChapterActivity: onStart");
-    }
+    private void setupNavigation() {
+        findViewById(R.id.navTabHome).setOnClickListener(v -> {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "ChapterActivity: onResume");
-    }
+        findViewById(R.id.navTabStudy).setOnClickListener(v ->
+                Toast.makeText(this, "Already in Exam Practice Hub", Toast.LENGTH_SHORT).show());
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "ChapterActivity: onPause");
-    }
+        findViewById(R.id.navTabSaved).setOnClickListener(v ->
+                startActivity(new Intent(this, SavedItemsActivity.class)));
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "ChapterActivity: onStop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "ChapterActivity: onDestroy");
+        findViewById(R.id.navTabProfile).setOnClickListener(v ->
+                startActivity(new Intent(this, ProfileActivity.class)));
     }
 }
-

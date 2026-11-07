@@ -179,6 +179,37 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         btnSubmit = findViewById(R.id.btnSubmitQuiz);
 
         tvChapterTitle.setText(chapterTitle);
+
+        View btnBack = findViewById(R.id.btnQuizBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
+
+        View btnBookmark = findViewById(R.id.btnQuizBookmark);
+        if (btnBookmark != null) {
+            btnBookmark.setOnClickListener(v -> startActivity(new Intent(this, SavedItemsActivity.class)));
+        }
+
+        View navHome = findViewById(R.id.navTabHome);
+        if (navHome != null) {
+            navHome.setOnClickListener(v -> {
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+            });
+        }
+        View navStudy = findViewById(R.id.navTabStudy);
+        if (navStudy != null) {
+            navStudy.setOnClickListener(v -> startActivity(new Intent(this, ChapterActivity.class)));
+        }
+        View navSaved = findViewById(R.id.navTabSaved);
+        if (navSaved != null) {
+            navSaved.setOnClickListener(v -> startActivity(new Intent(this, SavedItemsActivity.class)));
+        }
+        View navProfile = findViewById(R.id.navTabProfile);
+        if (navProfile != null) {
+            navProfile.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
+        }
     }
 
     private void restoreState(Bundle savedInstanceState) {
@@ -373,7 +404,7 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
 
         QuizResult result = QuizScorer.score(questions, selectedAnswers);
 
-        Intent intent = new Intent(QuizActivity.this, ResultActivity.class);
+        Intent intent = new Intent(QuizActivity.this, AnalyticsActivity.class);
         intent.putExtra(EXTRA_TOTAL, result.getTotalQuestions());
         intent.putExtra(EXTRA_CORRECT, result.getCorrectCount());
         intent.putExtra(EXTRA_INCORRECT, result.getIncorrectCount());

@@ -1,173 +1,994 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutHomeRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:padding="20dp">
+    android:background="@color/bio_surface">
 
-    <!-- Header Section -->
-    <TextView
-        android:id="@+id/tvHomeTitle"
+    <!-- Fullscreen Botanical Microscopic Background (Stitch UI Theme) -->
+    <ImageView
+        android:id="@+id/ivHomeBackground"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/title_home"
-        android:textColor="@color/primary_green_dark"
-        android:textSize="26sp"
-        android:textStyle="bold"
+        android:layout_height="0dp"
+        android:alpha="0.25"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_stitch_biology"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvHomeSubtitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/subtitle_home"
-        android:textColor="@color/text_secondary"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvHomeTitle" />
-
-    <!-- Biology 1st Paper Card / Button -->
+    <!-- Top App Header Bar (Pinned to Top) -->
     <LinearLayout
-        android:id="@+id/cardPaper1"
+        android:id="@+id/headerBar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/bg_card"
-        android:clickable="true"
-        android:elevation="3dp"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="20dp"
+        android:layout_height="56dp"
+        android:background="@color/bio_surface_container"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvHomeSubtitle">
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Small Back Option at Top Left -->
+        <ImageButton
+            android:id="@+id/btnHomeBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/bio_primary" />
+
+        <!-- Student Avatar at Top Left Corner -->
+        <TextView
+            android:id="@+id/ivHeaderAvatar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_chip_cyan"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="👨‍🎓"
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/tvPaper1Title"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvHomeAppTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/paper_1_title"
-            android:textColor="@color/primary_green_dark"
-            android:textSize="20sp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="জীববিজ্ঞান (HSC Biology)"
+            android:textColor="@color/bio_primary"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
+        <!-- Goal Option at Top Right Corner -->
         <TextView
-            android:id="@+id/tvPaper1Desc"
+            android:id="@+id/btnHeaderGoal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/paper_1_desc"
-            android:textColor="@color/text_secondary"
-            android:textSize="13sp" />
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_chip_cyan"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="8dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="3dp"
+            android:text="Goal 85%"
+            android:textColor="@color/bio_primary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnPaper1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:backgroundTint="@color/primary_green"
-            android:minHeight="48dp"
-            android:text="Study 1st Paper"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
+        <ImageButton
+            android:id="@+id/btnSavedLibrary"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Resources Library"
+            android:src="@drawable/ic_notification"
+            app:tint="@color/bio_primary_container" />
     </LinearLayout>
 
-    <!-- Biology 2nd Paper Card / Button -->
-    <LinearLayout
-        android:id="@+id/cardPaper2"
+    <!-- Scrollable Content Body between Header and Bottom Navigation Dock -->
+    <ScrollView
+        android:id="@+id/homeScrollView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_card"
-        android:clickable="true"
-        android:elevation="3dp"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="20dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardPaper1">
+        app:layout_constraintTop_toBottomOf="@id/headerBar">
 
-        <TextView
-            android:id="@+id/tvPaper2Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/paper_2_title"
-            android:textColor="@color/primary_green_dark"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvPaper2Desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/paper_2_desc"
-            android:textColor="@color/text_secondary"
-            android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/btnPaper2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:backgroundTint="@color/primary_green"
-            android:minHeight="48dp"
-            android:text="Study 2nd Paper"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
-    </LinearLayout>
-
-    <!-- Online Challenge Section -->
-    <LinearLayout
-        android:id="@+id/cardOnlineChallenge"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_card"
-        android:elevation="3dp"
-        android:orientation="vertical"
-        android:padding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardPaper2">
-
-        <TextView
-            android:id="@+id/tvOnlineTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_online_challenge"
-            android:textColor="@color/accent_teal"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvOnlineDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/online_challenge_desc"
-            android:textColor="@color/text_secondary"
-            android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/btnOnlineChallenge"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scrollInnerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:backgroundTint="@color/accent_teal"
-            android:minHeight="48dp"
-            android:text="@string/btn_online_challenge"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
+            android:padding="16dp">
+
+            <!-- Constraint Guideline for responsive split -->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <!-- Student Greeting & Daily Goal Progress Ring Card -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardStudentGreeting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_glow"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/imgStudentAvatar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_chip_cyan"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="👨‍🎓"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvGreetingTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Hello, HSC Warrior! 🧬"
+                    android:textColor="@color/bio_on_surface"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/layoutGoalRing"
+                    app:layout_constraintStart_toEndOf="@id/imgStudentAvatar"
+                    app:layout_constraintTop_toTopOf="@id/imgStudentAvatar" />
+
+                <TextView
+                    android:id="@+id/tvGreetingSubtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Ready to master Biology today?"
+                    android:textColor="@color/bio_on_surface_variant"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toStartOf="@id/layoutGoalRing"
+                    app:layout_constraintStart_toEndOf="@id/imgStudentAvatar"
+                    app:layout_constraintTop_toBottomOf="@id/tvGreetingTitle" />
+
+                <!-- Daily Goal Progress Badge (85%) -->
+                <LinearLayout
+                    android:id="@+id/layoutGoalRing"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_chip_cyan"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Goal"
+                        android:textColor="@color/bio_on_surface_variant"
+                        android:textSize="9sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="85%"
+                        android:textColor="@color/bio_primary_container"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Horizontal Chapter Bubbles Header -->
+            <TextView
+                android:id="@+id/tvChaptersHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Chapters"
+                android:textColor="@color/bio_on_surface"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardStudentGreeting" />
+
+            <TextView
+                android:id="@+id/tvChaptersBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_chip_cyan"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:text="৪টি অধ্যায়"
+                android:textColor="@color/bio_primary"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/tvChaptersHeader"
+                app:layout_constraintStart_toEndOf="@id/tvChaptersHeader"
+                app:layout_constraintTop_toTopOf="@id/tvChaptersHeader" />
+
+            <TextView
+                android:id="@+id/btnViewAllChapters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All >"
+                android:textColor="@color/bio_primary_container"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/tvChaptersHeader"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvChaptersHeader" />
+
+            <!-- Horizontal Chapter Scroll -->
+            <HorizontalScrollView
+                android:id="@+id/hsvChapters"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:scrollbars="none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvChaptersHeader">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Chapter 1 -->
+                    <LinearLayout
+                        android:id="@+id/chipChapter1"
+                        android:layout_width="92dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:background="@drawable/bg_chip_cyan"
+                            android:gravity="center"
+                            android:text="🔬"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="কোষ ও গঠন"
+                            android:textColor="@color/bio_on_surface"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="১ম অধ্যায়"
+                            android:textColor="@color/bio_outline"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <!-- Chapter 2 -->
+                    <LinearLayout
+                        android:id="@+id/chipChapter2"
+                        android:layout_width="92dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:background="@drawable/bg_chip_emerald"
+                            android:gravity="center"
+                            android:text="🌿"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="উদ্ভিদ শারীরতত্ত্ব"
+                            android:textColor="@color/bio_on_surface"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="২য় অধ্যায়"
+                            android:textColor="@color/bio_outline"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <!-- Chapter 3 -->
+                    <LinearLayout
+                        android:id="@+id/chipChapter3"
+                        android:layout_width="92dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:background="@drawable/bg_chip_amber"
+                            android:gravity="center"
+                            android:text="🫀"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="প্রাণীর পরিচিতি"
+                            android:textColor="@color/bio_on_surface"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="৩য় অধ্যায়"
+                            android:textColor="@color/bio_outline"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <!-- Chapter 4 -->
+                    <LinearLayout
+                        android:id="@+id/chipChapter4"
+                        android:layout_width="92dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:background="@drawable/bg_chip_cyan"
+                            android:gravity="center"
+                            android:text="🧬"
+                            android:textSize="24sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="জিনতত্ত্ব ও বিবর্তন"
+                            android:textColor="@color/bio_on_surface"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="৪র্থ অধ্যায়"
+                            android:textColor="@color/bio_outline"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Features Header -->
+            <TextView
+                android:id="@+id/tvFeaturesHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Features"
+                android:textColor="@color/bio_on_surface"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/hsvChapters" />
+
+            <TextView
+                android:id="@+id/tvFeaturesSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Active Learning Tools"
+                android:textColor="@color/bio_outline"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvFeaturesHeader"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvFeaturesHeader" />
+
+            <!-- 2-Column Clinical White High-Contrast Feature Cards -->
+            <!-- 1. Active Recall Card -->
+            <LinearLayout
+                android:id="@+id/cardActiveRecall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="14dp"
+                app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFeaturesHeader">
+
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="#E6FAF7"
+                    android:gravity="center"
+                    android:text="🧠"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Active Recall"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Challenge memory &amp; recall concepts"
+                    android:textColor="@color/bio_card_text_muted"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="স্মৃতি পরীক্ষা >"
+                    android:textColor="@color/bio_on_primary_container"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 2. Flashcards / Lab Manual List Card -->
+            <LinearLayout
+                android:id="@+id/cardLabExperiments"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guidelineCenter"
+                app:layout_constraintTop_toBottomOf="@id/tvFeaturesHeader">
+
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="#E6F8F3"
+                    android:gravity="center"
+                    android:text="🎴"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Flashcards"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="Botany &amp; Zoology Deck + Lab Fruits"
+                    android:textColor="@color/bio_card_text_muted"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="কার্ড রিভিশন >"
+                    android:textColor="@color/bio_secondary_container"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 3. Notes Card (Topic 10 Content Provider) -->
+            <LinearLayout
+                android:id="@+id/cardNotes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="14dp"
+                app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardActiveRecall">
+
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="#FFF8EB"
+                    android:gravity="center"
+                    android:text="📝"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Notes Notebook"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="ContentProvider SQLite database"
+                    android:textColor="@color/bio_card_text_muted"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="হাতে লেখা নোট >"
+                    android:textColor="@color/bio_tertiary_container"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 4. Resources Library Card (Topic 3 Implicit Intent) -->
+            <LinearLayout
+                android:id="@+id/cardResources"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_card_white"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:padding="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guidelineCenter"
+                app:layout_constraintTop_toBottomOf="@id/cardLabExperiments">
+
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="#EFF6FF"
+                    android:gravity="center"
+                    android:text="📚"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Resources Library"
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="NCTB books &amp; board syllabus"
+                    android:textColor="@color/bio_card_text_muted"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="মডেল টেস্ট >"
+                    android:textColor="#1D4ED8"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Featured Banner: Active Recall Session -->
+            <LinearLayout
+                android:id="@+id/bannerRecallSession"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_card_glow"
+                android:orientation="vertical"
+                android:padding="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardNotes">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_chip_cyan"
+                    android:paddingStart="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="2dp"
+                    android:text="HSC REVISION MODE"
+                    android:textColor="@color/bio_primary"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Active Recall Session"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="How much Biology can you remember without opening your textbook?"
+                    android:textColor="@color/bio_primary"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btnStartRecall"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="@color/bio_primary_container"
+                    android:text="Start Recall Session ▶"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bio_on_primary_container"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Lab 08 Topic Controls Card (Services, Notifications, Broadcast Receiver, Click Demos) -->
+            <LinearLayout
+                android:id="@+id/cardLabControls"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_card_glow"
+                android:orientation="vertical"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bannerRecallSession">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lab 08 Demonstration Hub"
+                    android:textColor="@color/bio_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Topics 4 (Clicks), 8 (Services), 9 (Broadcasts), 11 &amp; 12 (Notif/Perms)"
+                    android:textColor="@color/bio_on_surface_variant"
+                    android:textSize="11sp" />
+
+                <!-- Topic 4: Click Events (android:onClick="sendMessage", findViewById(R.id.text_after), setText) -->
+                <TextView
+                    android:id="@+id/text_after"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_card_white"
+                    android:padding="10dp"
+                    android:text="Click status will appear here..."
+                    android:textColor="@color/bio_card_text_dark"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <!-- android:onClick="sendMessage" specified in Topic 4 -->
+                    <Button
+                        android:id="@+id/btnXmlClick"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/bio_surface_container_highest"
+                        android:onClick="sendMessage"
+                        android:text="XML onClick"
+                        android:textAllCaps="false"
+                        android:textColor="@color/bio_primary"
+                        android:textSize="12sp" />
+
+                    <!-- setOnClickListener(this) / anonymous class in Topic 4 -->
+                    <Button
+                        android:id="@+id/btnInterfaceClick"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/bio_surface_container_highest"
+                        android:text="Interface Click"
+                        android:textAllCaps="false"
+                        android:textColor="@color/bio_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- Topic 8: Services (findViewById(R.id.startButton), stopService) -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Topic 8: Focus Audio Service (MediaPlayer &amp; START_STICKY)"
+                    android:textColor="@color/bio_on_surface"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/startButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/bio_primary_container"
+                        android:text="Start Service"
+                        android:textAllCaps="false"
+                        android:textColor="@color/bio_on_primary_container"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/stopButton"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/bio_error_container"
+                        android:text="Stop Service"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Topic 11: Notification Button (findViewById(R.id.btn)) -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Topic 11 &amp; 12: NotificationChannel &amp; Runtime Permission"
+                    android:textColor="@color/bio_on_surface"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+
+                    <!-- Button with id 'btn' as listed in Topic 11 -->
+                    <Button
+                        android:id="@+id/btn"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/bio_surface_container_highest"
+                        android:text="Post Notification"
+                        android:textAllCaps="false"
+                        android:textColor="@color/bio_primary"
+                        android:textSize="12sp" />
+
+                    <!-- Runtime permission request button for Topic 12 -->
+                    <Button
+                        android:id="@+id/btnRequestPerm"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/bio_secondary_container"
+                        android:text="Request Perms"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- Topic 9: Airplane Mode Broadcast Receiver Status -->
+                <TextView
+                    android:id="@+id/tvAirplaneStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#204EDEA3"
+                    android:padding="8dp"
+                    android:text="✈️ Topic 9 Receiver Active: Toggle Airplane mode to test."
+                    android:textColor="@color/bio_secondary"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+            <!-- Bottom spacing before scroll ends -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                app:layout_constraintTop_toBottomOf="@id/cardLabControls" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation Dock (Fixed at Bottom, matching Stitch Design) -->
+    <!-- Destinations: Home, Study, Saved, Profile -->
+    <LinearLayout
+        android:id="@+id/bottomNavBar"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:background="@color/bio_surface_container_low"
+        android:elevation="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Tab 1: Home (Active) -->
+        <LinearLayout
+            android:id="@+id/navTabHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_chip_cyan"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏠"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/bio_primary"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Tab 2: Study (Opens Chapters / MCQ Quiz) -->
+        <LinearLayout
+            android:id="@+id/navTabStudy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📖"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Study"
+                android:textColor="@color/bio_on_surface_variant"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Tab 3: Saved (Opens Notes Notebook) -->
+        <LinearLayout
+            android:id="@+id/navTabSaved"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔖"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saved"
+                android:textColor="@color/bio_on_surface_variant"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Tab 4: Profile / Experiments (Opens Lab Experiments) -->
+        <LinearLayout
+            android:id="@+id/navTabProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="👤"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textColor="@color/bio_on_surface_variant"
+                android:textSize="11sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
