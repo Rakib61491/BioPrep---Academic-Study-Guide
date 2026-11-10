@@ -43,51 +43,61 @@
         <!-- Screen 2: Home Dashboard (Stitch UI 42f918aa14ed4adaa9691586e244cea1 & Topics 2, 4, 6, 8, 9, 11, 12) -->
         <activity
             android:name=".activities.HomeActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Screen 3: Active Recall (Stitch UI 8e0b6be08b3540ec9378b2c2e92d7abc & Topic 5 Dynamic Layouts) -->
         <activity
             android:name=".activities.ActiveRecallActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Screen 4: Notes (Stitch UI 692a226658e74006ab34491ea36b157a & Topic 10 ContentProvider Client) -->
         <activity
             android:name=".activities.NotesActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Screen 5: Bangladeshi Resources Library (Stitch UI cedda05495b643c9a6166c01c5b1f0c7 & Topic 3 Implicit Intents) -->
         <activity
             android:name=".activities.ResourcesActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Screen 6: Flashcards (Stitch UI 629273b7864d428ba53d656d62c9e39f & Lab Manual Experiments A-D) -->
         <activity
             android:name=".activities.FlashcardsActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Screen 7: Exam Practice Hub (Stitch UI 2a7bc4f212844e18a9a7062a2d9e5377) -->
         <activity
             android:name=".activities.ChapterActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Screen 8: Exam Practice MCQ (Stitch UI 83149009bc5a421c902eae2d555996b4) -->
         <activity
             android:name=".activities.QuizActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Screen 9: Daily Goal & Analytics (Stitch UI f2da6fcd1eb14abc8f2ab5e649c85f74) -->
         <activity
             android:name=".activities.AnalyticsActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Screen 10: Saved Items (Stitch UI e888790cdd02497dba1b515e3036d0a6) -->
         <activity
             android:name=".activities.SavedItemsActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Screen 11: My Profile (Stitch UI 71d77bd7d6c14a188f6ba5eede1863d9) -->
         <activity
             android:name=".activities.ProfileActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Topic 11: AfterNotification Activity ("new Intent(this, AfterNotification.class)") -->
@@ -98,11 +108,13 @@
         <!-- Add Note Screen -->
         <activity
             android:name=".activities.AddNoteActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- View Note Screen -->
         <activity
             android:name=".activities.ViewNoteActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <!-- Native PDF Reader Screen -->
@@ -133,10 +145,21 @@
         <!-- Authentication Screens -->
         <activity
             android:name=".activities.SignInActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
 
         <activity
             android:name=".activities.RegisterActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.RecentActivitiesActivity"
             android:exported="false" />
 
         <!-- Bound Study Timer Service -->

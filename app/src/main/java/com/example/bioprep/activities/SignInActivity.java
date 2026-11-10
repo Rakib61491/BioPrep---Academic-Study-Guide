@@ -8,18 +8,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bioprep.R;
 import com.example.bioprep.auth.AuthRepository;
-import com.example.bioprep.auth.LocalAuthRepository;
+import com.example.bioprep.auth.FirebaseAuthRepository;
+import com.example.bioprep.utils.FirebaseSyncManager;
 import com.example.bioprep.utils.UserPreferences;
 
 /**
  * Sign In Activity implementing Requirement 12:
- * Connected to decoupled AuthRepository for local SQLite storage with Firebase Auth readiness.
+ * Connected to decoupled AuthRepository for local SQLite storage with Firebase
+ * Auth readiness.
  */
 public class SignInActivity extends AppCompatActivity {
 
@@ -37,7 +38,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        authRepository = LocalAuthRepository.getInstance(this);
+        authRepository = FirebaseAuthRepository.getInstance(this);
 
         initViews();
     }
@@ -74,6 +75,13 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(intent);
             });
         }
+
+        // Auto-scroll input fields into view when software keyboard appears
+        com.example.bioprep.utils.KeyboardUtils.autoScrollOnFocus(
+                findViewById(R.id.scrollSignIn),
+                etEmail,
+                etPassword
+        );
     }
 
     private void performSignIn() {
@@ -100,7 +108,9 @@ public class SignInActivity extends AppCompatActivity {
             public void onSuccess(String userName, String email) {
                 btnSignIn.setEnabled(true);
                 btnSignIn.setText("Sign In");
-                Toast.makeText(SignInActivity.this, "Welcome back, " + userName + "!", Toast.LENGTH_SHORT).show();
+
+                FirebaseSyncManager.pullProfileFromCloud(SignInActivity.this, null);
+                FirebaseSyncManager.syncProfileAndPerformance(SignInActivity.this, null);
 
                 proceedToNextScreen();
             }
@@ -109,7 +119,8 @@ public class SignInActivity extends AppCompatActivity {
             public void onFailure(String errorMessage) {
                 btnSignIn.setEnabled(true);
                 btnSignIn.setText("Sign In");
-                Toast.makeText(SignInActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                etPassword.setError(errorMessage);
+                etPassword.requestFocus();
             }
         });
     }
@@ -126,4 +137,3 @@ public class SignInActivity extends AppCompatActivity {
         finish();
     }
 }
-

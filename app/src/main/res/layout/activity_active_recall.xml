@@ -32,9 +32,11 @@
 
     <!-- Scrollable Content Container -->
     <ScrollView
+        android:id="@+id/scrollActiveRecall"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:isScrollContainer="true"
         app:layout_constraintBottom_toTopOf="@id/bottomNavBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +100,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/btnRecallOptions"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/btnRecallBack"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -112,19 +114,6 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
-
-                <!-- Three dots options button -->
-                <ImageView
-                    android:id="@+id/btnRecallOptions"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Options"
-                    android:src="@drawable/ic_more_vert_clean"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/bio_banner_header_text" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -315,14 +304,14 @@
 
             </LinearLayout>
 
-            <!-- Bottom Action Button: Show Answer matching Active Recall.jpeg -->
+            <!-- Bottom Action Button: Save Drill Question (Requirement 9) -->
             <Button
-                android:id="@+id/btnShowAnswerBottom"
+                android:id="@+id/btnSaveRecall"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_pill_emerald"
-                android:text="Show Answer"
+                android:text="🔖 Save Question"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="15sp"

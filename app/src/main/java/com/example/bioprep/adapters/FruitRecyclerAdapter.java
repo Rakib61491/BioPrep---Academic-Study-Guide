@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,7 +43,7 @@ public class FruitRecyclerAdapter extends RecyclerView.Adapter<FruitRecyclerAdap
         }
 
         holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Selected: " + name + " (" + desc + ")", Toast.LENGTH_SHORT).show();
+            // Item clicked
         });
     }
 

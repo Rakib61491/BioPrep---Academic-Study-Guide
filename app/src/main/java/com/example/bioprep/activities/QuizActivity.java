@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -34,9 +33,13 @@ import com.example.bioprep.database.AppDatabase;
 import com.example.bioprep.database.PracticeAnswerEntity;
 import com.example.bioprep.database.PracticeAttemptEntity;
 import com.example.bioprep.database.QuestionEntity;
+import com.example.bioprep.database.SavedItemEntity;
 import com.example.bioprep.database.StudySessionEntity;
 import com.example.bioprep.receivers.TimerUpdateReceiver;
 import com.example.bioprep.services.StudyTimerService;
+import com.example.bioprep.utils.FirebaseSyncManager;
+import com.example.bioprep.utils.NotificationHelper;
+import com.example.bioprep.utils.RecentActivityHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -178,8 +181,76 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         if (chapterId == null) chapterId = "bot_ch01";
         if (chapterTitle == null) chapterTitle = "Chapter 1: Cell and its Structure";
 
+        // Record recent activity
+        RecentActivityHelper.recordActivity(
+                this,
+                RecentActivityHelper.TYPE_EXAM_PRACTICE,
+                chapterId,
+                chapterTitle,
+                paperId
+        );
+
         initViews();
         loadQuestionsAndStartExam();
+    }
+
+    private boolean isCurrentQuizQuestionSaved = false;
+
+    private void checkIfCurrentQuestionSaved(String questionId) {
+        executor.execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+            int count = db.savedItemDao().isItemSaved("MCQ", questionId);
+            isCurrentQuizQuestionSaved = (count > 0);
+            mainHandler.post(this::updateQuizSaveButtonUI);
+        });
+    }
+
+    private void updateQuizSaveButtonUI() {
+        if (btnQuizSkip == null) return;
+        if (isCurrentQuizQuestionSaved) {
+            btnQuizSkip.setText("✓ Saved");
+            btnQuizSkip.setBackgroundResource(R.drawable.bg_pill_emerald);
+        } else {
+            btnQuizSkip.setText("🔖 Save");
+            btnQuizSkip.setBackgroundResource(R.drawable.bg_pill_dark_teal);
+        }
+    }
+
+    private void toggleSaveCurrentQuizQuestion() {
+        if (examItems.isEmpty() || currentPosition >= examItems.size()) return;
+        ExamItem item = examItems.get(currentPosition);
+        String qId = String.valueOf(item.entity.getId());
+
+        executor.execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+            if (isCurrentQuizQuestionSaved) {
+                db.savedItemDao().deleteByTypeAndItemId("MCQ", qId);
+                isCurrentQuizQuestionSaved = false;
+                mainHandler.post(this::updateQuizSaveButtonUI);
+            } else {
+                StringBuilder contentBuilder = new StringBuilder();
+                contentBuilder.append(item.entity.getQuestionText()).append("\n\n");
+                List<String> opts = item.shuffledOptions;
+                for (int i = 0; i < opts.size(); i++) {
+                    contentBuilder.append((char) ('A' + i)).append(") ").append(opts.get(i)).append("\n");
+                }
+                if (item.entity.getExplanation() != null && !item.entity.getExplanation().isEmpty()) {
+                    contentBuilder.append("\nExplanation: ").append(item.entity.getExplanation());
+                }
+
+                SavedItemEntity saved = new SavedItemEntity(
+                        "MCQ",
+                        qId,
+                        chapterTitle + " - Question " + (currentPosition + 1),
+                        contentBuilder.toString().trim(),
+                        "MCQ Practice",
+                        System.currentTimeMillis()
+                );
+                db.savedItemDao().insert(saved);
+                isCurrentQuizQuestionSaved = true;
+                mainHandler.post(this::updateQuizSaveButtonUI);
+            }
+        });
     }
 
     private void initViews() {
@@ -237,15 +308,7 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         setupOptionClicks();
 
         if (btnQuizSkip != null) {
-            btnQuizSkip.setOnClickListener(v -> {
-                if (examItems.isEmpty()) return;
-                if (currentPosition < examItems.size() - 1) {
-                    currentPosition++;
-                    displayQuestion(currentPosition);
-                } else {
-                    promptSubmitExam();
-                }
-            });
+            btnQuizSkip.setOnClickListener(v -> toggleSaveCurrentQuizQuestion());
         }
 
         if (btnQuizSubmit != null) {
@@ -334,7 +397,6 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
 
             mainHandler.post(() -> {
                 if (items.isEmpty()) {
-                    Toast.makeText(this, "No exam questions available.", Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }
@@ -383,6 +445,8 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
                 btnQuizSubmit.setText("Submit & Next");
             }
         }
+
+        checkIfCurrentQuestionSaved(String.valueOf(item.entity.getId()));
     }
 
     private void startExamTimer(long durationMillis) {
@@ -402,7 +466,6 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
             public void onFinish() {
                 remainingTimeMillis = 0;
                 updateTimerUI(0);
-                Toast.makeText(QuizActivity.this, "Time's up! Automatically submitting exam...", Toast.LENGTH_SHORT).show();
                 performExamSubmission();
             }
         };
@@ -521,6 +584,25 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
                 ));
             }
             db.practiceDao().insertAnswers(answerEntities);
+
+            // 4. Sync Exam Attempt & Metrics to Cloud Firestore
+            FirebaseSyncManager.logQuizAttemptToCloud(
+                    QuizActivity.this,
+                    paperId != null ? paperId : "BIOLOGY",
+                    chapterTitle,
+                    finalCorrect,
+                    total,
+                    elapsedSeconds
+            );
+
+            // 5. Post Exam Completion & Lock-screen Study Metrics Notification
+            NotificationHelper.notifyPracticeExamCompleted(
+                    QuizActivity.this,
+                    attemptId,
+                    chapterTitle,
+                    finalCorrect,
+                    total
+            );
 
             mainHandler.post(() -> {
                 Intent resultIntent = new Intent(QuizActivity.this, QuizResultActivity.class);

@@ -13,3 +13,11 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Agent & AI Assistant directories
+.agents
+.claude
+agent/
+skills-lock.json
+
+

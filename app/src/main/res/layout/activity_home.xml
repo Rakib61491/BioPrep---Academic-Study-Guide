@@ -613,8 +613,9 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <!-- Green Squircle with Leaf Icon -->
+                    <!-- Green Squircle with Category Icon -->
                     <TextView
+                        android:id="@+id/tvRecentIcon"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@drawable/bg_card_dark_teal"
@@ -647,16 +648,6 @@
                             android:textColor="@color/bio_card_text_muted"
                             android:textSize="12sp" />
                     </LinearLayout>
-
-                    <!-- Three Dots Menu -->
-                    <ImageView
-                        android:id="@+id/btnRecentMenu"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Options"
-                        android:src="@drawable/ic_more_vert_clean"
-                        app:tint="@color/bio_card_text_muted" />
                 </LinearLayout>
 
                 <!-- Cyan Progress Bar -->

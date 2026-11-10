@@ -11,7 +11,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -45,9 +44,6 @@ public class WelcomeActivity extends AppCompatActivity {
         Log.d(TAG, "WelcomeActivity (Loading Screen): onCreate");
         setContentView(R.layout.activity_welcome);
 
-        // Topic 2: Toast.makeText(...).show() with getApplicationContext()
-        Toast.makeText(getApplicationContext(), "WelcomeActivity: Loading Bio-Universe...", Toast.LENGTH_SHORT).show();
-
         pbAutoProgress = findViewById(R.id.pbWelcomeAutoProgress);
         tvLoadingStatus = findViewById(R.id.tvLoadingStatus);
         tvLoadingSubStatus = findViewById(R.id.tvLoadingSubStatus);
@@ -57,7 +53,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         View root = findViewById(R.id.layoutWelcomeRoot);
         if (root != null) {
-            root.setOnClickListener(v -> navigateToHome());
+            root.setOnClickListener(v -> navigateNext());
         }
 
         ImageButton btnBack = findViewById(R.id.btnWelcomeBack);
@@ -105,24 +101,30 @@ public class WelcomeActivity extends AppCompatActivity {
                 int progress = (int) animator.getAnimatedValue();
                 pbAutoProgress.setProgress(progress);
                 if (progress >= 100 && !isNavigated) {
-                    navigateToHome();
+                    navigateNext();
                 }
             }
         });
         progressAnimator.start();
     }
 
-    private synchronized void navigateToHome() {
+    private synchronized void navigateNext() {
         if (isNavigated || isFinishing()) return;
         isNavigated = true;
 
-        if (!com.example.bioprep.utils.UserPreferences.isAgreementAccepted(this)) {
-            Intent intent = new Intent(getApplicationContext(), AgreementActivity.class);
-            startActivity(intent);
+        boolean isSignedIn = com.example.bioprep.auth.FirebaseAuthRepository.getInstance(this).isUserSignedIn();
+        Intent intent;
+        if (!isSignedIn) {
+            // Requirement 1A & 1C: User must authenticate first via Login / Sign Up
+            intent = new Intent(this, SignInActivity.class);
+        } else if (!com.example.bioprep.utils.UserPreferences.isAgreementAccepted(this)) {
+            intent = new Intent(this, AgreementActivity.class);
         } else {
-            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(intent);
+            // Requirement 1B: Already authenticated user proceeds directly to Home
+            intent = new Intent(this, HomeActivity.class);
         }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
         finish();
     }
 

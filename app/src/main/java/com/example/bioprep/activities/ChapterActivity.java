@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -40,6 +39,7 @@ public class ChapterActivity extends AppCompatActivity {
     public static final String EXTRA_MODE = "extra_mode";
     public static final String MODE_EXAM = "mode_exam";
     public static final String MODE_FLASHCARDS = "mode_flashcards";
+    public static final String MODE_ACTIVE_RECALL = "mode_active_recall";
     private static final String TAG = "BIOPREP_CHAPTER_HUB";
 
     private String mode = MODE_EXAM;
@@ -119,7 +119,14 @@ public class ChapterActivity extends AppCompatActivity {
         tvNoZoologyMatches = findViewById(R.id.tvNoZoologyMatches);
 
         // Configure header title based on mode
-        if (MODE_FLASHCARDS.equals(mode)) {
+        if (MODE_ACTIVE_RECALL.equals(mode)) {
+            if (tvPaperTitle != null) {
+                tvPaperTitle.setText("Active Recall");
+            }
+            if (etSearchChapters != null) {
+                etSearchChapters.setHint("Search active recall chapters...");
+            }
+        } else if (MODE_FLASHCARDS.equals(mode)) {
             if (tvPaperTitle != null) {
                 tvPaperTitle.setText("Flashcards");
             }
@@ -139,13 +146,6 @@ public class ChapterActivity extends AppCompatActivity {
         View btnBack = findViewById(R.id.btnChapterBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
-        }
-
-        // Bookmark / Saved button
-        View btnBookmark = findViewById(R.id.btnChapterBookmark);
-        if (btnBookmark != null) {
-            btnBookmark.setOnClickListener(v ->
-                    startActivity(new Intent(this, SavedItemsActivity.class)));
         }
 
         // Search icon focus
@@ -206,8 +206,12 @@ public class ChapterActivity extends AppCompatActivity {
             tvTitle.setText(chapter.getTitle());
         }
 
+        boolean isActiveRecall = MODE_ACTIVE_RECALL.equals(mode);
+
         if (tvSubtitle != null) {
-            if (isFlashcard) {
+            if (isActiveRecall) {
+                tvSubtitle.setText("🧠 10 Drill Questions • Self Testing");
+            } else if (isFlashcard) {
                 tvSubtitle.setText("⚡ 25+ Flashcards • Active Recall");
             } else {
                 tvSubtitle.setText("🎯 50+ MCQs • 10 Mins Mock");
@@ -215,7 +219,9 @@ public class ChapterActivity extends AppCompatActivity {
         }
 
         if (btnAction != null) {
-            if (isFlashcard) {
+            if (isActiveRecall) {
+                btnAction.setText("Recall");
+            } else if (isFlashcard) {
                 btnAction.setText("Study");
             } else {
                 btnAction.setText("Practice");
@@ -223,7 +229,14 @@ public class ChapterActivity extends AppCompatActivity {
         }
 
         View.OnClickListener launchChapterListener = v -> {
-            Class<?> targetActivity = isFlashcard ? FlashcardsActivity.class : QuizActivity.class;
+            Class<?> targetActivity;
+            if (isActiveRecall) {
+                targetActivity = ActiveRecallActivity.class;
+            } else if (isFlashcard) {
+                targetActivity = FlashcardsActivity.class;
+            } else {
+                targetActivity = QuizActivity.class;
+            }
             Intent intent = new Intent(ChapterActivity.this, targetActivity);
             intent.putExtra(EXTRA_PAPER_ID, targetPaper);
             intent.putExtra(EXTRA_CHAPTER_ID, chapter.getId());
@@ -327,7 +340,6 @@ public class ChapterActivity extends AppCompatActivity {
                     }
                     updateBotanyAccordionState();
                     updateZoologyAccordionState();
-                    Toast.makeText(this, "Filter: " + title, Toast.LENGTH_SHORT).show();
                     return true;
                 });
                 popup.show();
@@ -413,8 +425,7 @@ public class ChapterActivity extends AppCompatActivity {
 
         View navStudy = findViewById(R.id.navTabStudy);
         if (navStudy != null) {
-            navStudy.setOnClickListener(v ->
-                    Toast.makeText(this, "Already in Chapter Selection", Toast.LENGTH_SHORT).show());
+            navStudy.setOnClickListener(v -> {});
         }
 
         View navSaved = findViewById(R.id.navTabSaved);

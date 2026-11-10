@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +19,20 @@ import androidx.core.content.ContextCompat;
 
 import com.example.bioprep.R;
 import com.example.bioprep.data.SampleBiologyData;
+import com.example.bioprep.database.AppDatabase;
+import com.example.bioprep.database.RecentActivityEntity;
 import com.example.bioprep.receivers.AirplaneModeReceiver;
 import com.example.bioprep.services.BackgroundAudioService;
 import com.example.bioprep.services.NewService;
 import com.example.bioprep.utils.NotificationHelper;
+import com.example.bioprep.utils.RecentActivityHelper;
+import com.example.bioprep.utils.UserPreferences;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.Executors;
+import android.widget.ProgressBar;
 
 /**
  * Main Home Dashboard Activity implementing Stitch UI Design (15814936439009237240)
@@ -54,10 +63,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "HomeActivity: onCreate");
-        setContentView(R.layout.activity_home);
 
-        // Topic 2: Toast notification showing callback
-        Toast.makeText(getApplicationContext(), "HomeActivity: onCreate() called", Toast.LENGTH_SHORT).show();
+        // Authentication guard: users cannot access main application without authenticating
+        if (!com.example.bioprep.auth.FirebaseAuthRepository.getInstance(this).isUserSignedIn()) {
+            Intent authIntent = new Intent(this, SignInActivity.class);
+            authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(authIntent);
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.activity_home);
 
         // Topic 11: Notification channel initialization
         NotificationHelper.createNotificationChannel(this);
@@ -102,16 +118,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             btnInterfaceClick.setOnClickListener(this);
         }
 
-        // Topic 4: Anonymous class OnClickListener (new View.OnClickListener() {...})
+        // Card 1: Active Recall (Opens Chapter Selection with 12 Botany & 12 Zoology chapters)
         View cardActiveRecall = findViewById(R.id.cardActiveRecall);
         if (cardActiveRecall != null) {
-            cardActiveRecall.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Topic 3: Explicit Intent
-                    Intent intent = new Intent(getApplicationContext(), ActiveRecallActivity.class);
-                    startActivity(intent);
-                }
+            cardActiveRecall.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), ChapterActivity.class);
+                intent.putExtra(ChapterActivity.EXTRA_MODE, ChapterActivity.MODE_ACTIVE_RECALL);
+                startActivity(intent);
             });
         }
 
@@ -177,28 +190,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
 
-        View btnRecentMenu = findViewById(R.id.btnRecentMenu);
-        if (btnRecentMenu != null) {
-            btnRecentMenu.setOnClickListener(v -> {
-                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(HomeActivity.this, v);
-                popup.getMenu().add("Resume Photosynthesis");
-                popup.getMenu().add("Mark Completed");
-                popup.getMenu().add("Remove from Recent");
-                popup.setOnMenuItemClickListener(item -> {
-                    Toast.makeText(HomeActivity.this, item.getTitle() + " selected", Toast.LENGTH_SHORT).show();
-                    if ("Resume Photosynthesis".equals(item.getTitle())) {
-                        startActivity(new Intent(HomeActivity.this, ActiveRecallActivity.class));
-                    }
-                    return true;
-                });
-                popup.show();
-            });
-        }
-
         View btnSeeAllRecent = findViewById(R.id.btnSeeAllRecent);
         if (btnSeeAllRecent != null) {
             btnSeeAllRecent.setOnClickListener(v -> {
-                Intent intent = new Intent(getApplicationContext(), AnalyticsActivity.class);
+                Intent intent = new Intent(HomeActivity.this, RecentActivitiesActivity.class);
                 startActivity(intent);
             });
         }
@@ -260,7 +255,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (btnNotification != null) {
             btnNotification.setOnClickListener(v -> {
                 NotificationHelper.sendNotification(HomeActivity.this, true);
-                Toast.makeText(this, "Notification posted (RemoteViews custom layout)!", Toast.LENGTH_SHORT).show();
             });
         }
 
@@ -275,8 +269,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // Bottom Navigation Bar items
-        findViewById(R.id.navTabHome).setOnClickListener(v ->
-                Toast.makeText(this, "Already on Home Dashboard", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.navTabHome).setOnClickListener(v -> {});
         findViewById(R.id.navTabStudy).setOnClickListener(v ->
                 startActivity(new Intent(this, ChapterActivity.class)));
         findViewById(R.id.navTabSaved).setOnClickListener(v ->
@@ -292,7 +285,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (textAfter != null) {
             textAfter.setText("Handled via XML onClick attribute: sendMessage(View view)");
         }
-        Toast.makeText(this, "sendMessage() invoked via XML onClick attribute", Toast.LENGTH_SHORT).show();
     }
 
     // =========================================================================
@@ -306,7 +298,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             if (textAfter != null) {
                 textAfter.setText("Handled via View.OnClickListener interface: onClick(View view)");
             }
-            Toast.makeText(this, "Clicked via View.OnClickListener (view.getId())", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.startButton) {
             // Topic 8: new Intent(this, NewService.class) and startService()
             Intent serviceIntent = new Intent(this, NewService.class);
@@ -327,24 +318,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         new String[]{Manifest.permission.POST_NOTIFICATIONS},
                         PERMISSION_REQUEST_CODE
                 );
-            } else {
-                Toast.makeText(this, "POST_NOTIFICATIONS permission already granted!", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(this, "Permissions automatically granted on this Android version.", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Notification permission GRANTED!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Notification permission DENIED.", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     // =========================================================================
@@ -354,7 +334,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "HomeActivity: onStart");
-        Toast.makeText(getApplicationContext(), "HomeActivity: onStart()", Toast.LENGTH_SHORT).show();
 
         // Topic 9: Register Broadcast Receiver dynamically in onStart()
         if (!isReceiverRegistered && airplaneModeReceiver != null) {
@@ -373,8 +352,105 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "HomeActivity: onResume");
+
+        if (!com.example.bioprep.auth.FirebaseAuthRepository.getInstance(this).isUserSignedIn()) {
+            Intent authIntent = new Intent(this, SignInActivity.class);
+            authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(authIntent);
+            finish();
+            return;
+        }
+
         updateUserAvatar();
-        Toast.makeText(getApplicationContext(), "HomeActivity: onResume()", Toast.LENGTH_SHORT).show();
+        updateDailyGoalPercent();
+        updateRecentActivity();
+        NotificationHelper.showStudyStatsLockscreenNotification(this);
+    }
+
+    private void updateDailyGoalPercent() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+            String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            int todaySeconds = db.studySessionDao().getStudySecondsForDate(todayDate);
+            int goalMinutes = UserPreferences.getDailyGoalMinutes(this);
+            int goalSeconds = goalMinutes * 60;
+            int dailyProgress = 0;
+            if (goalSeconds > 0) {
+                dailyProgress = Math.min(100, (int) Math.round((todaySeconds / (double) goalSeconds) * 100.0));
+            }
+            final int finalPercent = dailyProgress;
+            runOnUiThread(() -> {
+                TextView tvHeaderGoalPercent = findViewById(R.id.tvHeaderGoalPercent);
+                if (tvHeaderGoalPercent != null) {
+                    tvHeaderGoalPercent.setText(finalPercent + "%");
+                }
+            });
+        });
+    }
+
+    private void updateRecentActivity() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+            RecentActivityEntity recent = db.recentActivityDao().getMostRecent();
+            runOnUiThread(() -> {
+                View cardRecentActivity = findViewById(R.id.cardRecentActivity);
+                TextView tvRecentTitle = findViewById(R.id.tvRecentTitle);
+                TextView tvRecentTime = findViewById(R.id.tvRecentTime);
+                TextView tvRecentIcon = findViewById(R.id.tvRecentIcon);
+                ProgressBar pbRecentProgress = findViewById(R.id.pbRecentProgress);
+
+                if (cardRecentActivity == null || tvRecentTitle == null) return;
+
+                if (recent == null) {
+                    tvRecentTitle.setText("Explore: Cell and its Structure");
+                    if (tvRecentTime != null) tvRecentTime.setText("Tap to begin learning");
+                    if (tvRecentIcon != null) tvRecentIcon.setText("🌱");
+                    if (pbRecentProgress != null) pbRecentProgress.setProgress(0);
+                    cardRecentActivity.setOnClickListener(v -> {
+                        Intent intent = new Intent(HomeActivity.this, ChapterActivity.class);
+                        startActivity(intent);
+                    });
+                    return;
+                }
+
+                String actionName;
+                String icon;
+                Class<?> targetClass;
+
+                if ("ACTIVE_RECALL".equals(recent.getActivityType())) {
+                    actionName = "Active Recall";
+                    icon = "🧠";
+                    targetClass = ActiveRecallActivity.class;
+                } else if ("FLASHCARD".equals(recent.getActivityType())) {
+                    actionName = "Flashcard";
+                    icon = "🗂️";
+                    targetClass = FlashcardsActivity.class;
+                } else {
+                    actionName = "Exam Practice";
+                    icon = "📝";
+                    targetClass = QuizActivity.class;
+                }
+
+                if (tvRecentIcon != null) tvRecentIcon.setText(icon);
+                tvRecentTitle.setText(actionName + ": " + recent.getChapterTitle());
+
+                if (tvRecentTime != null) {
+                    tvRecentTime.setText(RecentActivityHelper.formatRelativeTime(recent.getTimestamp()));
+                }
+
+                if (pbRecentProgress != null) {
+                    pbRecentProgress.setProgress(70);
+                }
+
+                cardRecentActivity.setOnClickListener(v -> {
+                    Intent intent = new Intent(HomeActivity.this, targetClass);
+                    intent.putExtra(ChapterActivity.EXTRA_CHAPTER_ID, recent.getChapterId());
+                    intent.putExtra(ChapterActivity.EXTRA_CHAPTER_TITLE, recent.getChapterTitle());
+                    intent.putExtra(ChapterActivity.EXTRA_PAPER_ID, recent.getPaperId());
+                    startActivity(intent);
+                });
+            });
+        });
     }
 
     private void updateUserAvatar() {
@@ -400,14 +476,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "HomeActivity: onPause");
-        Toast.makeText(getApplicationContext(), "HomeActivity: onPause()", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "HomeActivity: onStop");
-        Toast.makeText(getApplicationContext(), "HomeActivity: onStop()", Toast.LENGTH_SHORT).show();
 
         // Topic 9: Unregister Broadcast Receiver in onStop()
         if (isReceiverRegistered && airplaneModeReceiver != null) {
@@ -425,13 +499,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onRestart() {
         super.onRestart();
         Log.d(TAG, "HomeActivity: onRestart");
-        Toast.makeText(getApplicationContext(), "HomeActivity: onRestart()", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onDestroy() {
         Log.d(TAG, "HomeActivity: onDestroy. isFinishing() = " + isFinishing());
-        Toast.makeText(getApplicationContext(), "HomeActivity: onDestroy()", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 }

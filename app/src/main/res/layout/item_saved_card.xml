@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardSavedItemRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/bg_card_dark_teal"
+    android:clickable="true"
+    android:elevation="3dp"
+    android:focusable="true"
+    android:padding="16dp">
+
+    <!-- Type Tag Pill -->
+    <TextView
+        android:id="@+id/tvSavedItemType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_chip_cyan"
+        android:paddingStart="8dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="3dp"
+        android:text="Saved Item"
+        android:textColor="#0A382C"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Extra info / Subtitle -->
+    <TextView
+        android:id="@+id/tvSavedItemExtra"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Chapter Info"
+        android:textColor="@color/bio_mint_accent"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/tvSavedItemType"
+        app:layout_constraintEnd_toStartOf="@id/btnRemoveSavedItem"
+        app:layout_constraintStart_toEndOf="@id/tvSavedItemType"
+        app:layout_constraintTop_toTopOf="@id/tvSavedItemType" />
+
+    <!-- Unsave / Bookmark Icon -->
+    <ImageView
+        android:id="@+id/btnRemoveSavedItem"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Remove from saved"
+        android:src="@drawable/ic_bookmark_ribbon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Item Title -->
+    <TextView
+        android:id="@+id/tvSavedItemTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Saved Item Title"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSavedItemType" />
+
+    <!-- Item Content Details / Snippet -->
+    <TextView
+        android:id="@+id/tvSavedItemContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="4"
+        android:text="Content details of saved flashcard, MCQ question, or active recall drill..."
+        android:textColor="@color/bio_on_surface_variant"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSavedItemTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

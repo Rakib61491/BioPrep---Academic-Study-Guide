@@ -345,16 +345,16 @@
                 android:layout_marginTop="24dp"
                 android:orientation="horizontal">
 
-                <!-- Skip Button -->
+                <!-- Save Question Button (Replaces Skip - Requirement 8) -->
                 <Button
                     android:id="@+id/btnQuizSkip"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_btn_option_unselected"
-                    android:text="Skip"
+                    android:background="@drawable/bg_pill_dark_teal"
+                    android:text="🔖 Save"
                     android:textAllCaps="false"
-                    android:textColor="@color/bio_mint_accent"
+                    android:textColor="@color/white"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:backgroundTint="@null" />

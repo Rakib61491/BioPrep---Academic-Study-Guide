@@ -114,15 +114,6 @@
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="Search"
                         android:src="@drawable/ic_search_clean" />
-
-                    <ImageView
-                        android:id="@+id/btnChapterBookmark"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:layout_marginStart="8dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Options"
-                        android:src="@drawable/ic_more_vert_clean" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

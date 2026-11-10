@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,7 +21,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bioprep.R;
+import com.example.bioprep.auth.FirebaseAuthRepository;
 import com.example.bioprep.database.AppDatabase;
+import com.example.bioprep.utils.FirebaseSyncManager;
 import com.example.bioprep.utils.UserPreferences;
 
 import java.io.File;
@@ -91,6 +92,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onResume();
         loadProfileData();
         loadDynamicAchievements();
+        FirebaseSyncManager.syncProfileAndPerformance(this, null);
     }
 
     private void initViews() {
@@ -122,7 +124,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         View btnSettings = findViewById(R.id.btnProfileSettings);
         if (btnSettings != null) {
-            btnSettings.setOnClickListener(v -> startActivity(new Intent(this, AnalyticsActivity.class)));
+            btnSettings.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
         }
 
         View btnLogout = findViewById(R.id.btnProfileLogout);
@@ -186,14 +188,11 @@ public class ProfileActivity extends AppCompatActivity {
                 }
 
                 UserPreferences.setAvatarPath(this, destFile.getAbsolutePath());
+                FirebaseSyncManager.syncProfileAndPerformance(this, null);
 
-                mainHandler.post(() -> {
-                    loadProfileData();
-                    Toast.makeText(this, "Profile picture updated successfully!", Toast.LENGTH_SHORT).show();
-                });
+                mainHandler.post(this::loadProfileData);
             } catch (Exception e) {
-                mainHandler.post(() ->
-                        Toast.makeText(this, "Failed to update profile picture: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                // Ignore avatar update error
             }
         });
     }
@@ -326,8 +325,8 @@ public class ProfileActivity extends AppCompatActivity {
             String name = editName.getText().toString().trim();
             if (!name.isEmpty()) {
                 UserPreferences.setUserName(this, name);
+                FirebaseSyncManager.syncProfileAndPerformance(this, null);
                 loadProfileData();
-                Toast.makeText(this, "Name updated successfully!", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("Cancel", null);
@@ -365,6 +364,8 @@ public class ProfileActivity extends AppCompatActivity {
             db.studySessionDao().clearAllSessions();
             db.practiceDao().clearAllAttempts();
             db.practiceDao().clearAllAnswers();
+            db.savedItemDao().clearAll();
+            db.recentActivityDao().clearAll();
 
             // 2. Clear avatar file
             String avatarPath = UserPreferences.getAvatarPath(this);
@@ -373,11 +374,11 @@ public class ProfileActivity extends AppCompatActivity {
                 if (f.exists()) f.delete();
             }
 
-            // 3. Clear user preferences session
+            // 3. Clear user preferences session & Firebase signOut
             UserPreferences.clearSession(this);
+            FirebaseAuthRepository.getInstance(this).signOut(null);
 
             mainHandler.post(() -> {
-                Toast.makeText(this, "Logged out and personal data cleared.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, SignInActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -403,7 +404,6 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SavedItemsActivity.class)));
 
         View navProfile = findViewById(R.id.navTabProfile);
-        if (navProfile != null) navProfile.setOnClickListener(v ->
-                Toast.makeText(this, "Already on My Profile", Toast.LENGTH_SHORT).show());
+        if (navProfile != null) navProfile.setOnClickListener(v -> {});
     }
 }

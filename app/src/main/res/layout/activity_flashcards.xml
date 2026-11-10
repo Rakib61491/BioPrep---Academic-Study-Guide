@@ -370,20 +370,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <!-- 1. Again Button (Coral / Orange) -->
+        <!-- 1. Save Button (Replaces Again - Requirement 5 & 6) -->
         <Button
-            android:id="@+id/btnRateAgain"
+            android:id="@+id/btnSaveFlashcard"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_pill_emerald"
-            android:backgroundTint="@color/bio_rate_again"
-            android:text="Again"
+            android:background="@drawable/bg_pill_dark_teal"
+            android:text="🔖 Save"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:backgroundTint="@null" />
 
         <!-- 2. Next Button (Emerald Green) -->
         <Button

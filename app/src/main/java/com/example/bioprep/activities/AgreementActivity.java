@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -76,7 +75,6 @@ public class AgreementActivity extends AppCompatActivity {
             if (hasScrolledToBottom && cbAgree.isChecked()) {
                 // Save agreement acceptance persistently
                 UserPreferences.setAgreementAccepted(AgreementActivity.this, true);
-                Toast.makeText(this, "Terms and Conditions accepted.", Toast.LENGTH_SHORT).show();
 
                 // Initialize Database if not already done
                 DatabaseInitializer.initializeDatabaseAsync(getApplicationContext(), null);
@@ -138,7 +136,6 @@ public class AgreementActivity extends AppCompatActivity {
                     }
 
                     if (allGranted) {
-                        Toast.makeText(this, "All requested permissions granted!", Toast.LENGTH_SHORT).show();
                         proceedToHome();
                     } else {
                         handleDeniedPermissions(deniedList);
@@ -204,9 +201,6 @@ public class AgreementActivity extends AppCompatActivity {
     }
 
     private void proceedToHome() {
-        if (!UserPreferences.isLoggedIn(this)) {
-            UserPreferences.saveSession(this, "HSC Biology Student", "student@bioprephsc.org");
-        }
         Intent intent = new Intent(AgreementActivity.this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

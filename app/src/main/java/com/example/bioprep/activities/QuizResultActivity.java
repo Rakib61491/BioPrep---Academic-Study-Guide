@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,7 +67,6 @@ public class QuizResultActivity extends AppCompatActivity {
         if (attemptId != -1L) {
             loadAttemptData(attemptId);
         } else {
-            Toast.makeText(this, "Result data not found.", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -120,7 +118,6 @@ public class QuizResultActivity extends AppCompatActivity {
 
             mainHandler.post(() -> {
                 if (attempt == null) {
-                    Toast.makeText(this, "Could not load exam attempt.", Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }

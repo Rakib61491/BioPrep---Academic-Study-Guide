@@ -10,19 +10,25 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bioprep.R;
-import com.example.bioprep.data.SampleBiologyData;
+import com.example.bioprep.data.ActiveRecallDataProvider;
 import com.example.bioprep.data.SampleBiologyData.ActiveRecallItem;
+import com.example.bioprep.database.AppDatabase;
+import com.example.bioprep.database.SavedItemEntity;
+import com.example.bioprep.utils.KeyboardUtils;
+import com.example.bioprep.utils.RecentActivityHelper;
+import com.example.bioprep.utils.UserPreferences;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 /**
- * Active Recall Activity conforming to Stitch UI Design (Screen 8e0b6be08b3540ec9378b2c2e92d7abc)
- * and demonstrating Lab 08 Topic 5 (UI Layouts & dynamic code-level View addition).
+ * Active Recall Activity conforming to Stitch UI Design
+ * Supporting 10 high-yield questions for each of the 24 Botany & Zoology chapters,
+ * answer reveal, save question into Saved Items, and recent activity logging.
  */
 public class ActiveRecallActivity extends AppCompatActivity {
 
@@ -30,6 +36,7 @@ public class ActiveRecallActivity extends AppCompatActivity {
 
     private LinearLayout layoutAnswerContainer;
     private Button btnToggleAnswer;
+    private Button btnSaveRecall;
     private ProgressBar pbRecallProgress;
     private TextView tvQuestionProgress;
     private TextView tvChapterTag;
@@ -38,19 +45,55 @@ public class ActiveRecallActivity extends AppCompatActivity {
     private TextView tvModelAnswer;
     private TextView tvRecallKeywords;
     private EditText etActiveRecallText;
+
     private boolean isAnswerRevealed = false;
     private int currentQuestionIndex = 0;
     private List<ActiveRecallItem> recallItems;
+
+    private String chapterId;
+    private String chapterTitle;
+    private String paperId;
+
+    private AppDatabase db;
+    private boolean isCurrentQuestionSaved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active_recall);
 
-        recallItems = SampleBiologyData.getActiveRecallItems();
+        db = AppDatabase.getInstance(this);
+
+        // Retrieve Chapter info from Intent
+        chapterId = getIntent().getStringExtra(ChapterActivity.EXTRA_CHAPTER_ID);
+        chapterTitle = getIntent().getStringExtra(ChapterActivity.EXTRA_CHAPTER_TITLE);
+        paperId = getIntent().getStringExtra(ChapterActivity.EXTRA_PAPER_ID);
+
+        if (chapterId == null || chapterId.trim().isEmpty()) {
+            chapterId = "botany_ch01";
+        }
+        if (chapterTitle == null || chapterTitle.trim().isEmpty()) {
+            chapterTitle = "Chapter 1: Cell and Its Structure";
+        }
+        if (paperId == null || paperId.trim().isEmpty()) {
+            paperId = "PAPER_1";
+        }
+
+        // Record recent activity
+        RecentActivityHelper.recordActivity(
+                this,
+                RecentActivityHelper.TYPE_ACTIVE_RECALL,
+                chapterId,
+                chapterTitle,
+                paperId
+        );
+
+        // Load 10 chapter-specific questions
+        recallItems = ActiveRecallDataProvider.getQuestionsForChapter(chapterId, chapterTitle);
 
         layoutAnswerContainer = findViewById(R.id.layoutAnswerContainer);
         btnToggleAnswer = findViewById(R.id.btnToggleAnswer);
+        btnSaveRecall = findViewById(R.id.btnSaveRecall);
         pbRecallProgress = findViewById(R.id.pbRecallProgress);
         tvQuestionProgress = findViewById(R.id.tvQuestionProgress);
         tvChapterTag = findViewById(R.id.tvChapterTag);
@@ -60,37 +103,27 @@ public class ActiveRecallActivity extends AppCompatActivity {
         tvRecallKeywords = findViewById(R.id.tvRecallKeywords);
         etActiveRecallText = findViewById(R.id.etActiveRecallText);
 
+        // Auto-scroll above keyboard and hide bottom nav when keyboard appears
+        KeyboardUtils.autoScrollOnFocus(findViewById(R.id.scrollActiveRecall), etActiveRecallText);
+        KeyboardUtils.attachKeyboardListener(this, findViewById(R.id.layoutActiveRecallRoot), isVisible -> {
+            View nav = findViewById(R.id.bottomNavBar);
+            if (nav != null) {
+                nav.setVisibility(isVisible ? View.GONE : View.VISIBLE);
+            }
+        });
+
         ImageButton btnRecallBack = findViewById(R.id.btnRecallBack);
         if (btnRecallBack != null) {
             btnRecallBack.setOnClickListener(v -> finish());
-        }
-
-        View btnRecallOptions = findViewById(R.id.btnRecallOptions);
-        if (btnRecallOptions != null) {
-            btnRecallOptions.setOnClickListener(v -> {
-                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(ActiveRecallActivity.this, v);
-                popup.getMenu().add("Bookmark this Drill");
-                popup.getMenu().add("Reset All Drills");
-                popup.getMenu().add("Switch to Botany");
-                popup.setOnMenuItemClickListener(item -> {
-                    Toast.makeText(ActiveRecallActivity.this, item.getTitle() + " selected", Toast.LENGTH_SHORT).show();
-                    if ("Reset All Drills".equals(item.getTitle())) {
-                        currentQuestionIndex = 0;
-                        updateQuestionDisplay();
-                    }
-                    return true;
-                });
-                popup.show();
-            });
         }
 
         if (btnToggleAnswer != null) {
             btnToggleAnswer.setOnClickListener(v -> toggleAnswer());
         }
 
-        Button btnShowAnswerBottom = findViewById(R.id.btnShowAnswerBottom);
-        if (btnShowAnswerBottom != null) {
-            btnShowAnswerBottom.setOnClickListener(v -> toggleAnswer());
+        // Bottom Save button (Requirement 9)
+        if (btnSaveRecall != null) {
+            btnSaveRecall.setOnClickListener(v -> toggleSaveCurrentQuestion());
         }
 
         // Bottom Navigation Bar items
@@ -113,14 +146,7 @@ public class ActiveRecallActivity extends AppCompatActivity {
 
         Button btnRecallNext = findViewById(R.id.btnRecallNext);
         if (btnRecallNext != null) {
-            btnRecallNext.setOnClickListener(v -> {
-                if (recallItems != null && currentQuestionIndex < recallItems.size() - 1) {
-                    currentQuestionIndex++;
-                    updateQuestionDisplay();
-                } else {
-                    Toast.makeText(this, "🎉 Awesome! You completed all active recall drills for today!", Toast.LENGTH_SHORT).show();
-                }
-            });
+            btnRecallNext.setOnClickListener(v -> advanceToNextCard());
         }
 
         Button btnRecallPrev = findViewById(R.id.btnRecallPrev);
@@ -136,42 +162,26 @@ public class ActiveRecallActivity extends AppCompatActivity {
         // Self assessment feedback buttons
         Button btnRecallAgain = findViewById(R.id.btnRecallAgain);
         if (btnRecallAgain != null) {
-            btnRecallAgain.setOnClickListener(v -> {
-                Toast.makeText(this, "Marked for review in < 1 min", Toast.LENGTH_SHORT).show();
-                advanceToNextCard();
-            });
+            btnRecallAgain.setOnClickListener(v -> advanceToNextCard());
         }
         Button btnRecallGood = findViewById(R.id.btnRecallGood);
         if (btnRecallGood != null) {
-            btnRecallGood.setOnClickListener(v -> {
-                Toast.makeText(this, "✓ Good recall! Scheduled for tomorrow", Toast.LENGTH_SHORT).show();
-                advanceToNextCard();
-            });
+            btnRecallGood.setOnClickListener(v -> advanceToNextCard());
         }
         Button btnRecallEasy = findViewById(R.id.btnRecallEasy);
         if (btnRecallEasy != null) {
-            btnRecallEasy.setOnClickListener(v -> {
-                Toast.makeText(this, "⭐ Mastered! Scheduled in 4 days", Toast.LENGTH_SHORT).show();
-                advanceToNextCard();
-            });
+            btnRecallEasy.setOnClickListener(v -> advanceToNextCard());
         }
 
         // Initialize question display
         updateQuestionDisplay();
-
-        // =========================================================================
-        // Lab 08 Topic 5: Dynamic View Addition Demonstration
-        // Demonstrates: new EditText(this), new Button(this), addView(), setOnClickListener
-        // =========================================================================
-        setupDynamicViewsDemo();
     }
 
     private void advanceToNextCard() {
+        UserPreferences.incrementTodayActiveRecallCount(this);
         if (recallItems != null && currentQuestionIndex < recallItems.size() - 1) {
             currentQuestionIndex++;
             updateQuestionDisplay();
-        } else {
-            Toast.makeText(this, "Session Complete! Well done!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -195,7 +205,7 @@ public class ActiveRecallActivity extends AppCompatActivity {
         tvQuestionProgress.setText("Question " + (currentQuestionIndex + 1) + " of " + recallItems.size());
 
         if (tvChapterTag != null) {
-            tvChapterTag.setText(item.chapterName);
+            tvChapterTag.setText(chapterTitle);
         }
         if (tvRecallPrompt != null) {
             tvRecallPrompt.setText(item.promptEn);
@@ -216,52 +226,51 @@ public class ActiveRecallActivity extends AppCompatActivity {
         if (etActiveRecallText != null) {
             etActiveRecallText.setText("");
         }
+
+        checkIfCurrentQuestionSaved(item.id);
     }
 
-    /**
-     * Programmatic dynamic creation of views as outlined in Topic 5:
-     * findViewById<LinearLayout>(R.id.main), new EditText(this), new Button(this),
-     * addView(editText), addView(showButton), setOnClickListener, Toast.makeText.
-     */
-    private void setupDynamicViewsDemo() {
-        LinearLayout dynamicContainer = findViewById(R.id.main);
-        if (dynamicContainer == null) return;
+    private void checkIfCurrentQuestionSaved(String questionId) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            int count = db.savedItemDao().isItemSaved("ACTIVE_RECALL", questionId);
+            isCurrentQuestionSaved = (count > 0);
+            runOnUiThread(() -> updateSaveButtonUI());
+        });
+    }
 
-        // 1. new EditText(this)
-        EditText dynamicEditText = new EditText(this);
-        dynamicEditText.setHint("Type custom bio keyword (dynamic EditText)...");
-        dynamicEditText.setTextColor(getColor(R.color.bio_on_surface));
-        dynamicEditText.setHintTextColor(getColor(R.color.bio_outline));
-        dynamicEditText.setBackgroundResource(R.drawable.bg_card_glow);
-        dynamicEditText.setPadding(24, 20, 24, 20);
+    private void updateSaveButtonUI() {
+        if (btnSaveRecall == null) return;
+        if (isCurrentQuestionSaved) {
+            btnSaveRecall.setText("✓ Saved");
+            btnSaveRecall.setBackgroundResource(R.drawable.bg_pill_emerald);
+        } else {
+            btnSaveRecall.setText("🔖 Save");
+            btnSaveRecall.setBackgroundResource(R.drawable.bg_pill_dark_teal);
+        }
+    }
 
-        // 2. new Button(this)
-        Button dynamicButton = new Button(this);
-        dynamicButton.setText("Submit Dynamic Keyword");
-        dynamicButton.setBackgroundTintList(getColorStateList(R.color.bio_primary_container));
-        dynamicButton.setTextColor(getColor(R.color.bio_on_primary_container));
+    private void toggleSaveCurrentQuestion() {
+        if (recallItems == null || currentQuestionIndex >= recallItems.size()) return;
+        ActiveRecallItem item = recallItems.get(currentQuestionIndex);
 
-        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        btnParams.setMargins(0, 16, 0, 0);
-        dynamicButton.setLayoutParams(btnParams);
-
-        // 3. setOnClickListener { ... }
-        dynamicButton.setOnClickListener(v -> {
-            String userInput = dynamicEditText.getText().toString();
-            if (userInput.trim().isEmpty()) {
-                Toast.makeText(ActiveRecallActivity.this, "Please enter a keyword first!", Toast.LENGTH_SHORT).show();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            if (isCurrentQuestionSaved) {
+                db.savedItemDao().deleteByTypeAndItemId("ACTIVE_RECALL", item.id);
+                isCurrentQuestionSaved = false;
+                runOnUiThread(this::updateSaveButtonUI);
             } else {
-                Toast.makeText(ActiveRecallActivity.this, "Added to Recall Queue: " + userInput, Toast.LENGTH_LONG).show();
-                dynamicEditText.setText("");
+                SavedItemEntity savedItem = new SavedItemEntity(
+                        "ACTIVE_RECALL",
+                        item.id,
+                        chapterTitle + " - Q" + (currentQuestionIndex + 1),
+                        item.promptEn + "\n\n" + item.promptBn + "\n\nAnswer: " + item.answerEn,
+                        item.keywords,
+                        System.currentTimeMillis()
+                );
+                db.savedItemDao().insert(savedItem);
+                isCurrentQuestionSaved = true;
+                runOnUiThread(this::updateSaveButtonUI);
             }
         });
-
-        // 4. addView(editText), addView(showButton)
-        dynamicContainer.addView(dynamicEditText);
-        dynamicContainer.addView(dynamicButton);
     }
 }
-

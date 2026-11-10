@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bioprep.R;
 import com.example.bioprep.database.AppDatabase;
 import com.example.bioprep.database.FlashcardEntity;
+import com.example.bioprep.database.SavedItemEntity;
 import com.example.bioprep.database.StudySessionEntity;
+import com.example.bioprep.utils.FirebaseSyncManager;
+import com.example.bioprep.utils.RecentActivityHelper;
+import com.example.bioprep.utils.UserPreferences;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,8 +58,9 @@ public class FlashcardsActivity extends AppCompatActivity {
 
     private Button btnFlipFront;
     private Button btnFlipBack;
-    private Button btnRateAgain;
+    private Button btnSaveFlashcard;
     private Button btnRateNext;
+    private boolean isCurrentCardSaved = false;
 
     private String chapterId;
     private String chapterTitle;
@@ -84,6 +88,15 @@ public class FlashcardsActivity extends AppCompatActivity {
 
         sessionStartTime = System.currentTimeMillis();
 
+        // Record recent activity
+        RecentActivityHelper.recordActivity(
+                this,
+                RecentActivityHelper.TYPE_FLASHCARD,
+                chapterId,
+                chapterTitle,
+                paperId
+        );
+
         initViews();
         setupFlipCard();
         setupActionButtons();
@@ -108,7 +121,7 @@ public class FlashcardsActivity extends AppCompatActivity {
 
         btnFlipFront = findViewById(R.id.btnFlipFront);
         btnFlipBack = findViewById(R.id.btnFlipBack);
-        btnRateAgain = findViewById(R.id.btnRateAgain);
+        btnSaveFlashcard = findViewById(R.id.btnSaveFlashcard);
         btnRateNext = findViewById(R.id.btnRateNext);
 
         if (tvFlashcardsHeaderTitle != null) {
@@ -143,18 +156,9 @@ public class FlashcardsActivity extends AppCompatActivity {
     }
 
     private void setupActionButtons() {
-        // "Again" button: marks for review and adds to the end of the current session queue
-        if (btnRateAgain != null) {
-            btnRateAgain.setOnClickListener(v -> {
-                if (flashcardQueue.isEmpty() || currentQueueIndex >= flashcardQueue.size()) return;
-
-                FlashcardEntity current = flashcardQueue.get(currentQueueIndex);
-                current.setAgain(true);
-                flashcardQueue.add(current); // Re-queue at the end for this review session
-
-                Toast.makeText(this, "Marked 'Again' — queued for repeat in this session", Toast.LENGTH_SHORT).show();
-                advanceCard();
-            });
+        // Save button (Replaces Again - Requirement 5 & 6)
+        if (btnSaveFlashcard != null) {
+            btnSaveFlashcard.setOnClickListener(v -> toggleSaveCurrentFlashcard());
         }
 
         // "Next" button: advances to the next flashcard
@@ -168,6 +172,7 @@ public class FlashcardsActivity extends AppCompatActivity {
     private void advanceCard() {
         if (flashcardQueue.isEmpty()) return;
 
+        UserPreferences.incrementTodayFlashcardCount(this);
         currentQueueIndex++;
         if (currentQueueIndex < flashcardQueue.size()) {
             displayCurrentCard();
@@ -219,6 +224,55 @@ public class FlashcardsActivity extends AppCompatActivity {
         isFlipped = false;
         if (cardBack != null) cardBack.setVisibility(View.GONE);
         if (cardFront != null) cardFront.setVisibility(View.VISIBLE);
+
+        checkIfCardSaved(String.valueOf(item.getId()));
+    }
+
+    private void checkIfCardSaved(String cardId) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+            int count = db.savedItemDao().isItemSaved("FLASHCARD", cardId);
+            isCurrentCardSaved = (count > 0);
+            runOnUiThread(this::updateSaveButtonUI);
+        });
+    }
+
+    private void updateSaveButtonUI() {
+        if (btnSaveFlashcard == null) return;
+        if (isCurrentCardSaved) {
+            btnSaveFlashcard.setText("✓ Saved");
+            btnSaveFlashcard.setBackgroundResource(R.drawable.bg_pill_emerald);
+        } else {
+            btnSaveFlashcard.setText("🔖 Save");
+            btnSaveFlashcard.setBackgroundResource(R.drawable.bg_pill_dark_teal);
+        }
+    }
+
+    private void toggleSaveCurrentFlashcard() {
+        if (flashcardQueue.isEmpty() || currentQueueIndex >= flashcardQueue.size()) return;
+        FlashcardEntity current = flashcardQueue.get(currentQueueIndex);
+        String cardId = String.valueOf(current.getId());
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+            if (isCurrentCardSaved) {
+                db.savedItemDao().deleteByTypeAndItemId("FLASHCARD", cardId);
+                isCurrentCardSaved = false;
+                runOnUiThread(this::updateSaveButtonUI);
+            } else {
+                SavedItemEntity saved = new SavedItemEntity(
+                        "FLASHCARD",
+                        cardId,
+                        chapterTitle + " - " + current.getQuestionEn(),
+                        current.getAnswerEn() + "\n\n" + (current.getAnswerBn() != null ? current.getAnswerBn() : ""),
+                        current.getMedicalTip() != null ? current.getMedicalTip() : "Flashcard",
+                        System.currentTimeMillis()
+                );
+                db.savedItemDao().insert(saved);
+                isCurrentCardSaved = true;
+                runOnUiThread(this::updateSaveButtonUI);
+            }
+        });
     }
 
     private void loadFlashcardsFromDatabase() {
@@ -245,8 +299,6 @@ public class FlashcardsActivity extends AppCompatActivity {
                     totalUniqueCards = finalCards.size();
                     currentQueueIndex = 0;
                     displayCurrentCard();
-                } else {
-                    Toast.makeText(this, "Loading flashcard database...", Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -286,6 +338,7 @@ public class FlashcardsActivity extends AppCompatActivity {
                     System.currentTimeMillis(),
                     dateString
             ));
+            FirebaseSyncManager.logStudySessionToCloud(getApplicationContext(), "FLASHCARD", chapterTitle, durationSeconds);
         });
     }
 

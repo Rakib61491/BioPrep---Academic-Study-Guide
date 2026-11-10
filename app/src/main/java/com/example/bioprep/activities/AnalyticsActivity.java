@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -91,12 +90,6 @@ public class AnalyticsActivity extends AppCompatActivity {
         ImageButton btnBack = findViewById(R.id.btnAnalyticsBack);
         if (btnBack != null) btnBack.setOnClickListener(v -> finish());
 
-        View btnMore = findViewById(R.id.btnAnalyticsMore);
-        if (btnMore != null) {
-            btnMore.setOnClickListener(v ->
-                    Toast.makeText(this, "Analytics updated based on local Room SQLite records.", Toast.LENGTH_SHORT).show());
-        }
-
         tvAnalyticsDate = findViewById(R.id.tvAnalyticsDate);
         tvTodayPercent = findViewById(R.id.tvAnalyticsTodayPercent);
         tvStudyTime = findViewById(R.id.tvAnalyticsStudyTime);
@@ -118,6 +111,52 @@ public class AnalyticsActivity extends AppCompatActivity {
         if (tvAnalyticsDate != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault());
             tvAnalyticsDate.setText(dateFormat.format(new Date()));
+        }
+
+        setupDynamicCalendarStrip();
+    }
+
+    private void setupDynamicCalendarStrip() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEE", Locale.US);
+
+        TextView[] dayNames = {
+                findViewById(R.id.tvAnalyticsDayM3Name),
+                findViewById(R.id.tvAnalyticsDayM2Name),
+                findViewById(R.id.tvAnalyticsDayM1Name),
+                null,
+                findViewById(R.id.tvAnalyticsDayP1Name),
+                findViewById(R.id.tvAnalyticsDayP2Name),
+                findViewById(R.id.tvAnalyticsDayP3Name)
+        };
+
+        TextView[] dayNums = {
+                findViewById(R.id.tvAnalyticsDayM3Num),
+                findViewById(R.id.tvAnalyticsDayM2Num),
+                findViewById(R.id.tvAnalyticsDayM1Num),
+                null,
+                findViewById(R.id.tvAnalyticsDayP1Num),
+                findViewById(R.id.tvAnalyticsDayP2Num),
+                findViewById(R.id.tvAnalyticsDayP3Num)
+        };
+
+        int[] offsets = {-3, -2, -1, 0, 1, 2, 3};
+
+        for (int i = 0; i < offsets.length; i++) {
+            Calendar dayCal = (Calendar) cal.clone();
+            dayCal.add(Calendar.DAY_OF_YEAR, offsets[i]);
+            String dayName = dayFormat.format(dayCal.getTime()).toUpperCase(Locale.US);
+            int dayNum = dayCal.get(Calendar.DAY_OF_MONTH);
+
+            if (offsets[i] == 0) {
+                TextView tvTodayLabel = findViewById(R.id.tvAnalyticsTodayLabel);
+                if (tvTodayLabel != null) {
+                    tvTodayLabel.setText("TODAY (" + dayNum + ")");
+                }
+            } else {
+                if (dayNames[i] != null) dayNames[i].setText(dayName);
+                if (dayNums[i] != null) dayNums[i].setText(String.valueOf(dayNum));
+            }
         }
     }
 
@@ -211,11 +250,46 @@ public class AnalyticsActivity extends AppCompatActivity {
                 studyTimeDisplay = totalStudySeconds + "s";
             }
 
+            // 6. Dynamic Daily Progress Breakdown calculation
+            Calendar startOfDayCal = Calendar.getInstance();
+            startOfDayCal.set(Calendar.HOUR_OF_DAY, 0);
+            startOfDayCal.set(Calendar.MINUTE, 0);
+            startOfDayCal.set(Calendar.SECOND, 0);
+            startOfDayCal.set(Calendar.MILLISECOND, 0);
+            long startOfDayMillis = startOfDayCal.getTimeInMillis();
+
+            // Active Recall
+            int recallDone = UserPreferences.getTodayActiveRecallCount(AnalyticsActivity.this);
+            int recallTarget = UserPreferences.getTargetActiveRecall(AnalyticsActivity.this);
+            int recallPercent = Math.min(100, (int) Math.round((recallDone / (double) recallTarget) * 100.0));
+
+            // Flashcards
+            int flashcardDone = UserPreferences.getTodayFlashcardCount(AnalyticsActivity.this);
+            int flashcardTarget = UserPreferences.getTargetFlashcard(AnalyticsActivity.this);
+            int flashcardPercent = Math.min(100, (int) Math.round((flashcardDone / (double) flashcardTarget) * 100.0));
+
+            // Exam Practice
+            int examQuestionsDone = db.practiceDao().getQuestionsAnsweredSince(startOfDayMillis);
+            int examTarget = UserPreferences.getTargetExam(AnalyticsActivity.this);
+            int examPercent = Math.min(100, (int) Math.round((examQuestionsDone / (double) examTarget) * 100.0));
+
             final int finalDailyProgress = dailyProgress;
             final String finalStudyTimeDisplay = studyTimeDisplay;
             final int finalAccuracy = accuracyPercent;
             final int finalReviewCount = reviewNeededCount;
             final int finalStreak = streakDays;
+
+            final int fRecallDone = recallDone;
+            final int fRecallTarget = recallTarget;
+            final int fRecallPercent = recallPercent;
+
+            final int fFlashDone = flashcardDone;
+            final int fFlashTarget = flashcardTarget;
+            final int fFlashPercent = flashcardPercent;
+
+            final int fExamDone = examQuestionsDone;
+            final int fExamTarget = examTarget;
+            final int fExamPercent = examPercent;
 
             mainHandler.post(() -> {
                 if (tvTodayPercent != null) {
@@ -234,6 +308,48 @@ public class AnalyticsActivity extends AppCompatActivity {
                     tvStreak.setText(finalStreak + (finalStreak == 1 ? " Day 🔥" : " Days 🔥"));
                 }
 
+                // Update dynamic Breakdown texts
+                TextView tvRecallProg = findViewById(R.id.tvBreakdownActiveRecallProgress);
+                TextView tvRecallPct = findViewById(R.id.tvBreakdownActiveRecallPercent);
+                if (tvRecallProg != null) tvRecallProg.setText("Active Recall\n" + fRecallDone + "/" + fRecallTarget);
+                if (tvRecallPct != null) tvRecallPct.setText(fRecallPercent + "%");
+
+                TextView tvFlashProg = findViewById(R.id.tvBreakdownFlashcardsProgress);
+                TextView tvFlashPct = findViewById(R.id.tvBreakdownFlashcardsPercent);
+                if (tvFlashProg != null) tvFlashProg.setText("Flashcards\n" + fFlashDone + "/" + fFlashTarget);
+                if (tvFlashPct != null) tvFlashPct.setText(fFlashPercent + "%");
+
+                TextView tvExamProg = findViewById(R.id.tvBreakdownExamProgress);
+                TextView tvExamPct = findViewById(R.id.tvBreakdownExamPercent);
+                if (tvExamProg != null) tvExamProg.setText("Exam Practice\n" + fExamDone + "/" + fExamTarget);
+                if (tvExamPct != null) tvExamPct.setText(fExamPercent + "%");
+
+                // Update proportional bar heights on left
+                float density = getResources().getDisplayMetrics().density;
+                int maxBarHeightPx = (int) (100 * density);
+                int minBarHeightPx = (int) (10 * density);
+
+                View barRecall = findViewById(R.id.barBreakdownActiveRecall);
+                if (barRecall != null) {
+                    int h = Math.max(minBarHeightPx, (int) ((fRecallPercent / 100.0f) * maxBarHeightPx));
+                    barRecall.getLayoutParams().height = h;
+                    barRecall.requestLayout();
+                }
+
+                View barFlash = findViewById(R.id.barBreakdownFlashcards);
+                if (barFlash != null) {
+                    int h = Math.max(minBarHeightPx, (int) ((fFlashPercent / 100.0f) * maxBarHeightPx));
+                    barFlash.getLayoutParams().height = h;
+                    barFlash.requestLayout();
+                }
+
+                View barExam = findViewById(R.id.barBreakdownExam);
+                if (barExam != null) {
+                    int h = Math.max(minBarHeightPx, (int) ((fExamPercent / 100.0f) * maxBarHeightPx));
+                    barExam.getLayoutParams().height = h;
+                    barExam.requestLayout();
+                }
+
                 // Prepare Share Summary text
                 currentShareText = String.format(
                         Locale.getDefault(),
@@ -250,6 +366,8 @@ public class AnalyticsActivity extends AppCompatActivity {
                         finalStreak,
                         finalDailyProgress
                 );
+
+                NotificationHelper.showStudyStatsLockscreenNotification(AnalyticsActivity.this);
             });
         });
     }
@@ -321,10 +439,9 @@ public class AnalyticsActivity extends AppCompatActivity {
                 int totalMins = Math.max(15, (h * 60) + m);
 
                 UserPreferences.setDailyGoalMinutes(this, totalMins);
-                Toast.makeText(this, "Daily goal set to " + totalMins + " minutes (" + (totalMins / 60) + "h " + (totalMins % 60) + "m)", Toast.LENGTH_SHORT).show();
                 loadDynamicAnalytics();
             } catch (Exception e) {
-                Toast.makeText(this, "Invalid number entered.", Toast.LENGTH_SHORT).show();
+                // Invalid number
             }
         });
         builder.setNegativeButton("Cancel", null);
@@ -338,8 +455,6 @@ public class AnalyticsActivity extends AppCompatActivity {
         TimePickerDialog picker = new TimePickerDialog(this, (view, selectedHour, selectedMinute) -> {
             UserPreferences.setReminderTime(this, selectedHour, selectedMinute);
             NotificationHelper.sendNotification(this, false);
-            String timeFormat = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute);
-            Toast.makeText(this, "Daily study reminder set for " + timeFormat, Toast.LENGTH_SHORT).show();
         }, hour, minute, false);
 
         picker.setTitle("Select Daily Study Reminder Time");

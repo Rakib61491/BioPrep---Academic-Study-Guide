@@ -9,13 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bioprep.R;
 import com.example.bioprep.auth.AuthRepository;
-import com.example.bioprep.auth.LocalAuthRepository;
+import com.example.bioprep.auth.FirebaseAuthRepository;
+import com.example.bioprep.utils.FirebaseSyncManager;
+import com.example.bioprep.utils.KeyboardUtils;
 import com.example.bioprep.utils.UserPreferences;
 
 /**
@@ -43,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        authRepository = LocalAuthRepository.getInstance(this);
+        authRepository = FirebaseAuthRepository.getInstance(this);
 
         initViews();
     }
@@ -89,9 +90,17 @@ public class RegisterActivity extends AppCompatActivity {
             btnRegister.setOnClickListener(v -> performRegistration());
         }
 
+        // Auto-scroll input fields above the keyboard when focused
+        KeyboardUtils.autoScrollOnFocus(findViewById(R.id.scrollRegister), etName, etEmail, etPassword, etConfirmPassword);
+
         // Navigate to Sign In
         if (tvGoToSignIn != null) {
-            tvGoToSignIn.setOnClickListener(v -> finish());
+            tvGoToSignIn.setOnClickListener(v -> {
+                Intent intent = new Intent(RegisterActivity.this, SignInActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();
+            });
         }
     }
 
@@ -133,7 +142,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onSuccess(String userName, String email) {
                 btnRegister.setEnabled(true);
                 btnRegister.setText("Create Account");
-                Toast.makeText(RegisterActivity.this, "Account created successfully for " + userName + "!", Toast.LENGTH_SHORT).show();
+
+                FirebaseSyncManager.syncProfileAndPerformance(RegisterActivity.this, null);
 
                 proceedToNextScreen();
             }
@@ -142,7 +152,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onFailure(String errorMessage) {
                 btnRegister.setEnabled(true);
                 btnRegister.setText("Create Account");
-                Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                etEmail.setError(errorMessage);
+                etEmail.requestFocus();
             }
         });
     }

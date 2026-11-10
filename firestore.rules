@@ -1,0 +1,279 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // This security rules file assumes the following data structures:
+    //
+    // Collection: users/{userId}
+    // Document ID: {userId} (Must match authenticated user's uid)
+    // Fields:
+    //   - uid: string (required, 1-128 chars, immutable, matches userId)
+    //   - name: string (required, 1-100 chars)
+    //   - email: string (required, valid email address, max 254 chars)
+    //   - bio: string (optional, 0-500 chars)
+    //   - studentLevel: string (optional, 0-100 chars)
+    //   - avatarPath: string (optional, 0-500 chars)
+    //   - dailyGoalMinutes: number (optional, integer 0-1440)
+    //   - createdAt: timestamp (optional, immutable)
+    //   - lastSyncedAt: timestamp (optional)
+    //   - performance: map (optional, allowed keys: studyTimeSeconds, activeStreak,
+    //                       quizzesCompleted, accuracyRate, totalQuestionsAnswered, totalCorrectAnswers)
+    //
+    // Subcollection: users/{userId}/studySessions/{sessionId}
+    // Fields:
+    //   - subject: string (optional, 0-100 chars)
+    //   - chapterTitle: string (optional, 0-200 chars)
+    //   - chapterId: string (optional, 0-100 chars)
+    //   - sessionType: string (optional, 0-50 chars)
+    //   - durationSeconds: number (optional, >= 0 and <= 86400)
+    //   - timestamp: timestamp (optional, immutable)
+    //   - dateString: string (optional, 0-20 chars)
+    //
+    // Subcollection: users/{userId}/quizAttempts/{attemptId}
+    // Fields:
+    //   - subject: string (optional, 0-100 chars)
+    //   - chapterTitle: string (optional, 0-200 chars)
+    //   - chapterId: string (optional, 0-100 chars)
+    //   - paperId: string (optional, 0-100 chars)
+    //   - score: number (optional, >= 0 and <= 1000)
+    //   - totalQuestions: number (optional, >= 0 and <= 1000)
+    //   - correctCount: number (optional, >= 0 and <= 1000)
+    //   - incorrectCount: number (optional, >= 0 and <= 1000)
+    //   - unansweredCount: number (optional, >= 0 and <= 1000)
+    //   - accuracyPercent: number (optional, 0-100)
+    //   - timeSpentSeconds: number (optional, >= 0 and <= 86400)
+    //   - timestamp: timestamp (optional, immutable)
+    //
+    // Subcollection: users/{userId}/notes/{noteId}
+    // Fields:
+    //   - title: string (required, 1-200 chars)
+    //   - content: string (optional, 0-50000 chars)
+    //   - imageUri: string (optional, 0-1000 chars)
+    //   - createdAt: timestamp | number (optional, immutable)
+    //   - updatedAt: timestamp | number (optional)
+    //   - tags: list of strings (optional, max 20 items, each item <= 50 chars)
+    //   - userId: string (optional, immutable, matches userId)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if authenticated user owns the resource path
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Validate that required fields exist in request payload
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // Validate that only allowed fields exist in request payload
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // Validate that immutable fields are not modified
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    // Validate required string field with length constraints
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+        request.resource.data[field].size() >= minLen &&
+        request.resource.data[field].size() <= maxLen;
+    }
+
+    // Validate optional string field with length constraints
+    function isValidOptionalString(field, minLen, maxLen) {
+      return !(field in request.resource.data) ||
+        (request.resource.data[field] is string &&
+         request.resource.data[field].size() >= minLen &&
+         request.resource.data[field].size() <= maxLen);
+    }
+
+    // Validate optional numeric field with bounds
+    function isValidOptionalNumber(field, minVal, maxVal) {
+      return !(field in request.resource.data) ||
+        (request.resource.data[field] is number &&
+         request.resource.data[field] >= minVal &&
+         request.resource.data[field] <= maxVal);
+    }
+
+    // Validate optional timestamp field
+    function isValidOptionalTimestamp(field) {
+      return !(field in request.resource.data) ||
+        request.resource.data[field] is timestamp;
+    }
+
+    // Validate email format
+    function isValidEmail(email) {
+      return email is string &&
+        email.size() > 3 &&
+        email.size() <= 254 &&
+        email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+
+    // ===============================================================
+    // Domain Validators (Applied on both create and update)
+    // ===============================================================
+
+    // Validate performance sub-map in user profile
+    function isValidPerformance(perf) {
+      return perf is map &&
+        perf.keys().hasOnly([
+          'studyTimeSeconds', 'activeStreak', 'quizzesCompleted',
+          'accuracyRate', 'totalQuestionsAnswered', 'totalCorrectAnswers'
+        ]) &&
+        (!('studyTimeSeconds' in perf) || (perf.studyTimeSeconds is number && perf.studyTimeSeconds >= 0)) &&
+        (!('activeStreak' in perf) || (perf.activeStreak is number && perf.activeStreak >= 0)) &&
+        (!('quizzesCompleted' in perf) || (perf.quizzesCompleted is number && perf.quizzesCompleted >= 0)) &&
+        (!('accuracyRate' in perf) || (perf.accuracyRate is number && perf.accuracyRate >= 0 && perf.accuracyRate <= 100)) &&
+        (!('totalQuestionsAnswered' in perf) || (perf.totalQuestionsAnswered is number && perf.totalQuestionsAnswered >= 0)) &&
+        (!('totalCorrectAnswers' in perf) || (perf.totalCorrectAnswers is number && perf.totalCorrectAnswers >= 0));
+    }
+
+    // Validate user profile document data
+    function isValidUser(userId) {
+      return hasRequiredFields(['uid', 'email', 'name']) &&
+        hasOnlyAllowedFields([
+          'uid', 'name', 'email', 'bio', 'studentLevel',
+          'avatarPath', 'dailyGoalMinutes', 'createdAt',
+          'lastSyncedAt', 'performance'
+        ]) &&
+        request.resource.data.uid is string &&
+        request.resource.data.uid == userId &&
+        request.resource.data.uid == request.auth.uid &&
+        validStringLength('name', 1, 100) &&
+        isValidEmail(request.resource.data.email) &&
+        isValidOptionalString('bio', 0, 500) &&
+        isValidOptionalString('studentLevel', 0, 100) &&
+        isValidOptionalString('avatarPath', 0, 500) &&
+        isValidOptionalNumber('dailyGoalMinutes', 0, 1440) &&
+        isValidOptionalTimestamp('createdAt') &&
+        isValidOptionalTimestamp('lastSyncedAt') &&
+        (!('performance' in request.resource.data) || isValidPerformance(request.resource.data.performance));
+    }
+
+    // Protect immutable user document fields on update
+    function areImmutableUserFieldsUnchanged() {
+      return areImmutableFieldsUnchanged(['uid']) &&
+        (!('createdAt' in resource.data) || ('createdAt' in request.resource.data && request.resource.data.createdAt == resource.data.createdAt));
+    }
+
+    // Validate studySession document
+    function isValidStudySession() {
+      return hasOnlyAllowedFields([
+          'subject', 'chapterTitle', 'chapterId',
+          'sessionType', 'durationSeconds', 'timestamp', 'dateString'
+        ]) &&
+        isValidOptionalString('subject', 0, 100) &&
+        isValidOptionalString('chapterTitle', 0, 200) &&
+        isValidOptionalString('chapterId', 0, 100) &&
+        isValidOptionalString('sessionType', 0, 50) &&
+        isValidOptionalString('dateString', 0, 20) &&
+        isValidOptionalNumber('durationSeconds', 0, 86400) &&
+        isValidOptionalTimestamp('timestamp');
+    }
+
+    // Validate quizAttempt document
+    function isValidQuizAttempt() {
+      return hasOnlyAllowedFields([
+          'subject', 'chapterTitle', 'chapterId', 'paperId',
+          'score', 'totalQuestions', 'correctCount', 'incorrectCount',
+          'unansweredCount', 'accuracyPercent', 'timeSpentSeconds', 'timestamp'
+        ]) &&
+        isValidOptionalString('subject', 0, 100) &&
+        isValidOptionalString('chapterTitle', 0, 200) &&
+        isValidOptionalString('chapterId', 0, 100) &&
+        isValidOptionalString('paperId', 0, 100) &&
+        isValidOptionalNumber('score', 0, 1000) &&
+        isValidOptionalNumber('totalQuestions', 0, 1000) &&
+        isValidOptionalNumber('correctCount', 0, 1000) &&
+        isValidOptionalNumber('incorrectCount', 0, 1000) &&
+        isValidOptionalNumber('unansweredCount', 0, 1000) &&
+        isValidOptionalNumber('accuracyPercent', 0, 100) &&
+        isValidOptionalNumber('timeSpentSeconds', 0, 86400) &&
+        isValidOptionalTimestamp('timestamp');
+    }
+
+    // Validate note document
+    function isValidNote(userId) {
+      return hasRequiredFields(['title']) &&
+        hasOnlyAllowedFields([
+          'title', 'content', 'imageUri', 'createdAt',
+          'updatedAt', 'tags', 'userId'
+        ]) &&
+        validStringLength('title', 1, 200) &&
+        isValidOptionalString('content', 0, 50000) &&
+        isValidOptionalString('imageUri', 0, 1000) &&
+        (!('userId' in request.resource.data) || (request.resource.data.userId == userId && request.resource.data.userId == request.auth.uid)) &&
+        (!('createdAt' in request.resource.data) || (request.resource.data.createdAt is timestamp || (request.resource.data.createdAt is number && request.resource.data.createdAt > 0))) &&
+        (!('updatedAt' in request.resource.data) || (request.resource.data.updatedAt is timestamp || (request.resource.data.updatedAt is number && request.resource.data.updatedAt > 0))) &&
+        (!('tags' in request.resource.data) || (request.resource.data.tags is list && request.resource.data.tags.size() <= 20));
+    }
+
+    // Protect immutable note document fields on update
+    function areImmutableNoteFieldsUnchanged() {
+      return areImmutableFieldsUnchanged(['userId']) &&
+        (!('createdAt' in resource.data) || ('createdAt' in request.resource.data && request.resource.data.createdAt == resource.data.createdAt));
+    }
+
+    // ===============================================================
+    // Rules Definition
+    // ===============================================================
+
+    // Users Collection & User-Scoped Subcollections
+    match /users/{userId} {
+      // User Profile document: private to the owner
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(userId);
+      allow update: if isOwner(userId) && isValidUser(userId) && areImmutableUserFieldsUnchanged();
+      allow delete: if isOwner(userId);
+
+      // Subcollection: studySessions
+      match /studySessions/{sessionId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidStudySession();
+        allow update: if isOwner(userId) && isValidStudySession() && areImmutableFieldsUnchanged(['timestamp']);
+        allow delete: if isOwner(userId);
+      }
+
+      // Subcollection: quizAttempts
+      match /quizAttempts/{attemptId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidQuizAttempt();
+        allow update: if isOwner(userId) && isValidQuizAttempt() && areImmutableFieldsUnchanged(['timestamp']);
+        allow delete: if isOwner(userId);
+      }
+
+      // Subcollection: notes
+      match /notes/{noteId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidNote(userId);
+        allow update: if isOwner(userId) && isValidNote(userId) && areImmutableNoteFieldsUnchanged();
+        allow delete: if isOwner(userId);
+      }
+    }
+
+    // ===============================================================
+    // Default Deny Root Fallback
+    // ===============================================================
+    // Disallow access to any collections or paths not explicitly allowed above
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

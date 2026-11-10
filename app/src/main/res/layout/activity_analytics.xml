@@ -114,18 +114,7 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Three Dots Options on Right -->
-                <ImageView
-                    android:id="@+id/btnAnalyticsMore"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Options"
-                    android:src="@drawable/ic_more_vert_clean"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
+                <!-- Three Dots Options on Right removed -->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Quiz Score Milestone Banner (if arrived from Quiz) -->
@@ -167,7 +156,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <!-- Sun 1 -->
+                <!-- Day -3 -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -176,22 +165,24 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayM3Name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sun"
+                        android:text="FRI"
                         android:textColor="@color/bio_on_surface_variant"
                         android:textSize="11sp" />
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayM3Num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="1"
+                        android:text="7"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 
-                <!-- Mon 2 -->
+                <!-- Day -2 -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -200,22 +191,24 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayM2Name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mon"
+                        android:text="SAT"
                         android:textColor="@color/bio_on_surface_variant"
                         android:textSize="11sp" />
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayM2Num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="2"
+                        android:text="8"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 
-                <!-- Tue 3 -->
+                <!-- Day -1 -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -224,17 +217,19 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayM1Name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tue"
+                        android:text="SUN"
                         android:textColor="@color/bio_on_surface_variant"
                         android:textSize="11sp" />
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayM1Num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="3"
+                        android:text="9"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -248,9 +243,10 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvAnalyticsTodayLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Today"
+                        android:text="TODAY (10)"
                         android:textColor="@color/bio_mint_accent"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -281,7 +277,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Fri 5 -->
+                <!-- Day +1 -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -290,22 +286,24 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayP1Name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Fri"
+                        android:text="TUE"
                         android:textColor="@color/bio_on_surface_variant"
                         android:textSize="11sp" />
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayP1Num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="5"
+                        android:text="11"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 
-                <!-- Sat 6 -->
+                <!-- Day +2 -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -314,22 +312,24 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayP2Name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sat"
+                        android:text="WED"
                         android:textColor="@color/bio_on_surface_variant"
                         android:textSize="11sp" />
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayP2Num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="6"
+                        android:text="12"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 
-                <!-- Sun 7 -->
+                <!-- Day +3 -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -338,17 +338,19 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayP3Name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sun"
+                        android:text="THU"
                         android:textColor="@color/bio_on_surface_variant"
                         android:textSize="11sp" />
 
                     <TextView
+                        android:id="@+id/tvAnalyticsDayP3Num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="7"
+                        android:text="13"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -364,7 +366,7 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Header and Daily/Weekly/Monthly Toggle -->
+                <!-- Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -375,62 +377,17 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Daily Progress\nBreakdown"
+                        android:text="Daily Progress Breakdown"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
-
-                    <!-- Toggle Pills -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:background="@drawable/bg_card_dark_teal"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="2dp">
-
-                        <TextView
-                            android:id="@+id/btnFilterDaily"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/bg_card_white"
-                            android:gravity="center"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"
-                            android:text="Daily"
-                            android:textColor="@color/bio_card_text_dark"
-                            android:textSize="11sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btnFilterWeekly"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"
-                            android:text="Weekly"
-                            android:textColor="@color/white"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:id="@+id/btnFilterMonthly"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"
-                            android:text="Monthly"
-                            android:textColor="@color/white"
-                            android:textSize="11sp" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Progress This Week"
+                    android:text="Today's Target Progress"
                     android:textColor="@color/bio_on_surface_variant"
                     android:textSize="12sp" />
 
@@ -439,54 +396,87 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <!-- Stacked visual bars -->
+                    <!-- Dynamic proportional vertical bars -->
                     <LinearLayout
+                        android:id="@+id/layoutBreakdownBarsContainer"
                         android:layout_width="0dp"
                         android:layout_height="120dp"
-                        android:layout_weight="1.2"
-                        android:gravity="bottom"
-                        android:orientation="horizontal">
+                        android:layout_weight="1.1"
+                        android:gravity="bottom|center_horizontal"
+                        android:orientation="horizontal"
+                        android:paddingBottom="4dp">
 
-                        <!-- Bar 1 -->
+                        <!-- Bar 1: Active Recall (Blue) -->
                         <LinearLayout
-                            android:layout_width="14dp"
-                            android:layout_height="80dp"
-                            android:background="#F59E0B"
-                            android:orientation="vertical" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
 
-                        <!-- Bar 2 -->
-                        <LinearLayout
-                            android:layout_width="14dp"
-                            android:layout_height="100dp"
-                            android:layout_marginStart="8dp"
-                            android:background="#3B82F6"
-                            android:orientation="vertical" />
+                            <View
+                                android:id="@+id/barBreakdownActiveRecall"
+                                android:layout_width="22dp"
+                                android:layout_height="30dp"
+                                android:background="#3B82F6" />
 
-                        <!-- Bar 3 -->
-                        <LinearLayout
-                            android:layout_width="14dp"
-                            android:layout_height="90dp"
-                            android:layout_marginStart="8dp"
-                            android:background="#A855F7"
-                            android:orientation="vertical" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Recall"
+                                android:textColor="@color/bio_on_surface_variant"
+                                android:textSize="10sp" />
+                        </LinearLayout>
 
-                        <!-- Bar 4 -->
+                        <!-- Bar 2: Flashcards (Purple) -->
                         <LinearLayout
-                            android:layout_width="14dp"
-                            android:layout_height="60dp"
-                            android:layout_marginStart="8dp"
-                            android:background="#14B8A6"
-                            android:orientation="vertical" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="16dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
 
-                        <!-- Bar 5 -->
+                            <View
+                                android:id="@+id/barBreakdownFlashcards"
+                                android:layout_width="22dp"
+                                android:layout_height="30dp"
+                                android:background="#A855F7" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Flash"
+                                android:textColor="@color/bio_on_surface_variant"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <!-- Bar 3: Exam Practice (Teal) -->
                         <LinearLayout
-                            android:layout_width="14dp"
-                            android:layout_height="110dp"
-                            android:layout_marginStart="8dp"
-                            android:background="#F59E0B"
-                            android:orientation="vertical" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="16dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <View
+                                android:id="@+id/barBreakdownExam"
+                                android:layout_width="22dp"
+                                android:layout_height="30dp"
+                                android:background="#14B8A6" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Exam"
+                                android:textColor="@color/bio_on_surface_variant"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                     <!-- Breakdown Legend matching Goal Analysis.jpeg -->
@@ -497,41 +487,10 @@
                         android:layout_weight="1.4"
                         android:orientation="vertical">
 
-                        <!-- Quizzes Done -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="8dp"
-                                android:layout_height="8dp"
-                                android:background="#F59E0B" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="6dp"
-                                android:layout_weight="1"
-                                android:text="Quizzes Done\n5/5"
-                                android:textColor="@color/white"
-                                android:textSize="11sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="100%"
-                                android:textColor="#F59E0B"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
                         <!-- Active Recall -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -541,18 +500,20 @@
                                 android:background="#3B82F6" />
 
                             <TextView
+                                android:id="@+id/tvBreakdownActiveRecallProgress"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
                                 android:layout_weight="1"
-                                android:text="Active Recall\n12/15"
+                                android:text="Active Recall\n0/15"
                                 android:textColor="@color/white"
                                 android:textSize="11sp" />
 
                             <TextView
+                                android:id="@+id/tvBreakdownActiveRecallPercent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="80%"
+                                android:text="0%"
                                 android:textColor="#3B82F6"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -562,7 +523,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="10dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -572,18 +533,20 @@
                                 android:background="#A855F7" />
 
                             <TextView
+                                android:id="@+id/tvBreakdownFlashcardsProgress"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
                                 android:layout_weight="1"
-                                android:text="Flash Cards\n35/40"
+                                android:text="Flashcards\n0/30"
                                 android:textColor="@color/white"
                                 android:textSize="11sp" />
 
                             <TextView
+                                android:id="@+id/tvBreakdownFlashcardsPercent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="87%"
+                                android:text="0%"
                                 android:textColor="#A855F7"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -593,28 +556,31 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="10dp"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
                             <View
+                                android:id="@+id/viewLegendExamDot"
                                 android:layout_width="8dp"
                                 android:layout_height="8dp"
                                 android:background="#14B8A6" />
 
                             <TextView
+                                android:id="@+id/tvBreakdownExamProgress"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
                                 android:layout_weight="1"
-                                android:text="Exam Practice\n1/2"
+                                android:text="Exam Practice\n0/20"
                                 android:textColor="@color/white"
                                 android:textSize="11sp" />
 
                             <TextView
+                                android:id="@+id/tvBreakdownExamPercent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="50%"
+                                android:text="0%"
                                 android:textColor="#14B8A6"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />

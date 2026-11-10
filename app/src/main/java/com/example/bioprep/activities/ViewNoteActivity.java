@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -95,7 +94,6 @@ public class ViewNoteActivity extends AppCompatActivity {
                         db.noteDao().deleteNoteById(noteId);
 
                         runOnUiThread(() -> {
-                            Toast.makeText(this, "Note deleted", Toast.LENGTH_SHORT).show();
                             setResult(RESULT_OK);
                             finish();
                         });

@@ -2,206 +2,355 @@ package com.example.bioprep.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bioprep.R;
+import com.example.bioprep.database.AppDatabase;
+import com.example.bioprep.database.SavedItemEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
 
 /**
- * Saved Items Activity implementing Stitch UI Design (Screen ID: e888790cdd02497dba1b515e3036d0a6).
- * Manages bookmarked study notes, active recall drills, flashcard decks, and board question PDFs.
+ * Saved Items Activity implementing Stitch UI Design and dynamic persistent bookmarks:
+ * - Initially empty until saved by the user (Requirements 6, 8, 9, 10).
+ * - "All" pill has white background (#FFFFFF) with dark legible text (Requirement 7).
+ * - Categorized by All, Saved Notes, Saved Active Recall, Saved MCQ / Questions, and Saved Flash Cards.
  */
 public class SavedItemsActivity extends AppCompatActivity {
 
-    private View cardSavedNote;
-    private View cardSavedRecall;
-    private View cardSavedFlashcard;
-    private View cardSavedResource;
+    private LinearLayout layoutSavedItemsContainer;
+    private LinearLayout layoutSavedEmpty;
+    private TextView tvSavedEmptyTitle;
+    private TextView tvSavedEmptyDesc;
+
+    private TextView pillAll;
+    private TextView pillNotes;
+    private TextView pillRecall;
+    private TextView pillMcq;
+    private TextView pillFlashcards;
+
+    private String currentFilterType = "ALL";
+    private String currentSearchQuery = "";
+    private final List<SavedItemEntity> currentLoadedItems = new ArrayList<>();
+
+    private AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_items);
 
+        db = AppDatabase.getInstance(this);
+
         initViews();
         setupFilterPills();
-        setupCardClicks();
         setupNavigation();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadSavedItems();
+    }
+
     private void initViews() {
-        cardSavedNote = findViewById(R.id.cardSavedNote);
-        cardSavedRecall = findViewById(R.id.cardSavedRecall);
-        cardSavedFlashcard = findViewById(R.id.cardSavedFlashcard);
-        cardSavedResource = findViewById(R.id.cardSavedResource);
+        layoutSavedItemsContainer = findViewById(R.id.layoutSavedItemsContainer);
+        layoutSavedEmpty = findViewById(R.id.layoutSavedEmpty);
+        tvSavedEmptyTitle = findViewById(R.id.tvSavedEmptyTitle);
+        tvSavedEmptyDesc = findViewById(R.id.tvSavedEmptyDesc);
+
+        pillAll = findViewById(R.id.pillFilterAll);
+        pillNotes = findViewById(R.id.pillFilterNotes);
+        pillRecall = findViewById(R.id.pillFilterRecall);
+        pillMcq = findViewById(R.id.pillFilterMcq);
+        pillFlashcards = findViewById(R.id.pillFilterFlashcards);
 
         View btnBack = findViewById(R.id.btnSavedBack);
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }
 
-        View btnMore = findViewById(R.id.btnSavedMore);
-        if (btnMore != null) {
-            btnMore.setOnClickListener(v ->
-                    Toast.makeText(this, "Saved Items options: Select all, Clear bookmarks", Toast.LENGTH_SHORT).show());
+        View btnClearAll = findViewById(R.id.btnClearAllBookmarks);
+        if (btnClearAll != null) {
+            btnClearAll.setOnClickListener(v -> {
+                new androidx.appcompat.app.AlertDialog.Builder(SavedItemsActivity.this)
+                        .setTitle("Clear All Saved Items")
+                        .setMessage("Are you sure you want to remove all saved items?")
+                        .setPositiveButton("Clear", (dialog, which) -> {
+                            Executors.newSingleThreadExecutor().execute(() -> {
+                                db.savedItemDao().clearAll();
+                                runOnUiThread(this::loadSavedItems);
+                            });
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            });
         }
 
-        android.widget.EditText etSearchSaved = findViewById(R.id.etSearchSaved);
+        EditText etSearchSaved = findViewById(R.id.etSearchSaved);
         if (etSearchSaved != null) {
-            etSearchSaved.addTextChangedListener(new android.text.TextWatcher() {
+            etSearchSaved.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    filterSavedItems(s.toString());
+                    currentSearchQuery = s.toString().trim().toLowerCase();
+                    renderSavedCards();
                 }
 
                 @Override
-                public void afterTextChanged(android.text.Editable s) {}
+                public void afterTextChanged(Editable s) {}
             });
         }
     }
 
-    private void filterSavedItems(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            cardSavedNote.setVisibility(View.VISIBLE);
-            cardSavedRecall.setVisibility(View.VISIBLE);
-            cardSavedFlashcard.setVisibility(View.VISIBLE);
-            cardSavedResource.setVisibility(View.VISIBLE);
-            return;
-        }
-        String lower = query.toLowerCase().trim();
-        cardSavedNote.setVisibility("photosynthesis".contains(lower) || "note".contains(lower) || "calvin".contains(lower) ? View.VISIBLE : View.GONE);
-        cardSavedRecall.setVisibility("calvin".contains(lower) || "recall".contains(lower) || "drill".contains(lower) ? View.VISIBLE : View.GONE);
-        cardSavedFlashcard.setVisibility("powerhouse".contains(lower) || "mitochondria".contains(lower) || "flashcard".contains(lower) ? View.VISIBLE : View.GONE);
-        cardSavedResource.setVisibility("nctb".contains(lower) || "resource".contains(lower) || "textbook".contains(lower) ? View.VISIBLE : View.GONE);
-    }
-
     private void setupFilterPills() {
-        TextView pillAll = findViewById(R.id.pillFilterAll);
-        TextView pillNotes = findViewById(R.id.pillFilterNotes);
-        TextView pillRecall = findViewById(R.id.pillFilterRecall);
-        TextView pillFlashcards = findViewById(R.id.pillFilterFlashcards);
-        TextView pillMcq = findViewById(R.id.pillFilterMcq);
-
-        View.OnClickListener pillReset = v -> {
-            if (pillAll != null) pillAll.setBackgroundResource(R.drawable.bg_card_dark_teal);
-            if (pillNotes != null) pillNotes.setBackgroundResource(R.drawable.bg_card_dark_teal);
-            if (pillRecall != null) pillRecall.setBackgroundResource(R.drawable.bg_card_dark_teal);
-            if (pillFlashcards != null) pillFlashcards.setBackgroundResource(R.drawable.bg_card_dark_teal);
-            if (pillMcq != null) pillMcq.setBackgroundResource(R.drawable.bg_card_dark_teal);
-            v.setBackgroundResource(R.drawable.bg_pill_cyan);
-        };
+        updatePillsUI();
 
         if (pillAll != null) {
             pillAll.setOnClickListener(v -> {
-                pillReset.onClick(v);
-                cardSavedNote.setVisibility(View.VISIBLE);
-                cardSavedRecall.setVisibility(View.VISIBLE);
-                cardSavedFlashcard.setVisibility(View.VISIBLE);
-                cardSavedResource.setVisibility(View.VISIBLE);
-                Toast.makeText(this, "Showing all saved items", Toast.LENGTH_SHORT).show();
+                currentFilterType = "ALL";
+                updatePillsUI();
+                loadSavedItems();
             });
         }
 
         if (pillNotes != null) {
             pillNotes.setOnClickListener(v -> {
-                pillReset.onClick(v);
-                cardSavedNote.setVisibility(View.VISIBLE);
-                cardSavedRecall.setVisibility(View.GONE);
-                cardSavedFlashcard.setVisibility(View.GONE);
-                cardSavedResource.setVisibility(View.GONE);
-                Toast.makeText(this, "Showing saved notes", Toast.LENGTH_SHORT).show();
+                currentFilterType = "NOTE";
+                updatePillsUI();
+                loadSavedItems();
             });
         }
 
         if (pillRecall != null) {
             pillRecall.setOnClickListener(v -> {
-                pillReset.onClick(v);
-                cardSavedNote.setVisibility(View.GONE);
-                cardSavedRecall.setVisibility(View.VISIBLE);
-                cardSavedFlashcard.setVisibility(View.GONE);
-                cardSavedResource.setVisibility(View.GONE);
-                Toast.makeText(this, "Showing saved active recall", Toast.LENGTH_SHORT).show();
-            });
-        }
-
-        if (pillFlashcards != null) {
-            pillFlashcards.setOnClickListener(v -> {
-                pillReset.onClick(v);
-                cardSavedNote.setVisibility(View.GONE);
-                cardSavedRecall.setVisibility(View.GONE);
-                cardSavedFlashcard.setVisibility(View.VISIBLE);
-                cardSavedResource.setVisibility(View.GONE);
-                Toast.makeText(this, "Showing saved flashcards", Toast.LENGTH_SHORT).show();
+                currentFilterType = "ACTIVE_RECALL";
+                updatePillsUI();
+                loadSavedItems();
             });
         }
 
         if (pillMcq != null) {
             pillMcq.setOnClickListener(v -> {
-                pillReset.onClick(v);
-                cardSavedNote.setVisibility(View.GONE);
-                cardSavedRecall.setVisibility(View.VISIBLE);
-                cardSavedFlashcard.setVisibility(View.VISIBLE);
-                cardSavedResource.setVisibility(View.GONE);
-                Toast.makeText(this, "Showing saved MCQ & questions", Toast.LENGTH_SHORT).show();
+                currentFilterType = "MCQ";
+                updatePillsUI();
+                loadSavedItems();
+            });
+        }
+
+        if (pillFlashcards != null) {
+            pillFlashcards.setOnClickListener(v -> {
+                currentFilterType = "FLASHCARD";
+                updatePillsUI();
+                loadSavedItems();
             });
         }
     }
 
-    private void setupCardClicks() {
-        // Saved Note -> NotesActivity
-        View.OnClickListener noteOpener = v -> startActivity(new Intent(this, NotesActivity.class));
-        if (cardSavedNote != null) cardSavedNote.setOnClickListener(noteOpener);
-        View btnOpenNote = findViewById(R.id.btnOpenSavedNote);
-        if (btnOpenNote != null) btnOpenNote.setOnClickListener(noteOpener);
+    private void updatePillsUI() {
+        // Requirement 7: "In 'Saved' page, 'All' button background color should be white. It must show all the saved button."
+        if (pillAll != null) {
+            if ("ALL".equals(currentFilterType)) {
+                pillAll.setBackgroundResource(R.drawable.bg_pill_white);
+                pillAll.setTextColor(0xFF0F172A); // Dark readable text on white
+            } else {
+                pillAll.setBackgroundResource(R.drawable.bg_card_dark_teal);
+                pillAll.setTextColor(0xFFFFFFFF);
+            }
+        }
 
-        // Saved Recall -> ActiveRecallActivity
-        View.OnClickListener recallOpener = v -> startActivity(new Intent(this, ActiveRecallActivity.class));
-        if (cardSavedRecall != null) cardSavedRecall.setOnClickListener(recallOpener);
-        View btnOpenRecall = findViewById(R.id.btnOpenSavedRecall);
-        if (btnOpenRecall != null) btnOpenRecall.setOnClickListener(recallOpener);
+        TextView[] otherPills = {pillNotes, pillRecall, pillMcq, pillFlashcards};
+        String[] types = {"NOTE", "ACTIVE_RECALL", "MCQ", "FLASHCARD"};
 
-        // Saved Flashcard -> FlashcardsActivity
-        View.OnClickListener flashcardOpener = v -> startActivity(new Intent(this, FlashcardsActivity.class));
-        if (cardSavedFlashcard != null) cardSavedFlashcard.setOnClickListener(flashcardOpener);
-        View btnOpenFlashcard = findViewById(R.id.btnOpenSavedFlashcard);
-        if (btnOpenFlashcard != null) btnOpenFlashcard.setOnClickListener(flashcardOpener);
+        for (int i = 0; i < otherPills.length; i++) {
+            TextView p = otherPills[i];
+            if (p == null) continue;
+            if (types[i].equals(currentFilterType)) {
+                p.setBackgroundResource(R.drawable.bg_pill_cyan);
+                p.setTextColor(0xFF0A382C);
+            } else {
+                p.setBackgroundResource(R.drawable.bg_card_dark_teal);
+                p.setTextColor(0xFFFFFFFF);
+            }
+        }
+    }
 
-        // Saved Resource -> ResourcesActivity
-        View.OnClickListener resourceOpener = v -> startActivity(new Intent(this, ResourcesActivity.class));
-        if (cardSavedResource != null) cardSavedResource.setOnClickListener(resourceOpener);
-        View btnOpenResource = findViewById(R.id.btnOpenSavedResource);
-        if (btnOpenResource != null) btnOpenResource.setOnClickListener(resourceOpener);
+    private void loadSavedItems() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<SavedItemEntity> items;
+            if ("ALL".equals(currentFilterType)) {
+                items = db.savedItemDao().getAllSavedItems();
+            } else {
+                items = db.savedItemDao().getSavedItemsByType(currentFilterType);
+            }
 
-        // Bookmark ribbons toggle
-        View.OnClickListener bookmarkToggle = v -> Toast.makeText(this, "Bookmark updated in your library", Toast.LENGTH_SHORT).show();
-        if (findViewById(R.id.btnBookmarkItem1) != null) findViewById(R.id.btnBookmarkItem1).setOnClickListener(bookmarkToggle);
-        if (findViewById(R.id.btnBookmarkItem2) != null) findViewById(R.id.btnBookmarkItem2).setOnClickListener(bookmarkToggle);
-        if (findViewById(R.id.btnBookmarkItem3) != null) findViewById(R.id.btnBookmarkItem3).setOnClickListener(bookmarkToggle);
-        if (findViewById(R.id.btnDownloadSavedPaper) != null) findViewById(R.id.btnDownloadSavedPaper).setOnClickListener(v ->
-                Toast.makeText(this, "Downloading 2025 Past Paper PDF (1.2 MB)...", Toast.LENGTH_SHORT).show());
+            runOnUiThread(() -> {
+                currentLoadedItems.clear();
+                if (items != null) {
+                    currentLoadedItems.addAll(items);
+                }
+                renderSavedCards();
+            });
+        });
+    }
+
+    private void renderSavedCards() {
+        if (layoutSavedItemsContainer == null) return;
+        layoutSavedItemsContainer.removeAllViews();
+
+        List<SavedItemEntity> filtered = new ArrayList<>();
+        for (SavedItemEntity entity : currentLoadedItems) {
+            if (currentSearchQuery.isEmpty() ||
+                    (entity.getTitle() != null && entity.getTitle().toLowerCase().contains(currentSearchQuery)) ||
+                    (entity.getContent() != null && entity.getContent().toLowerCase().contains(currentSearchQuery)) ||
+                    (entity.getExtraInfo() != null && entity.getExtraInfo().toLowerCase().contains(currentSearchQuery))) {
+                filtered.add(entity);
+            }
+        }
+
+        if (filtered.isEmpty()) {
+            if (layoutSavedEmpty != null) {
+                layoutSavedEmpty.setVisibility(View.VISIBLE);
+                if (tvSavedEmptyTitle != null) {
+                    if ("ALL".equals(currentFilterType)) {
+                        tvSavedEmptyTitle.setText("No Saved Items Yet");
+                    } else if ("NOTE".equals(currentFilterType)) {
+                        tvSavedEmptyTitle.setText("No Saved Notes Yet");
+                    } else if ("ACTIVE_RECALL".equals(currentFilterType)) {
+                        tvSavedEmptyTitle.setText("No Saved Active Recall Drills");
+                    } else if ("MCQ".equals(currentFilterType)) {
+                        tvSavedEmptyTitle.setText("No Saved MCQs Yet");
+                    } else if ("FLASHCARD".equals(currentFilterType)) {
+                        tvSavedEmptyTitle.setText("No Saved Flashcards Yet");
+                    }
+                }
+            }
+            return;
+        }
+
+        if (layoutSavedEmpty != null) {
+            layoutSavedEmpty.setVisibility(View.GONE);
+        }
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        for (SavedItemEntity item : filtered) {
+            View card = inflater.inflate(R.layout.item_saved_card, layoutSavedItemsContainer, false);
+
+            TextView tvType = card.findViewById(R.id.tvSavedItemType);
+            TextView tvExtra = card.findViewById(R.id.tvSavedItemExtra);
+            TextView tvTitle = card.findViewById(R.id.tvSavedItemTitle);
+            TextView tvContent = card.findViewById(R.id.tvSavedItemContent);
+            ImageView btnRemove = card.findViewById(R.id.btnRemoveSavedItem);
+
+            if (tvType != null) {
+                String typeDisplay;
+                switch (item.getType()) {
+                    case "FLASHCARD":
+                        typeDisplay = "Flashcard";
+                        break;
+                    case "MCQ":
+                        typeDisplay = "MCQ / Practice";
+                        break;
+                    case "ACTIVE_RECALL":
+                        typeDisplay = "Active Recall";
+                        break;
+                    case "NOTE":
+                        typeDisplay = "Saved Note";
+                        break;
+                    default:
+                        typeDisplay = item.getType();
+                        break;
+                }
+                tvType.setText(typeDisplay);
+            }
+
+            if (tvExtra != null) {
+                tvExtra.setText(item.getExtraInfo() != null ? item.getExtraInfo() : "HSC Biology");
+            }
+
+            if (tvTitle != null) {
+                tvTitle.setText(item.getTitle() != null ? item.getTitle() : "Untitled Item");
+            }
+
+            if (tvContent != null) {
+                tvContent.setText(item.getContent() != null ? item.getContent() : "");
+            }
+
+            // Remove/Unsave item handler
+            if (btnRemove != null) {
+                btnRemove.setOnClickListener(v -> {
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        db.savedItemDao().delete(item);
+                        runOnUiThread(this::loadSavedItems);
+                    });
+                });
+            }
+
+            // Card click: open corresponding module
+            card.setOnClickListener(v -> {
+                Intent targetIntent;
+                switch (item.getType()) {
+                    case "FLASHCARD":
+                        targetIntent = new Intent(SavedItemsActivity.this, ChapterActivity.class);
+                        targetIntent.putExtra(ChapterActivity.EXTRA_MODE, ChapterActivity.MODE_FLASHCARDS);
+                        break;
+                    case "MCQ":
+                        targetIntent = new Intent(SavedItemsActivity.this, ChapterActivity.class);
+                        targetIntent.putExtra(ChapterActivity.EXTRA_MODE, ChapterActivity.MODE_EXAM);
+                        break;
+                    case "ACTIVE_RECALL":
+                        targetIntent = new Intent(SavedItemsActivity.this, ChapterActivity.class);
+                        targetIntent.putExtra(ChapterActivity.EXTRA_MODE, ChapterActivity.MODE_ACTIVE_RECALL);
+                        break;
+                    case "NOTE":
+                        targetIntent = new Intent(SavedItemsActivity.this, NotesActivity.class);
+                        break;
+                    default:
+                        targetIntent = new Intent(SavedItemsActivity.this, ChapterActivity.class);
+                        break;
+                }
+                startActivity(targetIntent);
+            });
+
+            layoutSavedItemsContainer.addView(card);
+        }
     }
 
     private void setupNavigation() {
-        findViewById(R.id.navTabHome).setOnClickListener(v -> {
+        View navHome = findViewById(R.id.navTabHome);
+        if (navHome != null) navHome.setOnClickListener(v -> {
             Intent intent = new Intent(this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            finish();
         });
 
-        findViewById(R.id.navTabStudy).setOnClickListener(v ->
-                startActivity(new Intent(this, ChapterActivity.class)));
+        View navStudy = findViewById(R.id.navTabStudy);
+        if (navStudy != null) navStudy.setOnClickListener(v -> {
+            startActivity(new Intent(this, ChapterActivity.class));
+            finish();
+        });
 
-        findViewById(R.id.navTabSaved).setOnClickListener(v ->
-                Toast.makeText(this, "Already on Saved Items", Toast.LENGTH_SHORT).show());
+        View navSaved = findViewById(R.id.navTabSaved);
+        if (navSaved != null) navSaved.setOnClickListener(v -> {});
 
-        findViewById(R.id.navTabProfile).setOnClickListener(v ->
-                startActivity(new Intent(this, ProfileActivity.class)));
+        View navProfile = findViewById(R.id.navTabProfile);
+        if (navProfile != null) navProfile.setOnClickListener(v -> {
+            startActivity(new Intent(this, ProfileActivity.class));
+            finish();
+        });
     }
 }
-

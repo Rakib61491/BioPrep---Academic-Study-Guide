@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -21,6 +20,7 @@ import androidx.core.content.FileProvider;
 import com.example.bioprep.R;
 import com.example.bioprep.database.AppDatabase;
 import com.example.bioprep.database.NoteEntity;
+import com.example.bioprep.utils.KeyboardUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -90,6 +90,9 @@ public class AddNoteActivity extends AppCompatActivity {
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }
+
+        // Auto-scroll input fields above the keyboard when focused
+        KeyboardUtils.autoScrollOnFocus(findViewById(R.id.scrollAddNote), etNoteTitle, etNoteContent);
     }
 
     private void setupListeners() {
@@ -123,7 +126,7 @@ public class AddNoteActivity extends AppCompatActivity {
             );
             cameraLauncher.launch(cameraCaptureUri);
         } catch (Exception e) {
-            Toast.makeText(this, "Could not open camera: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            // Error opening camera
         }
     }
 
@@ -151,7 +154,7 @@ public class AddNoteActivity extends AppCompatActivity {
             ivNoteImagePreview.setImageBitmap(bitmap);
             frameImagePreview.setVisibility(View.VISIBLE);
         } catch (Exception e) {
-            Toast.makeText(this, "Error processing image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            // Error processing image
         }
     }
 
@@ -161,7 +164,8 @@ public class AddNoteActivity extends AppCompatActivity {
 
         // Validation: prevent completely empty notes
         if (title.isEmpty() && content.isEmpty()) {
-            Toast.makeText(this, "Please enter a title or note content.", Toast.LENGTH_SHORT).show();
+            etNoteTitle.setError("Please enter a title or note content");
+            etNoteTitle.requestFocus();
             return;
         }
 
@@ -181,7 +185,6 @@ public class AddNoteActivity extends AppCompatActivity {
             db.noteDao().insertNote(note);
 
             runOnUiThread(() -> {
-                Toast.makeText(AddNoteActivity.this, "✓ Note saved to notebook!", Toast.LENGTH_SHORT).show();
                 setResult(RESULT_OK);
                 finish();
             });

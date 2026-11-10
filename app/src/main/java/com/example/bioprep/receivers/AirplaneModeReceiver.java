@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
-import android.widget.Toast;
+import android.util.Log;
 
 /**
  * BroadcastReceiver conforming directly to Lab 08 Topic 9.
@@ -24,7 +24,7 @@ public class AirplaneModeReceiver extends BroadcastReceiver {
                     ? "Airplane Mode is ON (Distraction-Free Study Mode Active) ✈️"
                     : "Airplane Mode is OFF (Online Sync Restored) 🌐";
 
-            Toast.makeText(context, statusMessage, Toast.LENGTH_LONG).show();
+            Log.i("AirplaneModeReceiver", statusMessage);
         }
     }
 

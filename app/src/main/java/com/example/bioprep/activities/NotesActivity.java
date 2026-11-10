@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bioprep.R;
 import com.example.bioprep.database.AppDatabase;
 import com.example.bioprep.database.NoteEntity;
+import com.example.bioprep.database.SavedItemEntity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -130,7 +131,6 @@ public class NotesActivity extends AppCompatActivity {
         if (filtered.isEmpty()) {
             if (layoutNotesEmpty != null) {
                 layoutNotesEmpty.setVisibility(View.VISIBLE);
-                TextView tvEmptyTitle = layoutNotesEmpty.findViewById(R.id.layoutNotesEmpty);
             }
             return;
         }
@@ -175,6 +175,39 @@ public class NotesActivity extends AppCompatActivity {
                 intent.putExtra(ViewNoteActivity.EXTRA_NOTE_ID, note.getId());
                 addNoteLauncher.launch(intent);
             });
+
+            TextView btnSaveNoteCard = card.findViewById(R.id.btnSaveNoteCard);
+            if (btnSaveNoteCard != null) {
+                String noteIdStr = String.valueOf(note.getId());
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+                    int count = db.savedItemDao().isItemSaved("NOTE", noteIdStr);
+                    boolean isSaved = (count > 0);
+                    runOnUiThread(() -> btnSaveNoteCard.setText(isSaved ? "⭐" : "🔖"));
+                });
+
+                btnSaveNoteCard.setOnClickListener(v -> {
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+                        int count = db.savedItemDao().isItemSaved("NOTE", noteIdStr);
+                        if (count > 0) {
+                            db.savedItemDao().deleteByTypeAndItemId("NOTE", noteIdStr);
+                            runOnUiThread(() -> btnSaveNoteCard.setText("🔖"));
+                        } else {
+                            SavedItemEntity saved = new SavedItemEntity(
+                                    "NOTE",
+                                    noteIdStr,
+                                    note.getTitle(),
+                                    note.getContent() != null ? note.getContent() : "",
+                                    "Personal Study Note",
+                                    System.currentTimeMillis()
+                            );
+                            db.savedItemDao().insert(saved);
+                            runOnUiThread(() -> btnSaveNoteCard.setText("⭐"));
+                        }
+                    });
+                });
+            }
 
             layoutNotesListContainer.addView(card);
         }

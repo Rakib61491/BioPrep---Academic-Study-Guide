@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "832243646313",
+    "firebase_url": "https://bioprep-hsc-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "bioprep-hsc",
+    "storage_bucket": "bioprep-hsc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832243646313:android:5ae01f68f32e1dd31587f8",
+        "android_client_info": {
+          "package_name": "com.example.bioprep"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw16CMhKW_OKpxt_TrpcI_oOkMnSDdlXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

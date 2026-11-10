@@ -33,6 +33,12 @@ public interface PracticeDao {
     @Query("SELECT COALESCE(SUM(correctCount + incorrectCount), 0) FROM practice_attempts")
     int getTotalAnsweredQuestions();
 
+    @Query("SELECT COALESCE(SUM(correctCount + incorrectCount), 0) FROM practice_attempts WHERE timestamp >= :sinceMillis")
+    int getQuestionsAnsweredSince(long sinceMillis);
+
+    @Query("SELECT COUNT(*) FROM practice_attempts WHERE timestamp >= :sinceMillis")
+    int getCompletedQuizCountSince(long sinceMillis);
+
     @Query("SELECT COUNT(*) FROM practice_attempts")
     int getCompletedQuizCount();
 

@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -79,20 +78,7 @@ public class ResourcesActivity extends AppCompatActivity {
             btnBack.setOnClickListener(v -> finish());
         }
 
-        View btnOptions = findViewById(R.id.btnResourcesOptions);
-        if (btnOptions != null) {
-            btnOptions.setOnClickListener(v -> {
-                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(ResourcesActivity.this, v);
-                popup.getMenu().add("Check for Updates");
-                popup.getMenu().add("Offline Downloads");
-                popup.getMenu().add("Help & Support");
-                popup.setOnMenuItemClickListener(item -> {
-                    Toast.makeText(ResourcesActivity.this, item.getTitle() + " selected", Toast.LENGTH_SHORT).show();
-                    return true;
-                });
-                popup.show();
-            });
-        }
+
 
         bindViews();
         setupWebsiteAndVideoClicks();
@@ -257,8 +243,6 @@ public class ResourcesActivity extends AppCompatActivity {
         if (progressBar != null) progressBar.setProgress(0);
         if (tvProgress != null) tvProgress.setText("0%");
 
-        Toast.makeText(this, "Starting download: " + title, Toast.LENGTH_SHORT).show();
-
         ValueAnimator animator = ValueAnimator.ofInt(0, 100);
         animator.setDuration(5200); // 5.2 seconds
         animator.setInterpolator(new LinearInterpolator());
@@ -317,7 +301,6 @@ public class ResourcesActivity extends AppCompatActivity {
                     actionButton.setOnClickListener(v -> openPdfViewer(destFile.getAbsolutePath(), title));
 
                     NotificationHelper.sendNotification(this, false);
-                    Toast.makeText(ResourcesActivity.this, title + " downloaded successfully!", Toast.LENGTH_SHORT).show();
                 });
             } catch (Exception e) {
                 mainHandler.post(() -> {
@@ -325,7 +308,6 @@ public class ResourcesActivity extends AppCompatActivity {
                     actionButton.setEnabled(true);
                     actionButton.setAlpha(1.0f);
                     actionButton.setText("Download");
-                    Toast.makeText(ResourcesActivity.this, "Download failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
         });

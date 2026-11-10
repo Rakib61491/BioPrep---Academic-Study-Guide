@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -37,7 +36,7 @@ public class BackgroundAudioService extends Service {
             } else if (!myPlayer.isPlaying()) {
                 myPlayer.start();
             }
-            Toast.makeText(this, "Focus Audio Service Started (START_STICKY)", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Focus Audio Service Started (START_STICKY)");
         } catch (Exception e) {
             Log.e(TAG, "Error playing audio: " + e.getMessage());
         }
@@ -57,7 +56,7 @@ public class BackgroundAudioService extends Service {
             }
             myPlayer = null;
         }
-        Toast.makeText(this, "Focus Audio Service Stopped", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Focus Audio Service Stopped");
         super.onDestroy();
     }
 

@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -122,7 +121,6 @@ public class PdfReaderActivity extends AppCompatActivity {
                 if (targetFile == null || !targetFile.exists()) {
                     mainHandler.post(() -> {
                         pbPdfLoading.setVisibility(View.GONE);
-                        Toast.makeText(this, "Could not locate PDF file.", Toast.LENGTH_SHORT).show();
                         finish();
                     });
                     return;
@@ -154,7 +152,6 @@ public class PdfReaderActivity extends AppCompatActivity {
             } catch (Exception e) {
                 mainHandler.post(() -> {
                     pbPdfLoading.setVisibility(View.GONE);
-                    Toast.makeText(this, "Failed to open PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     finish();
                 });
             }
