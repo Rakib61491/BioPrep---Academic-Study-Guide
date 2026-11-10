@@ -40,6 +40,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.database)
 
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
@@ -47,6 +48,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.material)
     implementation(libs.recyclerview)
+    implementation(libs.glide)
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
     implementation(libs.work.runtime)

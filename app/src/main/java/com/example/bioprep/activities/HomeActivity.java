@@ -165,11 +165,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
 
+        // Card 6: Bio Gallery (Zoology Specimens from iNaturalist)
+        View cardBioGallery = findViewById(R.id.cardBioGallery);
+        if (cardBioGallery != null) {
+            cardBioGallery.setOnClickListener(v -> {
+                Intent intent = new Intent(getApplicationContext(), BioGalleryActivity.class);
+                startActivity(intent);
+            });
+        }
+
         // Daily Quiz Challenge: "Learn More" button
         View btnLearnMoreQuiz = findViewById(R.id.btnLearnMoreQuiz);
         if (btnLearnMoreQuiz != null) {
             btnLearnMoreQuiz.setOnClickListener(v -> {
                 Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
+                intent.putExtra(QuizActivity.EXTRA_IS_DAILY_CHALLENGE, true);
                 startActivity(intent);
             });
         }
@@ -177,6 +187,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (bannerDailyQuiz != null) {
             bannerDailyQuiz.setOnClickListener(v -> {
                 Intent intent = new Intent(getApplicationContext(), QuizActivity.class);
+                intent.putExtra(QuizActivity.EXTRA_IS_DAILY_CHALLENGE, true);
                 startActivity(intent);
             });
         }

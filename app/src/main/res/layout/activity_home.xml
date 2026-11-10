@@ -501,6 +501,63 @@
 
             </LinearLayout>
 
+            <!-- Row 3: Bio Gallery Option matching Features section -->
+            <LinearLayout
+                android:id="@+id/cardBioGallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_card_white"
+                android:clickable="true"
+                android:elevation="4dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_pill_dark_teal"
+                    android:gravity="center"
+                    android:text="🦁"
+                    android:textSize="22sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bio Gallery"
+                        android:textColor="@color/bio_card_text_dark"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Explore Live Zoology Specimens &amp; Species"
+                        android:textColor="@color/bio_card_text_muted"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="Open Bio Gallery"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="@color/bio_card_text_dark" />
+            </LinearLayout>
+
             <!-- Daily Quiz Challenge Banner matching Home.jpeg -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bannerDailyQuiz"

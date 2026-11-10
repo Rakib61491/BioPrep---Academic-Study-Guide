@@ -30,4 +30,7 @@ public interface RecentActivityDao {
 
     @Query("DELETE FROM recent_activities")
     void clearAll();
+
+    @Query("SELECT COUNT(*) FROM recent_activities WHERE activityType = :activityType AND chapterId = :chapterId")
+    int checkActivityExists(String activityType, String chapterId);
 }

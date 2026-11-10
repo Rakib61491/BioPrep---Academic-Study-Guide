@@ -47,5 +47,8 @@ public interface PracticeDao {
 
     @Query("DELETE FROM practice_answers")
     void clearAllAnswers();
+
+    @Query("SELECT COUNT(*) FROM practice_attempts WHERE timestamp = :timestamp AND chapterId = :chapterId")
+    int checkAttemptExists(long timestamp, String chapterId);
 }
 

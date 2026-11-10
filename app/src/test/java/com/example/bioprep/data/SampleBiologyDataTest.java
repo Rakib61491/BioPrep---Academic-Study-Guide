@@ -118,5 +118,18 @@ public class SampleBiologyDataTest {
             assertEquals(expectedZoology[i], zooChapters.get(i).getTitle());
         }
     }
+
+    @Test
+    public void testGetAllQuestionsAcrossMultipleChapters() {
+        List<Question> all = SampleBiologyData.getAllQuestions();
+        assertNotNull(all);
+        assertTrue("Total questions should be at least 20", all.size() >= 20);
+
+        java.util.Set<String> distinctChapters = new java.util.HashSet<>();
+        for (Question q : all) {
+            distinctChapters.add(q.getChapterId());
+        }
+        assertTrue("Questions should span across multiple chapters", distinctChapters.size() >= 10);
+    }
 }
 

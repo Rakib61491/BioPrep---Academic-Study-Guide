@@ -23,6 +23,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.BioPrepAcademicStudyGuide">
 
         <!-- Screen 1: Loading Screen (Stitch UI 5e7d8e45d1a747eb843fd7a0f5d2c67d & Topic 7 RelativeLayout) -->
@@ -160,6 +161,11 @@
 
         <activity
             android:name=".activities.RecentActivitiesActivity"
+            android:exported="false" />
+
+        <!-- Bio Gallery Screen (Zoology Specimens from iNaturalist) -->
+        <activity
+            android:name=".activities.BioGalleryActivity"
             android:exported="false" />
 
         <!-- Bound Study Timer Service -->

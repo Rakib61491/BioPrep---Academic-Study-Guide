@@ -31,5 +31,8 @@ public interface NoteDao {
 
     @Query("DELETE FROM notes")
     void clearAllNotes();
+
+    @Query("SELECT COUNT(*) FROM notes WHERE title = :title AND createdAt = :createdAt")
+    int checkNoteExists(String title, long createdAt);
 }
 

@@ -29,12 +29,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bioprep.R;
+import com.example.bioprep.data.SampleBiologyData;
 import com.example.bioprep.database.AppDatabase;
+import com.example.bioprep.database.ChapterEntity;
 import com.example.bioprep.database.PracticeAnswerEntity;
 import com.example.bioprep.database.PracticeAttemptEntity;
 import com.example.bioprep.database.QuestionEntity;
 import com.example.bioprep.database.SavedItemEntity;
 import com.example.bioprep.database.StudySessionEntity;
+import com.example.bioprep.models.Chapter;
+import com.example.bioprep.models.Question;
 import com.example.bioprep.receivers.TimerUpdateReceiver;
 import com.example.bioprep.services.StudyTimerService;
 import com.example.bioprep.utils.FirebaseSyncManager;
@@ -43,8 +47,11 @@ import com.example.bioprep.utils.RecentActivityHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -65,6 +72,7 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
     public static final String EXTRA_PAPER_ID = "extra_paper_id";
     public static final String EXTRA_CHAPTER_ID = "extra_chapter_id";
     public static final String EXTRA_CHAPTER_TITLE = "extra_chapter_title";
+    public static final String EXTRA_IS_DAILY_CHALLENGE = "extra_is_daily_challenge";
 
     public static final String EXTRA_TOTAL = "extra_total";
     public static final String EXTRA_CORRECT = "extra_correct";
@@ -81,8 +89,10 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
     private String paperId;
     private String chapterId;
     private String chapterTitle;
+    private boolean isDailyChallenge = false;
 
     // UI elements
+    private TextView tvQuizMainTitle;
     private TextView tvChapterTitle;
     private TextView tvProgress;
     private TextView tvTimerRemaining;
@@ -146,9 +156,15 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         final List<String> shuffledOptions;
         final int correctOptionIndex;
         int selectedOption = -1; // -1 if not answered, 0..3
+        final String chapterDisplayName;
 
         ExamItem(QuestionEntity entity) {
+            this(entity, null);
+        }
+
+        ExamItem(QuestionEntity entity, String chapterDisplayName) {
             this.entity = entity;
+            this.chapterDisplayName = chapterDisplayName;
             List<String> rawOptions = new ArrayList<>();
             rawOptions.add(entity.getOptionA() != null ? entity.getOptionA() : "");
             rawOptions.add(entity.getOptionB() != null ? entity.getOptionB() : "");
@@ -173,13 +189,25 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        paperId = getIntent().getStringExtra(EXTRA_PAPER_ID);
-        chapterId = getIntent().getStringExtra(EXTRA_CHAPTER_ID);
-        chapterTitle = getIntent().getStringExtra(EXTRA_CHAPTER_TITLE);
+        String passedChapterId = getIntent().getStringExtra(EXTRA_CHAPTER_ID);
+        String passedChapterTitle = getIntent().getStringExtra(EXTRA_CHAPTER_TITLE);
+        String passedPaperId = getIntent().getStringExtra(EXTRA_PAPER_ID);
 
-        if (paperId == null) paperId = "botany";
-        if (chapterId == null) chapterId = "bot_ch01";
-        if (chapterTitle == null) chapterTitle = "Chapter 1: Cell and its Structure";
+        isDailyChallenge = getIntent().getBooleanExtra(EXTRA_IS_DAILY_CHALLENGE, false)
+                || "daily_challenge".equalsIgnoreCase(passedChapterId)
+                || "daily_quiz".equalsIgnoreCase(passedChapterId)
+                || "Daily Quiz Challenge".equalsIgnoreCase(passedChapterTitle)
+                || passedChapterId == null;
+
+        if (isDailyChallenge) {
+            paperId = "mixed";
+            chapterId = "daily_challenge";
+            chapterTitle = "Daily Quiz Challenge";
+        } else {
+            paperId = passedPaperId != null ? passedPaperId : "botany";
+            chapterId = passedChapterId != null ? passedChapterId : "bot_ch01";
+            chapterTitle = passedChapterTitle != null ? passedChapterTitle : "Chapter 1: Cell and its Structure";
+        }
 
         // Record recent activity
         RecentActivityHelper.recordActivity(
@@ -254,6 +282,7 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
     }
 
     private void initViews() {
+        tvQuizMainTitle = findViewById(R.id.tvQuizMainTitle);
         tvChapterTitle = findViewById(R.id.tvChapterTitle);
         tvProgress = findViewById(R.id.tvProgress);
         tvTimerRemaining = findViewById(R.id.tvTimerRemaining);
@@ -291,8 +320,17 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
         btnTimerResume = findViewById(R.id.btnTimerResume);
         btnTimerStop = findViewById(R.id.btnTimerStop);
 
-        if (tvChapterTitle != null) {
-            tvChapterTitle.setText(chapterTitle);
+        if (isDailyChallenge) {
+            if (tvQuizMainTitle != null) {
+                tvQuizMainTitle.setText("Daily Quiz Challenge");
+            }
+            if (tvChapterTitle != null) {
+                tvChapterTitle.setText("Random Chapters • All Syllabus");
+            }
+        } else {
+            if (tvChapterTitle != null) {
+                tvChapterTitle.setText(chapterTitle);
+            }
         }
 
         View btnBack = findViewById(R.id.btnQuizBack);
@@ -372,26 +410,131 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
     private void loadQuestionsAndStartExam() {
         executor.execute(() -> {
             AppDatabase db = AppDatabase.getInstance(this);
-            List<QuestionEntity> pool = db.questionDao().getQuestionsByChapter(chapterId);
 
-            // If empty (e.g. mock exam or ID mismatch), try finding questions
-            if (pool == null || pool.isEmpty()) {
-                pool = db.questionDao().getAllQuestions();
+            // Pre-load chapter metadata for displaying human-friendly chapter names per question
+            Map<String, String> chapterTitleMap = new HashMap<>();
+            try {
+                List<ChapterEntity> allChs = db.chapterDao().getAllChapters();
+                if (allChs != null && !allChs.isEmpty()) {
+                    for (ChapterEntity c : allChs) {
+                        String paperStr = "botany".equalsIgnoreCase(c.getPaper()) ? "Botany" : "Zoology";
+                        chapterTitleMap.put(c.getId(), paperStr + " • Chapter " + c.getChapterNumber() + ": " + c.getTitleEn());
+                    }
+                }
+            } catch (Exception ignored) {}
+
+            // Fallback for chapter metadata from SampleBiologyData
+            if (chapterTitleMap.isEmpty()) {
+                for (Chapter c : SampleBiologyData.getChapters(SampleBiologyData.PAPER_BIOLOGY_1)) {
+                    chapterTitleMap.put(c.getId(), "Botany • Chapter " + c.getChapterNumber() + ": " + c.getTitle());
+                }
+                for (Chapter c : SampleBiologyData.getChapters(SampleBiologyData.PAPER_BIOLOGY_2)) {
+                    chapterTitleMap.put(c.getId(), "Zoology • Chapter " + c.getChapterNumber() + ": " + c.getTitle());
+                }
             }
 
             List<ExamItem> items = new ArrayList<>();
-            if (pool != null && !pool.isEmpty()) {
-                List<QuestionEntity> shuffledPool = new ArrayList<>(pool);
-                Collections.shuffle(shuffledPool);
 
-                // Select 20 to 25 random questions
-                int targetCount = Math.min(25, Math.max(20, Math.min(25, shuffledPool.size())));
-                if (targetCount > shuffledPool.size()) {
-                    targetCount = shuffledPool.size();
+            if (isDailyChallenge) {
+                // DAILY QUIZ CHALLENGE: Pull questions from random chapters across the entire syllabus
+                List<QuestionEntity> allQuestions = db.questionDao().getAllQuestions();
+                if (allQuestions == null || allQuestions.isEmpty()) {
+                    List<Question> sampleAll = SampleBiologyData.getAllQuestions();
+                    allQuestions = new ArrayList<>();
+                    for (Question q : sampleAll) {
+                        allQuestions.add(new QuestionEntity(
+                                String.valueOf(q.getId()),
+                                q.getChapterId(),
+                                q.getPaper(),
+                                q.getQuestionText(),
+                                q.getOptions().size() > 0 ? q.getOptions().get(0) : "",
+                                q.getOptions().size() > 1 ? q.getOptions().get(1) : "",
+                                q.getOptions().size() > 2 ? q.getOptions().get(2) : "",
+                                q.getOptions().size() > 3 ? q.getOptions().get(3) : "",
+                                q.getCorrectOptionIndex(),
+                                q.getExplanation()
+                        ));
+                    }
                 }
 
-                for (int i = 0; i < targetCount; i++) {
-                    items.add(new ExamItem(shuffledPool.get(i)));
+                if (!allQuestions.isEmpty()) {
+                    // Group questions by chapterId
+                    Map<String, List<QuestionEntity>> questionsByChapter = new LinkedHashMap<>();
+                    for (QuestionEntity q : allQuestions) {
+                        String cId = q.getChapterId() != null ? q.getChapterId() : "general";
+                        questionsByChapter.computeIfAbsent(cId, k -> new ArrayList<>()).add(q);
+                    }
+
+                    // Shuffle questions within each chapter
+                    for (List<QuestionEntity> chList : questionsByChapter.values()) {
+                        Collections.shuffle(chList);
+                    }
+
+                    // Shuffle the list of chapters so we select from random chapters
+                    List<String> shuffledChapters = new ArrayList<>(questionsByChapter.keySet());
+                    Collections.shuffle(shuffledChapters);
+
+                    // Round-robin selection across random chapters up to 20 questions
+                    List<QuestionEntity> selectedEntities = new ArrayList<>();
+                    Map<String, Integer> chapterIndexMap = new HashMap<>();
+                    for (String chId : shuffledChapters) {
+                        chapterIndexMap.put(chId, 0);
+                    }
+
+                    int targetCount = Math.min(20, allQuestions.size());
+                    while (selectedEntities.size() < targetCount) {
+                        boolean pickedAny = false;
+                        for (String chId : shuffledChapters) {
+                            if (selectedEntities.size() >= targetCount) break;
+                            List<QuestionEntity> qList = questionsByChapter.get(chId);
+                            int index = chapterIndexMap.get(chId);
+                            if (qList != null && index < qList.size()) {
+                                selectedEntities.add(qList.get(index));
+                                chapterIndexMap.put(chId, index + 1);
+                                pickedAny = true;
+                            }
+                        }
+                        if (!pickedAny) break;
+                    }
+
+                    // Shuffle selected questions so question order is mixed across chapters
+                    Collections.shuffle(selectedEntities);
+
+                    for (QuestionEntity qe : selectedEntities) {
+                        String chTitle = chapterTitleMap.get(qe.getChapterId());
+                        if (chTitle == null) {
+                            chTitle = "Mixed Chapters • All Syllabus";
+                        }
+                        items.add(new ExamItem(qe, chTitle));
+                    }
+                }
+            } else {
+                // CHAPTER-SPECIFIC PRACTICE:
+                List<QuestionEntity> pool = db.questionDao().getQuestionsByChapter(chapterId);
+
+                // If empty (e.g. mock exam or ID mismatch), try finding questions
+                if (pool == null || pool.isEmpty()) {
+                    pool = db.questionDao().getAllQuestions();
+                }
+
+                if (pool != null && !pool.isEmpty()) {
+                    List<QuestionEntity> shuffledPool = new ArrayList<>(pool);
+                    Collections.shuffle(shuffledPool);
+
+                    // Select 20 to 25 random questions
+                    int targetCount = Math.min(25, Math.max(20, Math.min(25, shuffledPool.size())));
+                    if (targetCount > shuffledPool.size()) {
+                        targetCount = shuffledPool.size();
+                    }
+
+                    for (int i = 0; i < targetCount; i++) {
+                        QuestionEntity qe = shuffledPool.get(i);
+                        String chTitle = chapterTitleMap.get(qe.getChapterId());
+                        if (chTitle == null) {
+                            chTitle = chapterTitle;
+                        }
+                        items.add(new ExamItem(qe, chTitle));
+                    }
                 }
             }
 
@@ -413,6 +556,19 @@ public class QuizActivity extends AppCompatActivity implements TimerUpdateReceiv
     private void displayQuestion(int index) {
         if (examItems.isEmpty() || index < 0 || index >= examItems.size()) return;
         ExamItem item = examItems.get(index);
+
+        if (isDailyChallenge) {
+            if (tvQuizMainTitle != null) {
+                tvQuizMainTitle.setText("Daily Quiz Challenge");
+            }
+            if (tvChapterTitle != null) {
+                if (item.chapterDisplayName != null && !item.chapterDisplayName.isEmpty()) {
+                    tvChapterTitle.setText(item.chapterDisplayName);
+                } else {
+                    tvChapterTitle.setText("Random Chapters • All Syllabus");
+                }
+            }
+        }
 
         if (tvProgress != null) {
             tvProgress.setText(String.format(Locale.getDefault(), "Question %d of %d", (index + 1), examItems.size()));

@@ -24,6 +24,12 @@ public interface StudySessionDao {
     @Query("SELECT DISTINCT dateString FROM study_sessions ORDER BY dateString ASC")
     List<String> getAllSessionDates();
 
+    @Query("SELECT * FROM study_sessions ORDER BY timestamp DESC")
+    List<StudySessionEntity> getAllSessions();
+
+    @Query("SELECT COUNT(*) FROM study_sessions WHERE timestamp = :timestamp AND durationSeconds = :durationSeconds")
+    int checkSessionExists(long timestamp, int durationSeconds);
+
     @Query("DELETE FROM study_sessions")
     void clearAllSessions();
 }
